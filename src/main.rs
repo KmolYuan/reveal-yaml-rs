@@ -1,22 +1,10 @@
 use clap::{clap_app, AppSettings};
-use std::{
-    fs::{canonicalize, create_dir},
-    io::Write,
-    path::Path,
-};
+use serve::{launch, new_project, update};
 
-const REVEAL: &str = "https://github.com/hakimel/reveal.js/archive/master.zip";
-const RESOURCE: &str = "reveal.zip";
+mod serve;
 
-fn download(url: &str) {
-    let b = reqwest::blocking::get(url).unwrap().bytes().unwrap();
-    let mut path = std::env::current_dir().unwrap();
-    path.push(RESOURCE);
-    let mut f = std::fs::File::create(path).unwrap();
-    f.write(b.to_vec().as_slice()).unwrap();
-}
-
-fn main() {
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
     let args = clap_app! {
         ("Reveal.yaml Manager") =>
         (version: env!("CARGO_PKG_VERSION"))
@@ -30,7 +18,7 @@ fn main() {
         (@subcommand new =>
             (alias: "init")
             (about: "Create a new project")
-            (@arg DIR: +required "Project dir")
+            (@arg DIR: "Project dir")
         )
         (@subcommand serve =>
             (about: "Serve the current project")
@@ -41,23 +29,15 @@ fn main() {
             (about: "Pack the current project")
             (@arg DIR: -c +takes_value "Set current path")
         )
-        (@subcommand help =>
-            (about: "Serve the documentation")
-            (@arg PORT: --port +takes_value "Set port")
-        )
     }
     .get_matches();
     if let Some(_) = args.subcommand_matches("update") {
-        download(REVEAL);
+        update()?;
     } else if let Some(cmd) = args.subcommand_matches("new") {
-        let mut path = canonicalize(Path::new(cmd.value_of("DIR").unwrap())).unwrap();
-        path.push("img");
-        let path_str = path.to_str().unwrap();
-        match create_dir(&path) {
-            Ok(_) => println!("Create directory: {}", path_str),
-            Err(_) => println!("Directory exist: {}", path_str),
-        }
+        new_project(cmd.value_of("DIR").unwrap_or(".")).await?;
     } else if let Some(cmd) = args.subcommand_matches("serve") {
-    } else if let Some(cmd) = args.subcommand_matches("help") {
+        let port = cmd.value_of("PORT").unwrap_or("8080");
+        launch(port.parse().unwrap()).await?;
     }
+    Ok(())
 }
