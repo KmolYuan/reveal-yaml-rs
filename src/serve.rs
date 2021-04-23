@@ -1,3 +1,4 @@
+use crate::loader::loader;
 use actix_files::{Files, NamedFile};
 use actix_web::{get, App, HttpResponse, HttpServer};
 use std::{
@@ -39,7 +40,9 @@ fn copy_dir(path: &PathBuf, dist: &PathBuf) -> Result<()> {
 
 #[get("/help")]
 async fn help_page() -> Result<HttpResponse> {
-    Ok(HttpResponse::Ok().content_type("text/html").body(HELP_DOC))
+    Ok(HttpResponse::Ok()
+        .content_type("text/html")
+        .body(loader(String::from(HELP_DOC))))
 }
 
 #[get("/")]
@@ -47,7 +50,9 @@ async fn index() -> Result<HttpResponse> {
     let f = NamedFile::open(ROOT)?;
     let mut buf = String::new();
     f.file().read_to_string(&mut buf)?;
-    Ok(HttpResponse::Ok().content_type("text/html").body(buf))
+    Ok(HttpResponse::Ok()
+        .content_type("text/html")
+        .body(loader(buf)))
 }
 
 pub(crate) async fn launch(port: u16, path: &str) -> Result<()> {
