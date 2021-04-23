@@ -1,6 +1,6 @@
 description: ""
 author: ""
-nav:
-  - title: Untitled
-    doc: |
-      Hello!
+---
+- title: Untitled
+  doc: |
+    Hello!

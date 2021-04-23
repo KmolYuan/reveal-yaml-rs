@@ -8,531 +8,520 @@ footer:
   width: 50pt
   label: Reveal.yaml
   link: https://github.com/KmolYuan/reveal-yaml/
-nav:
-  - title: Reveal.yaml Documentation
-    doc: |
-      *Author: [Yuan Chang](https://github.com/KmolYuan)*
+---
+- title: Reveal.yaml Documentation
+  doc: |
+    *Author: [Yuan Chang](https://github.com/KmolYuan)*
 
-      Required Python 3.7+
+    Required Python 3.7+
 
-      + <https://github.com/KmolYuan/reveal-yaml>
-      + <https://github.com/hakimel/reveal.js>
+    + <https://github.com/KmolYuan/reveal-yaml>
+    + <https://github.com/hakimel/reveal.js>
 
-      Scroll right → to see the tutorial.
+    Scroll right → to see the tutorial.
 
-      Scroll down ↓ to see an auto-generated outline.
+    Scroll down ↓ to see an auto-generated outline.
 
-  - title: Quick Start
-    doc: |
-      Install from PyPI:
+- title: Quick Start
+  doc: |
+    Install from PyPI:
 
-      ```bash
-      pip install reveal-yaml
-      ```
+    ```bash
+    pip install reveal-yaml
+    ```
 
-      Create a project by Reveal.yaml Manager (RYM):
+    Create a project by Reveal.yaml Manager (RYM):
 
-      ```bash
-      rym init myproject
-      ```
+    ```bash
+    rym init myproject
+    ```
 
-      This App will read the YAML file `reveal.yaml` or `reveal.yml` in the root directory.
-      Startup a local server to preview the slides.
+    This App will read the YAML file `reveal.yaml` or `reveal.yml` in the root directory.
+    Startup a local server to preview the slides.
 
-      ```bash
-      rym serve
-      ```
+    ```bash
+    rym serve
+    ```
 
-      Scroll down ↓ to see what should do next.
-    sub:
-      - doc: |
-          # JSON Schema
+    Scroll down ↓ to see what should do next.
+  sub:
+    - doc: |
+        # JSON Schema
 
-          If your IDE supports [JSON Schema](https://json-schema.org/understanding-json-schema/index.html),
-          you can use the installed or remote files to validate your Reveal.yaml project.
+        If your IDE supports [JSON Schema](https://json-schema.org/understanding-json-schema/index.html),
+        you can use the installed or remote files to validate your Reveal.yaml project.
 
-          + [schema.json](https://raw.githubusercontent.com/KmolYuan/reveal-yaml/gh-pages/schema.json)
-          + [schema.yaml](https://raw.githubusercontent.com/KmolYuan/reveal-yaml/master/reveal_yaml/schema.yaml)
+        + [schema.json](https://raw.githubusercontent.com/KmolYuan/reveal-yaml/gh-pages/schema.json)
+        + [schema.yaml](https://raw.githubusercontent.com/KmolYuan/reveal-yaml/master/reveal_yaml/schema.yaml)
 
-          # Deployment
+        # Deployment
 
-          Release the webpage to "build" directory:
+        Release the webpage to "build" directory:
 
-          ```bash
-          rym pack
-          ```
+        ```bash
+        rym pack
+        ```
 
-          # Certification
+        # Certification
 
-          Generate a key by Open SSL to create "https" protocol:
+        Generate a key by Open SSL to create "https" protocol:
 
-          ```bash
-          openssl genrsa 2048 > localhost.key
-          chmod 400 localhost.key
-          openssl req -new -x509 -nodes -sha256 -days 365 -key localhost.key -out localhost.crt
-          ```
+        ```bash
+        openssl genrsa 2048 > localhost.key
+        chmod 400 localhost.key
+        openssl req -new -x509 -nodes -sha256 -days 365 -key localhost.key -out localhost.crt
+        ```
 
-      - doc: |
-          # CLI Autocompletion
+    - doc: |
+        # CLI Autocompletion
 
-          Reveal.yaml supports Unix CLI auto completion by [argcomplete](https://pypi.org/project/argcomplete).
+        Reveal.yaml supports Unix CLI auto completion by [argcomplete](https://pypi.org/project/argcomplete).
 
-          To enable the CLI auto completion for `rym` command, add this command to your "~/.bashrc":
+        To enable the CLI auto completion for `rym` command, add this command to your "~/.bashrc":
 
-          ```sh
-          eval "$(register-python-argcomplete rym)"
-          ```
+        ```sh
+        eval "$(register-python-argcomplete rym)"
+        ```
 
-      - title: From Repository
-        doc: |
-          Install requirements:
+    - title: From Repository
+      doc: |
+        Install requirements:
 
-          ```bash
-          pip install -r requirements.txt
-          ```
+        ```bash
+        pip install -r requirements.txt
+        ```
 
-          Fetch Reveal.js repository and get the required files:
+        Fetch Reveal.js repository and get the required files:
 
-          ```bash
-          git submodule update --init
-          python sync.py
-          # Directly use (same as "rym --help")
-          python entry.py --help
-          # Install
-          python setup.py install
-          ```
+        ```bash
+        git submodule update --init
+        python sync.py
+        # Directly use (same as "rym --help")
+        python entry.py --help
+        # Install
+        python setup.py install
+        ```
 
-          See `rym` or `rym --help` command for more CLI information.
+        See `rym` or `rym --help` command for more CLI information.
 
-      - title: GH Pages
-        doc: |
-          The Github actions can deploy "build" to gh-pages automatically.
-          Disable it by remove ".github" folder or passing CLI argument:
+    - title: GH Pages
+      doc: |
+        The Github actions can deploy "build" to gh-pages automatically.
+        Disable it by remove ".github" folder or passing CLI argument:
 
-          ```bash
-          rym init --no-workflow
-          ```
+        ```bash
+        rym init --no-workflow
+        ```
 
-          You can refer the [config](https://github.com/KmolYuan/reveal-yaml/blob/master/.github/workflows/deploy.yaml) of this repo.
+        You can refer the [config](https://github.com/KmolYuan/reveal-yaml/blob/master/.github/workflows/deploy.yaml) of this repo.
 
-          At the first time, create an [access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
-          value named `ACCESS_TOKEN` under your repository "Secrets".
-          At last, each commit will enable auto deployment on "gh-pages" branch.
+        At the first time, create an [access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
+        value named `ACCESS_TOKEN` under your repository "Secrets".
+        At last, each commit will enable auto deployment on "gh-pages" branch.
 
-          Powered by [JamesIves/github-pages-deploy-action](https://github.com/JamesIves/github-pages-deploy-action).
+        Powered by [JamesIves/github-pages-deploy-action](https://github.com/JamesIves/github-pages-deploy-action).
 
-      - title: Browser Compatibility
-        doc: |
-          Table from MDN JavaScript. Icons are [icons8](https://icons8.com/).
+    - title: Browser Compatibility
+      doc: |
+        Table from MDN JavaScript. Icons are [icons8](https://icons8.com/).
 
-          ECMA Script 6:
-          [Async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function),
-          [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions),
-          ["let" declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let).
+        ECMA Script 6:
+        [Async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function),
+        [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions),
+        ["let" declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let).
 
-          |     | ![][android] | ![][chrome] | ![][edge] | ![][firefox] | ![][opera] | ![][safari] |
-          |:---:|:------------:|:-----------:|:---------:|:------------:|:----------:|:-----------:|
-          | | Android Webview | Chrome | Edge | Firefox | Opera | Safari |
-          | PC |  | 55+ | 15+ | 52+ | 42+ | 10.1+ |
-          | Mobiles | 55+ | 55+ | | 52+ | 42+ | 10.3+ |
+        |     | ![][android] | ![][chrome] | ![][edge] | ![][firefox] | ![][opera] | ![][safari] |
+        |:---:|:------------:|:-----------:|:---------:|:------------:|:----------:|:-----------:|
+        | | Android Webview | Chrome | Edge | Firefox | Opera | Safari |
+        | PC |  | 55+ | 15+ | 52+ | 42+ | 10.1+ |
+        | Mobiles | 55+ | 55+ | | 52+ | 42+ | 10.3+ |
 
-          [chrome]: https://img.icons8.com/color/96/000000/chrome--v1.png
-          [edge]: https://img.icons8.com/color/96/000000/ms-edge.png
-          [firefox]: https://img.icons8.com/color/96/000000/firefox.png
-          [opera]: https://img.icons8.com/color/96/000000/opera--v1.png
-          [safari]: https://img.icons8.com/color/96/000000/safari--v1.png
-          [android]: https://img.icons8.com/color/96/000000/android-os.png
+        [chrome]: https://img.icons8.com/color/96/000000/chrome--v1.png
+        [edge]: https://img.icons8.com/color/96/000000/ms-edge.png
+        [firefox]: https://img.icons8.com/color/96/000000/firefox.png
+        [opera]: https://img.icons8.com/color/96/000000/opera--v1.png
+        [safari]: https://img.icons8.com/color/96/000000/safari--v1.png
+        [android]: https://img.icons8.com/color/96/000000/android-os.png
 
-      - title: Editor
-        doc: |
-          RYM provides a basic web YAML editor for:
+    - title: Editor
+      doc: |
+        RYM provides a basic web YAML editor for:
 
-          + Validate the project syntax and field types.
-          + Preview slides in two columns.
-          + Save YAML project.
-          + Pack function.
-          + Content delivery network (CDN) support.
+        + Validate the project syntax and field types.
+        + Preview slides in two columns.
+        + Save YAML project.
+        + Pack function.
+        + Content delivery network (CDN) support.
 
-          Start it with CLI:
+        Start it with CLI:
 
-          ```bash
-          rym editor --port=5000
-          ```
+        ```bash
+        rym editor --port=5000
+        ```
 
-          If it starts in a project root, "reveal.yaml" will be opened in first time.
+        If it starts in a project root, "reveal.yaml" will be opened in first time.
 
-          There also has a [Heroku version](https://reveal-yaml.herokuapp.com/).
+        There also has a [Heroku version](https://reveal-yaml.herokuapp.com/).
 
-  - title: Reveal.js Slides
-    doc: |
-      The slides are 2D arrary-like.
+- title: Reveal.js Slides
+  doc: |
+    The slides are 2D arrary-like.
 
-      Scroll down ↓ to learn the rules.
+    Scroll down ↓ to learn the rules.
 
-      ```yaml
-      nav:
-        - title: ...
-          doc: ...
-          img:
-            src: ...
-      ```
-    sub:
-      - title: Slides in HTML
-        doc: |
-          In Reveal.js, the HTML structure shown as following:
+    ```yaml
+    nav:
+      - title: ...
+        doc: ...
+        img:
+          src: ...
+    ```
+  sub:
+    - title: Slides in HTML
+      doc: |
+        In Reveal.js, the HTML structure shown as following:
 
-          ```html
-          <section> <!-- Horizontal slide 1 -->
-          <section>...</section> <!-- Vertical slide 1 -->
-          <section>...</section> <!-- Vertical slide 2 -->
-          ...
-          </section>
-          <section> <!-- Horizontal slide 2 -->
-          ...
-          </section>
-          ```
+        ```html
+        <section> <!-- Horizontal slide 1 -->
+        <section>...</section> <!-- Vertical slide 1 -->
+        <section>...</section> <!-- Vertical slide 2 -->
+        ...
+        </section>
+        <section> <!-- Horizontal slide 2 -->
+        ...
+        </section>
+        ```
 
-      - title: Slides in YAML
-        doc: |
-          The **horizontal** slides are as list in the `nav` node.
-          And a slide can work with at least **one** attribute structure:
+    - title: Slides in YAML
+      doc: |
+        The **horizontal** slides are as list in the `nav` node.
+        And a slide can work with at least **one** attribute structure:
 
-          ```yaml
-          nav:
-            - title: ...  # Works!
-            - doc: ...  # Works!
-            - img: ...  # Works!
-          ```
+        ```yaml
+        nav:
+          - title: ...  # Works!
+          - doc: ...  # Works!
+          - img: ...  # Works!
+        ```
 
-          The **vertical** slides work under the `sub` node of first slide.
-          Their attributes are same as horizontal slides.
-          Or just use `sub` at first slide without other attributes.
+        The **vertical** slides work under the `sub` node of first slide.
+        Their attributes are same as horizontal slides.
+        Or just use `sub` at first slide without other attributes.
 
-          ```yaml
-          nav:
-            - title: Horizontal slide 1
-              sub:
-                - title: Vertical slide 1
-                - title: Vertical slide 2
-            - title: Horizontal slide 2
-          ```
+        ```yaml
+        nav:
+          - title: Horizontal slide 1
+            sub:
+              - title: Vertical slide 1
+              - title: Vertical slide 2
+          - title: Horizontal slide 2
+        ```
 
-      - doc: |
-          YAML Flow style and anchors is also valid in this project.
+    - doc: |
+        YAML Flow style and anchors is also valid in this project.
 
-          Please see the [official documentation](https://yaml.org/) for more information.
+        Please see the [official documentation](https://yaml.org/) for more information.
 
-          ```yaml
-          a:
-            - B
-            - C
-          a: [B, C]  # Flow style
-          1:
-            2: 3
-            4: 5
-          1: {2: 3, 4: 5}  # Flow style
-          ```
+        ```yaml
+        a:
+          - B
+          - C
+        a: [B, C]  # Flow style
+        1:
+          2: 3
+          4: 5
+        1: {2: 3, 4: 5}  # Flow style
+        ```
 
-          ```yaml
-          - &my-title-page  # Create anchor
-            title: Title 1
-            doc: Hello!
-          - <<: *my-title-page  # Extend from anchor
-            title: Hello Again
-          ```
+        ```yaml
+        - &my-title-page  # Create anchor
+          title: Title 1
+          doc: Hello!
+        - <<: *my-title-page  # Extend from anchor
+          title: Hello Again
+        ```
 
-      - title: Sized Attributes
-        doc: |
-          Some options are support resize. Based on HTML.
+    - title: Sized Attributes
+      doc: |
+        Some options are support resize. Based on HTML.
 
-          So their attributes are defined as:
+        So their attributes are defined as:
 
-          ```yaml
-          sized: &sized
-            src: # Source path: str (required)
-            width: # Source width: int / str ("")
-            height: # Source height: int / str ("")
-          ```
+        ```yaml
+        sized: &sized
+          src: # Source path: str (required)
+          width: # Source width: int / str ("")
+          height: # Source height: int / str ("")
+        ```
 
-          And they will be interpreted as:
+        And they will be interpreted as:
 
-          ```html
-          <tag src="..." width="..." height="..."></tag>
-          ```
+        ```html
+        <tag src="..." width="..." height="..."></tag>
+        ```
 
-          The "sized" block in the following sections will represented as YAML references.
+        The "sized" block in the following sections will represented as YAML references.
 
-          ```yaml
+        ```yaml
+        <<: *sized
+        ...: # other options
+        ```
+
+- title: Project Options
+  doc: |
+    | Key | Description | Type |
+    |:---:|:------------|:----:|
+    | lang | Page language, default is "en" | `str` |
+    | title | Page title, default is same as first page | `str` |
+    | description | Page description | `str` |
+    | author | Page author | `str` |
+    | [cdn](#/3/3) | Accessible CDN path if missing local files | `str` |
+    | watermark | Watermark source | `str` |
+    | watermark-size | Source width | `int` / `str` |
+    | outline | Outline page under first column with depth | `int` {0, 1, 2} |
+    | theme | Reveal.js theme, "serif" by default | `str` |
+    | code-theme | Highlight theme, "zenburn" by default | `str` |
+  sub:
+    - doc: |
+        | Key | Description | Type |
+        |:---:|:------------|:----:|
+        | icon | Icon path, "img/icon.png" by default | `str` |
+        | default-style | Use default style, enabled by default | `bool` |
+        | extra-style | Extra CSS style path | `str` |
+        | nav-mode | Reveal [navigation mode](https://revealjs.com/vertical-slides/#navigation-mode) option | `str` |
+        | show-arrows | Show control arrows, enabled by default | `bool` |
+        | center | Auto center the "doc", enabled by default | `bool` |
+        | loop | Loop the slides, disabled by default | `bool` |
+        | history | Enable page history, enabled by default | `bool` |
+        | slide-num | Slide number style, "c/t" by default | `bool` / `str` |
+        | progress | Show progress bar, enabled by default | `bool` |
+        | mouse-wheel | Allow wheel control, disabled by default | `bool` |
+    - doc: |
+        | Key | Description | Type |
+        |:---:|:------------|:----:|
+        | preview-links | Open a preview window for links, disabled by default | `bool` |
+        | transition | Transition mode, "slide" by default | `str` |
+        | [footer](#/3/4) | Footer option | `Footer` |
+        | [plugin](#/3/5) | Plugin enable / disable options | `Plugin` |
+        | nav | Horizontal slides | `List[HSlide]` |
+
+    - doc: |
+        # Content Delivery Network (CDN)
+
+        You can store resources in a public CDN, such as github.
+
+        ```yaml
+        cdn: https://raw.githubusercontent.com/.../static/
+        nav:
+          - title: Load My Files
+            include: template/code_demo.md
+            img:
+              src: img/logo.png
+            embed:
+              src: pdf/report.pdf
+        ```
+
+        The editor can found the files from local static folder.
+        If the resources are not exist, CDN path will be used.
+
+        This option is required on editor server,
+        otherwise the resource will not be found.
+    - doc: |
+        # Footer
+
+        The footer is at left buttom side.
+
+        Its height is adjusted by its logo size and text height.
+
+        ```yaml
+        footer:
           <<: *sized
-          ...: # other options
-          ```
+          label: # A caption at the right of logo: str ("")
+          link: # A URL link for the footer: str ("")
+        ```
 
-  - title: Project Options
-    doc: |
-      | Key | Description | Type |
-      |:---:|:------------|:----:|
-      | lang | Page language, default is "en" | `str` |
-      | title | Page title, default is same as first page | `str` |
-      | description | Page description | `str` |
-      | author | Page author | `str` |
-      | [cdn](#/3/3) | Accessible CDN path if missing local files | `str` |
-      | watermark | Watermark source | `str` |
-      | watermark-size | Source width | `int` / `str` |
-      | outline | Outline page under first column with depth | `int` {0, 1, 2} |
-      | theme | Reveal.js theme, "serif" by default | `str` |
-      | code-theme | Highlight theme, "zenburn" by default | `str` |
-    sub:
-      - doc: |
-          | Key | Description | Type |
-          |:---:|:------------|:----:|
-          | icon | Icon path, "img/icon.png" by default | `str` |
-          | default-style | Use default style, enabled by default | `bool` |
-          | extra-style | Extra CSS style path | `str` |
-          | nav-mode | Reveal [navigation mode](https://revealjs.com/vertical-slides/#navigation-mode) option | `str` |
-          | show-arrows | Show control arrows, enabled by default | `bool` |
-          | center | Auto center the "doc", enabled by default | `bool` |
-          | loop | Loop the slides, disabled by default | `bool` |
-          | history | Enable page history, enabled by default | `bool` |
-          | slide-num | Slide number style, "c/t" by default | `bool` / `str` |
-          | progress | Show progress bar, enabled by default | `bool` |
-          | mouse-wheel | Allow wheel control, disabled by default | `bool` |
-      - doc: |
-          | Key | Description | Type |
-          |:---:|:------------|:----:|
-          | preview-links | Open a preview window for links, disabled by default | `bool` |
-          | transition | Transition mode, "slide" by default | `str` |
-          | [footer](#/3/4) | Footer option | `Footer` |
-          | [plugin](#/3/5) | Plugin enable / disable options | `Plugin` |
-          | nav | Horizontal slides | `List[HSlide]` |
+        The example of this slide is:
 
-      - doc: |
-          # Content Delivery Network (CDN)
+        ```yaml
+        footer:
+          src: img/icon.png
+          width: 50pt
+          label: Reveal.yaml
+          link: https://github.com/KmolYuan/reveal-yaml/
+        ```
 
-          You can store resources in a public CDN, such as github.
+    - doc: |
+        # Plugins
 
-          ```yaml
-          cdn: https://raw.githubusercontent.com/.../static/
-          nav:
-            - title: Load My Files
-              include: template/code_demo.md
-              img:
-                src: img/logo.png
-              embed:
-                src: pdf/report.pdf
-          ```
+        Plugin can be enabled / disabled manually.
 
-          The editor can found the files from local static folder.
-          If the resources are not exist, CDN path will be used.
+        The default options:
 
-          This option is required on editor server,
-          otherwise the resource will not be found.
-      - doc: |
-          # Footer
+        + `zoom`: Disabled
+        + `notes`: Enabled
+        + `search`: Disabled
+        + `highlight`: Enabled
+        + `math`: Disabled (auto enabled)
 
-          The footer is at left buttom side.
+- title: Slide Attributes
+  doc: |
+    All attributes are default to disable.
 
-          Its height is adjusted by its logo size and text height.
+    | Key | Description | Type |
+    |:---:|:------------|:----:|
+    | title | Single line Markdown level 2 title | `str` |
+    | [doc](#/4/2) | Multiline Markdown pargraph | `str` |
+    | include | Include a Markdown file from path, append after "doc" | `str` |
+    | math | Latex math without "$$" brackets | `str` |
+    | [img](#/4/3) | A list of image source | `Img` / `List[Img]` |
+    | youtube / embed | YouTube or external resource like PDF | `Sized` |
+  sub:
+    - doc: |
+        | Key | Description | Type |
+        |:---:|:------------|:----:|
+        | [fragment](#/4/4) | Fragment option | `Fragment` |
+        | sub | Vertical slides, for horizontal slides only | `List[Slide]` |
 
-          ```yaml
-          footer:
-            <<: *sized
-            label: # A caption at the right of logo: str ("")
-            link: # A URL link for the footer: str ("")
-          ```
+    - title: Markdown Article
+      doc: |
+        Paragarphs are written in [Markdown](https://daringfireball.net/projects/markdown/syntax).
+        HTML is also supported.
 
-          The example of this slide is:
+        All of special characters will be auto escaped from HTML like `&gt;`.
 
-          ```yaml
-          footer:
-            src: img/icon.png
-            width: 50pt
-            label: Reveal.yaml
-            link: https://github.com/KmolYuan/reveal-yaml/
-          ```
+        Slide & element attributes are allowed.
 
-      - doc: |
-          # Plugins
+        ```html
+        &lt;!-- .slide: data-background="red" -->
+        &lt;!-- .element: class="fragment" data-fragment-index="1" -->
+        ```
 
-          Plugin can be enabled / disabled manually.
+        Notes are allowed in Markdown format. Press "S" to see this:
 
-          The default options:
+        ```markdown
+        note&colon;
+        Shows in speaker view!
+        ```
 
-          + `zoom`: Disabled
-          + `notes`: Enabled
-          + `search`: Disabled
-          + `highlight`: Enabled
-          + `math`: Disabled (auto enabled)
+        note:
+        Shows in speaker view!
 
-  - title: Slide Attributes
-    doc: |
-      All attributes are default to disable.
+    - title: Image Attributes
+      doc: |
+        Must have at least `src` attribute to become a valid image.
+        Each group will map to a picture.
 
-      | Key | Description | Type |
-      |:---:|:------------|:----:|
-      | title | Single line Markdown level 2 title | `str` |
-      | [doc](#/4/2) | Multiline Markdown pargraph | `str` |
-      | include | Include a Markdown file from path, append after "doc" | `str` |
-      | math | Latex math without "$$" brackets | `str` |
-      | [img](#/4/3) | A list of image source | `Img` / `List[Img]` |
-      | youtube / embed | YouTube or external resource like PDF | `Sized` |
-    sub:
-      - doc: |
-          | Key | Description | Type |
-          |:---:|:------------|:----:|
-          | [fragment](#/4/4) | Fragment option | `Fragment` |
-          | sub | Vertical slides, for horizontal slides only | `List[Slide]` |
+        ```yaml
+        - <<: *sized
+          label: # Image caption: str ("")
+        ```
 
-      - title: Markdown Article
+        They will be interpreted like:
+
+        ```html
+        <figure>
+        &lt;img src="fig1"/>
+        <figcaption>...</figcaption>
+        </figure><figure>
+        &lt;img src="fig2"/>
+        <figcaption>...</figcaption>
+        </figure> ...
+        ```
+
+        If there has only one image, the options can under `img` key directly
+        without to list them.
+
+    - title: Fragment Elements
+      doc: |
+        Each slide can be added [Fragment option](https://revealjs.com/fragments).
+        Supports:
+
+        + math
+        + img (one by one)
+        + youtube
+        + embed
+
+        ```yaml
+        fragment: {img: grow}
+        ```
+
+- title: Examples
+  doc: |
+    You can found [the source](https://github.com/KmolYuan/reveal-yaml/blob/master/reveal.yaml)
+    of this doc to see those example.
+
+    Scroll down ↓ to see the examples.
+  sub:
+    - doc: |
+        # Markdown
+
+        ```yaml
         doc: |
-          Paragarphs are written in [Markdown](https://daringfireball.net/projects/markdown/syntax).
-          HTML is also supported.
-
-          All of special characters will be auto escaped from HTML like `&gt;`.
-
-          Slide & element attributes are allowed.
-
-          ```html
-          &lt;!-- .slide: data-background="red" -->
-          &lt;!-- .element: class="fragment" data-fragment-index="1" -->
-          ```
-
-          Notes are allowed in Markdown format. Press "S" to see this:
-
-          ```markdown
-          note&colon;
-          Shows in speaker view!
-          ```
-
-          note:
-          Shows in speaker view!
-
-      - title: Image Attributes
-        doc: |
-          Must have at least `src` attribute to become a valid image.
-          Each group will map to a picture.
-
-          ```yaml
-          - <<: *sized
-            label: # Image caption: str ("")
-          ```
-
-          They will be interpreted like:
-
-          ```html
-          <figure>
-          &lt;img src="fig1"/>
-          <figcaption>...</figcaption>
-          </figure><figure>
-          &lt;img src="fig2"/>
-          <figcaption>...</figcaption>
-          </figure> ...
-          ```
-
-          If there has only one image, the options can under `img` key directly
-          without to list them.
-
-      - title: Fragment Elements
-        doc: |
-          Each slide can be added [Fragment option](https://revealjs.com/fragments).
-          Supports:
-
-          + math
-          + img (one by one)
-          + youtube
-          + embed
-
-          ```yaml
-          fragment: {img: grow}
-          ```
-
-  - title: Examples
-    doc: |
-      You can found [the source](https://github.com/KmolYuan/reveal-yaml/blob/master/reveal.yaml)
-      of this doc to see those example.
-
-      Scroll down ↓ to see the examples.
-    sub:
-      - doc: |
-          # Markdown
-
-          ```yaml
-          doc: |
-            *Something* **important**.
-
-            | item 1 | item 2 |
-            |:------:|:------:|
-            | A | B |
-
-            + Item 1 &lt;!-- .element: class="fragment" data-fragment-index="2" -->
-            + Item 2 &lt;!-- .element: class="fragment" data-fragment-index="1" -->
-          ```
-
           *Something* **important**.
 
           | item 1 | item 2 |
           |:------:|:------:|
           | A | B |
 
-          + Item 1 <!-- .element: class="fragment" data-fragment-index="2" -->
-          + Item 2 <!-- .element: class="fragment" data-fragment-index="1" -->
+          + Item 1 &lt;!-- .element: class="fragment" data-fragment-index="2" -->
+          + Item 2 &lt;!-- .element: class="fragment" data-fragment-index="1" -->
+        ```
 
-      - doc: |
-          # Code block
+        *Something* **important**.
 
-          ```markdown
-          doc: |
-            &#96;&#96;&#96;python [1-2]
-            import sys
-            print(sys.path)
-            for i in range(10):
-                print("Hello World!")
-            &#96;&#96;&#96;
-          ```
+        | item 1 | item 2 |
+        |:------:|:------:|
+        | A | B |
 
-          ```python [1-2]
+        + Item 1 <!-- .element: class="fragment" data-fragment-index="2" -->
+        + Item 2 <!-- .element: class="fragment" data-fragment-index="1" -->
+
+    - doc: |
+        # Code block
+
+        ```markdown
+        doc: |
+          &#96;&#96;&#96;python [1-2]
           import sys
           print(sys.path)
           for i in range(10):
               print("Hello World!")
-          ```
+          &#96;&#96;&#96;
+        ```
 
-      - doc: |
-          # Images
+        ```python [1-2]
+        import sys
+        print(sys.path)
+        for i in range(10):
+            print("Hello World!")
+        ```
 
-          ```yaml
-          img:
-          - label: Ubuntu Logo
-            src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
-            width: 50%
-          - label: Google Logo
-            src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
-          fragment:
-            img: fade-in-then-out
-          ```
+    - doc: |
+        # Images
+
+        ```yaml
         img:
-          - label: Ubuntu Logo
-            src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
-            width: 50%
-          - label: Google Logo
-            src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+        - label: Ubuntu Logo
+          src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+          width: 50%
+        - label: Google Logo
+          src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
         fragment:
           img: fade-in-then-out
+        ```
+      img:
+        - label: Ubuntu Logo
+          src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+          width: 50%
+        - label: Google Logo
+          src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+      fragment:
+        img: fade-in-then-out
 
-      - doc: |
-          # Maths
+    - doc: |
+        # Maths
 
-          ```yaml
-          math: |
-            \small\begin{aligned}
-            \min_{x_1, x_2}&f(x)
-            \\
-            \text{s.t. } &b(x) \le 0
-            \\
-            &c(x) = 0
-            \end{aligned}
-          fragment:
-            math: highlight-blue
-          ```
+        ```yaml
         math: |
           \small\begin{aligned}
           \min_{x_1, x_2}&f(x)
@@ -543,27 +532,38 @@ nav:
           \end{aligned}
         fragment:
           math: highlight-blue
+        ```
+      math: |
+        \small\begin{aligned}
+        \min_{x_1, x_2}&f(x)
+        \\
+        \text{s.t. } &b(x) \le 0
+        \\
+        &c(x) = 0
+        \end{aligned}
+      fragment:
+        math: highlight-blue
 
-      - doc: |
-          # YouTube Video
+    - doc: |
+        # YouTube Video
 
-          ```yaml
-          youtube:
-            src: https://www.youtube.com/embed/LcuvxJNIgfE
-            width: 800pt
-            height: 500pt
-          ```
+        ```yaml
         youtube:
           src: https://www.youtube.com/embed/LcuvxJNIgfE
-          width: 600pt
-          height: 400pt
+          width: 800pt
+          height: 500pt
+        ```
+      youtube:
+        src: https://www.youtube.com/embed/LcuvxJNIgfE
+        width: 600pt
+        height: 400pt
 
-      - doc: |
-          # Embedded PDF
+    - doc: |
+        # Embedded PDF
 
-          ```yaml
-          embed:
-            src: https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf
-          ```
+        ```yaml
         embed:
           src: https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf
+        ```
+      embed:
+        src: https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf
