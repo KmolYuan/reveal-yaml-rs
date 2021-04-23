@@ -1,16 +1,21 @@
-use actix_files::Files;
+use actix_files::{Files, NamedFile};
 use actix_web::{get, App, HttpResponse, HttpServer};
 use std::{
     env::current_exe,
-    fs::{canonicalize, create_dir, File},
-    io::Write,
+    fs::{canonicalize, copy, create_dir, File},
+    io::{Read, Result, Write},
     path::Path,
     path::PathBuf,
 };
 use temp_dir::TempDir;
+use walkdir::WalkDir;
 
+const ROOT: &str = "reveal.yaml";
+const WATERMARK_PATH: &str = "img/watermark.png";
+const ICON_PATH: &str = "img/icon.png";
 const WATERMARK: &[u8] = include_bytes!("../assets/img/watermark.png");
 const ICON: &[u8] = include_bytes!("../assets/img/icon.png");
+const BLANK_DOC: &[u8] = include_bytes!("../assets/blank.yaml");
 const HELP_DOC: &str = include_str!("../assets/reveal.yaml");
 const REVEAL: &str = "https://github.com/hakimel/reveal.js/archive/master.zip";
 thread_local! {
@@ -21,105 +26,91 @@ thread_local! {
         .join("reveal.js-master.zip");
 }
 
+fn copy_dir(path: &PathBuf, dist: &PathBuf) -> Result<()> {
+    for entry in WalkDir::new(path).follow_links(true) {
+        let entry = entry?;
+        let path = entry.path();
+        if path.is_file() {
+            copy(path, dist.join(path.file_name().unwrap().to_str().unwrap()))?;
+        }
+    }
+    Ok(())
+}
+
 #[get("/help")]
-async fn help_page() -> HttpResponse {
-    HttpResponse::Ok().content_type("text/html").body("help!")
+async fn help_page() -> Result<HttpResponse> {
+    Ok(HttpResponse::Ok().content_type("text/html").body(HELP_DOC))
 }
 
 #[get("/")]
-async fn index() -> HttpResponse {
-    HttpResponse::Ok().content_type("text/html").body(r##"
-    <!doctype html>
-    <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-            <title>reveal.js</title>
-
-            <link rel="stylesheet" href="dist/reset.css">
-            <link rel="stylesheet" href="dist/reveal.css">
-            <link rel="stylesheet" href="dist/theme/black.css" id="theme">
-
-            <!-- Theme used for syntax highlighted code -->
-            <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
-        </head>
-        <body>
-            <div class="reveal">
-                <div class="slides">
-                    <section>Slide 1</section>
-                    <section>Slide 2</section>
-                </div>
-            </div>
-
-            <script src="dist/reveal.js"></script>
-            <script src="plugin/notes/notes.js"></script>
-            <script src="plugin/markdown/markdown.js"></script>
-            <script src="plugin/highlight/highlight.js"></script>
-            <script>
-                // More info about initialization & config:
-                // - https://revealjs.com/initialization/
-                // - https://revealjs.com/config/
-                Reveal.initialize({
-                    hash: true,
-
-                    // Learn about plugins: https://revealjs.com/plugins/
-                    plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-                });
-            </script>
-        </body>
-    </html>"##)
+async fn index() -> Result<HttpResponse> {
+    let f = NamedFile::open(ROOT)?;
+    let mut buf = String::new();
+    f.file().read_to_string(&mut buf)?;
+    Ok(HttpResponse::Ok().content_type("text/html").body(buf))
 }
 
-pub(crate) async fn launch(port: u16) -> std::io::Result<()> {
+pub(crate) async fn launch(port: u16, path: &str) -> Result<()> {
+    let path = canonicalize(Path::new(path))?;
     let d = TempDir::new().unwrap();
+    // Expand Reveal.js
     RESOURCE.with(|path| {
         if path.exists() {
             zip::read::ZipArchive::new(File::open(path).unwrap())
                 .unwrap()
                 .extract(d.path())
-                .unwrap()
+                .unwrap();
         } else {
             panic!("Archive not exist, please update first");
         }
     });
-    let path = d
-        .path()
-        .join("reveal.js-master")
-        .into_os_string()
-        .into_string()
-        .unwrap();
+    // Copy local files to global
+    let assets = d.path().join("reveal.js-master");
+    copy(path.join(ROOT), assets.join(ROOT))?;
+    let assets_img = assets.join("img");
+    create_dir(&assets_img)?;
+    copy_dir(&path.join("img"), &assets_img)?;
+    // Start server
+    let assets = assets.into_os_string().into_string().unwrap();
     println!("Serve at: http://localhost:{}/", port);
-    println!("Local assets at: {}", path.as_str());
+    println!("Local assets at: {}", assets.as_str());
     HttpServer::new(move || {
         App::new()
             .service(index)
             .service(help_page)
-            .service(Files::new("/", path.as_str()).show_files_listing())
+            .service(Files::new("/", assets.as_str()).show_files_listing())
     })
     .bind(("localhost", port))?
     .run()
     .await
 }
 
-pub(crate) async fn new_project(path: &str) -> std::io::Result<()> {
-    let mut path = canonicalize(Path::new(path))?;
-    path.push("img");
-    let path_str = path.to_str().unwrap();
-    match create_dir(&path) {
-        Ok(_) => println!("Create directory: {}", path_str),
-        Err(_) => println!("Directory exist: {}", path_str),
+pub(crate) async fn new_project(path: &str) -> Result<()> {
+    let path = canonicalize(Path::new(path))?;
+    let path_str = path.join("img");
+    match create_dir(&path_str) {
+        Ok(_) => println!("Create directory: {}", path_str.to_str().unwrap()),
+        Err(_) => println!("Directory exist: {}", path_str.to_str().unwrap()),
+    }
+    for (data_path, content) in &[
+        (ROOT, BLANK_DOC),
+        (WATERMARK_PATH, WATERMARK),
+        (ICON_PATH, ICON),
+    ] {
+        let mut f = File::create(path.join(data_path))?;
+        f.write(content)?;
     }
     Ok(())
 }
 
-pub(crate) fn update() -> std::io::Result<()> {
+pub(crate) fn update() -> Result<()> {
     let b = reqwest::blocking::get(REVEAL).unwrap().bytes().unwrap();
     println!("Download archive: {}", REVEAL);
-    RESOURCE.with(|path| {
-        let mut f = std::fs::File::create(path).unwrap();
-        f.write(b.as_ref()).unwrap();
-    });
+    RESOURCE.with(|path| -> Result<()> {
+        let mut f = File::create(path)?;
+        f.write(b.as_ref())?;
+        Ok(())
+    })?;
     println!("Done");
     Ok(())
 }

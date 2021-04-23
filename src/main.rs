@@ -1,6 +1,7 @@
 use clap::{clap_app, AppSettings};
 use serve::{launch, new_project, update};
 
+mod loader;
 mod serve;
 
 #[actix_web::main]
@@ -34,10 +35,12 @@ async fn main() -> std::io::Result<()> {
     if let Some(_) = args.subcommand_matches("update") {
         update()?;
     } else if let Some(cmd) = args.subcommand_matches("new") {
-        new_project(cmd.value_of("DIR").unwrap_or(".")).await?;
+        let path = cmd.value_of("DIR").unwrap_or(".");
+        new_project(path).await?;
     } else if let Some(cmd) = args.subcommand_matches("serve") {
         let port = cmd.value_of("PORT").unwrap_or("8080");
-        launch(port.parse().unwrap()).await?;
+        let path = cmd.value_of("DIR").unwrap_or(".");
+        launch(port.parse().unwrap(), path).await?;
     }
     Ok(())
 }
