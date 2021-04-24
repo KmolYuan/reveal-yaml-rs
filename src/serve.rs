@@ -3,7 +3,7 @@ use actix_files::Files;
 use actix_web::{get, App, HttpResponse, HttpServer};
 use std::process::exit;
 use std::{
-    env::current_exe,
+    env::{current_exe, set_current_dir},
     fs::{canonicalize, create_dir, File},
     io::{Read, Result, Write},
     path::Path,
@@ -14,10 +14,10 @@ use temp_dir::TempDir;
 const ROOT: &str = "reveal.yaml";
 const WATERMARK_PATH: &str = "img/watermark.png";
 const ICON_PATH: &str = "img/icon.png";
-const WATERMARK: &[u8] = include_bytes!("../assets/img/watermark.png");
-const ICON: &[u8] = include_bytes!("../assets/img/icon.png");
-const BLANK_DOC: &[u8] = include_bytes!("../assets/blank.yaml");
-const HELP_DOC: &str = include_str!("../assets/reveal.yaml");
+const WATERMARK: &[u8] = include_bytes!("assets/img/watermark.png");
+const ICON: &[u8] = include_bytes!("assets/img/icon.png");
+const BLANK_DOC: &[u8] = include_bytes!("assets/blank.yaml");
+const HELP_DOC: &str = include_str!("assets/reveal.yaml");
 const REVEAL: &str = "https://github.com/hakimel/reveal.js/archive/master.zip";
 thread_local! {
     static RESOURCE: PathBuf = current_exe()
@@ -77,7 +77,9 @@ async fn index() -> Result<HttpResponse> {
 }
 
 pub async fn launch(port: u16, path: &str) -> Result<()> {
-    let path = canonicalize(Path::new(path))?.join("img");
+    let mut path = canonicalize(Path::new(path))?;
+    set_current_dir(&path)?;
+    path.push("img");
     let d = TempDir::new().unwrap();
     // Expand Reveal.js
     RESOURCE.with(|path| {

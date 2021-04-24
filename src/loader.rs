@@ -2,7 +2,7 @@ use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag
 use yaml_rust::yaml::Hash;
 use yaml_rust::{Yaml, YamlLoader};
 
-const TEMPLATE: &str = include_str!("../assets/template.html");
+const TEMPLATE: &str = include_str!("assets/template.html");
 
 macro_rules! err {
     ($v:expr) => {

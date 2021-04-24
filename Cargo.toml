@@ -4,7 +4,6 @@ version = "0.1.0"
 authors = ["KmolYuan <pyslvs@gmail.com>"]
 edition = "2018"
 description = "A YAML project manager serving Reveal.js slides."
-include = ["assets/**/*"]
 license = "MIT"
 repository = "https://github.com/KmolYuan/reveal-yaml-rs"
 readme = "README.md"
