@@ -392,8 +392,8 @@ footer:
         Slide & element attributes are allowed.
 
         ```html
-        &lt;!-- .slide: data-background="red" -->
-        &lt;!-- .element: class="fragment" data-fragment-index="1" -->
+        <!-- .slide: data-background="red" -->
+        <!-- .element: class="fragment" data-fragment-index="1" -->
         ```
 
         Notes are allowed in Markdown format. Press "S" to see this:
@@ -420,10 +420,10 @@ footer:
 
         ```html
         <figure>
-        &lt;img src="fig1"/>
+        <img src="fig1"/>
         <figcaption>...</figcaption>
         </figure><figure>
-        &lt;img src="fig2"/>
+        <img src="fig2"/>
         <figcaption>...</figcaption>
         </figure> ...
         ```
@@ -463,8 +463,8 @@ footer:
           |:------:|:------:|
           | A | B |
 
-          + Item 1 &lt;!-- .element: class="fragment" data-fragment-index="2" -->
-          + Item 2 &lt;!-- .element: class="fragment" data-fragment-index="1" -->
+          + Item 1 <!-- .element: class="fragment" data-fragment-index="2" -->
+          + Item 2 <!-- .element: class="fragment" data-fragment-index="1" -->
         ```
 
         *Something* **important**.
@@ -520,6 +520,8 @@ footer:
 
     - doc: |
         # Maths
+
+        Inline math text $x^2$.
 
         ```yaml
         math: |

@@ -1,15 +1,14 @@
 use crate::loader::loader;
-use actix_files::{Files, NamedFile};
+use actix_files::Files;
 use actix_web::{get, App, HttpResponse, HttpServer};
 use std::{
     env::current_exe,
-    fs::{canonicalize, copy, create_dir, File},
+    fs::{canonicalize, create_dir, File},
     io::{Read, Result, Write},
     path::Path,
     path::PathBuf,
 };
 use temp_dir::TempDir;
-use walkdir::WalkDir;
 
 const ROOT: &str = "reveal.yaml";
 const WATERMARK_PATH: &str = "img/watermark.png";
@@ -27,67 +26,16 @@ thread_local! {
         .join("reveal.js-master.zip");
 }
 
-fn copy_dir(path: &PathBuf, dist: &PathBuf) -> Result<()> {
-    for entry in WalkDir::new(path).follow_links(true) {
-        let entry = entry?;
-        let path = entry.path();
-        if path.is_file() {
-            copy(path, dist.join(path.file_name().unwrap().to_str().unwrap()))?;
-        }
-    }
+pub(crate) fn update() -> Result<()> {
+    let b = reqwest::blocking::get(REVEAL).unwrap().bytes().unwrap();
+    println!("Download archive: {}", REVEAL);
+    RESOURCE.with(|path| -> Result<()> {
+        let mut f = File::create(path)?;
+        f.write(b.as_ref())?;
+        Ok(())
+    })?;
+    println!("Done");
     Ok(())
-}
-
-#[get("/help")]
-async fn help_page() -> Result<HttpResponse> {
-    Ok(HttpResponse::Ok()
-        .content_type("text/html")
-        .body(loader(String::from(HELP_DOC))))
-}
-
-#[get("/")]
-async fn index() -> Result<HttpResponse> {
-    let f = NamedFile::open(ROOT)?;
-    let mut buf = String::new();
-    f.file().read_to_string(&mut buf)?;
-    Ok(HttpResponse::Ok()
-        .content_type("text/html")
-        .body(loader(buf)))
-}
-
-pub(crate) async fn launch(port: u16, path: &str) -> Result<()> {
-    let path = canonicalize(Path::new(path))?;
-    let d = TempDir::new().unwrap();
-    // Expand Reveal.js
-    RESOURCE.with(|path| {
-        if path.exists() {
-            zip::read::ZipArchive::new(File::open(path).unwrap())
-                .unwrap()
-                .extract(d.path())
-                .unwrap();
-        } else {
-            panic!("Archive not exist, please update first");
-        }
-    });
-    // Copy local files to global
-    let assets = d.path().join("reveal.js-master");
-    copy(path.join(ROOT), assets.join(ROOT))?;
-    let assets_img = assets.join("img");
-    create_dir(&assets_img)?;
-    copy_dir(&path.join("img"), &assets_img)?;
-    // Start server
-    let assets = assets.into_os_string().into_string().unwrap();
-    println!("Serve at: http://localhost:{}/", port);
-    println!("Local assets at: {}", assets.as_str());
-    HttpServer::new(move || {
-        App::new()
-            .service(index)
-            .service(help_page)
-            .service(Files::new("/", assets.as_str()).show_files_listing())
-    })
-    .bind(("localhost", port))?
-    .run()
-    .await
 }
 
 pub(crate) async fn new_project(path: &str) -> Result<()> {
@@ -108,14 +56,54 @@ pub(crate) async fn new_project(path: &str) -> Result<()> {
     Ok(())
 }
 
-pub(crate) fn update() -> Result<()> {
-    let b = reqwest::blocking::get(REVEAL).unwrap().bytes().unwrap();
-    println!("Download archive: {}", REVEAL);
-    RESOURCE.with(|path| -> Result<()> {
-        let mut f = File::create(path)?;
-        f.write(b.as_ref())?;
-        Ok(())
-    })?;
-    println!("Done");
-    Ok(())
+#[get("/help")]
+async fn help_page() -> Result<HttpResponse> {
+    Ok(HttpResponse::Ok()
+        .content_type("text/html")
+        .body(loader(String::from(HELP_DOC))))
+}
+
+#[get("/")]
+async fn index() -> Result<HttpResponse> {
+    let mut buf = String::new();
+    {
+        let mut f = File::open(ROOT)?;
+        f.read_to_string(&mut buf)?;
+    }
+    Ok(HttpResponse::Ok()
+        .content_type("text/html;charset=utf-8")
+        .body(loader(buf)))
+}
+
+pub(crate) async fn launch(port: u16, path: &str) -> Result<()> {
+    let path = canonicalize(Path::new(path))?;
+    let d = TempDir::new().unwrap();
+    // Expand Reveal.js
+    RESOURCE.with(|path| {
+        if path.exists() {
+            zip::read::ZipArchive::new(File::open(path).unwrap())
+                .unwrap()
+                .extract(d.path())
+                .unwrap();
+        } else {
+            panic!("Archive not exist, please update first");
+        }
+    });
+    // Start server
+    let assets = d.path().join("reveal.js-master");
+    let assets = assets.into_os_string().into_string().unwrap();
+    let path = path.into_os_string().into_string().unwrap();
+    println!("Serve at: http://localhost:{}/", port);
+    println!("Local assets at: {}", path.as_str());
+    println!("Global assets at: {}", assets.as_str());
+    HttpServer::new(move || {
+        App::new()
+            .service(index)
+            .service(help_page)
+            .service(Files::new("/", path.as_str()))
+            .service(Files::new("/", assets.as_str()))
+    })
+    .bind(("localhost", port))?
+    .run()
+    .await
 }

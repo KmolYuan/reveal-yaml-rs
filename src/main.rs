@@ -23,8 +23,8 @@ async fn main() -> std::io::Result<()> {
         )
         (@subcommand serve =>
             (about: "Serve the current project")
+            (@arg DIR: "Set current path")
             (@arg PORT: --port +takes_value "Set port")
-            (@arg DIR: -c +takes_value "Set current path")
         )
         (@subcommand pack =>
             (about: "Pack the current project")
