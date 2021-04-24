@@ -478,15 +478,14 @@ footer:
     - doc: |
         # Code block
 
-        ```markdown
-        doc: |
+        <pre><code class="language-markdown">doc: |
           ```python[1-2]
           import sys
           print(sys.path)
           for i in range(10):
               print("Hello World!")
-          \```
-        ```
+          ```
+        </code></pre>
 
         ```python[1-2]
         import sys
