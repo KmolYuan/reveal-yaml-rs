@@ -29,6 +29,9 @@ macro_rules! unpack {
             None => return Err(format!("{}: {:?}", $msg, $pos).into()),
         }
     };
+    ($v:expr$(=>$key:literal = $default:expr)?, $method:ident) => {
+        $v$(.get(yaml_str!($key)).unwrap_or($default))?.$method().unwrap()
+    }
 }
 
 fn parse(text: &str) -> Result<String, String> {
@@ -111,6 +114,32 @@ fn inner_loader(yaml_str: &String) -> Result<String, String> {
         {
             let slide = unpack!(s, as_hash, "unpack slide failed", (i, j));
             doc.push_str(&err!(check_slide(slide, i, j)));
+        }
+        if i == 0 {
+            doc.push_str("<section><h2>Outline</h2><hr/><ul>");
+            for (i, s) in unpack!(yaml[1], as_vec).iter().enumerate() {
+                let s = unpack!(s, as_hash);
+                let t = String::from(unpack!(s => "title" = yaml_str![], as_str));
+                if t.is_empty() {
+                    continue;
+                }
+                doc.push_str(&format!("<li><a href=\"#/{}\">{}</a></li>", i, t));
+                let sub = Vec::from(unpack!(s => "sub" = yaml_vec![], as_vec).as_slice());
+                if sub.is_empty() {
+                    continue;
+                }
+                doc.push_str("<ul>");
+                for (j, s) in sub.iter().enumerate() {
+                    let s = unpack!(s, as_hash);
+                    let t = String::from(unpack!(s => "title" = yaml_str![], as_str));
+                    if t.is_empty() {
+                        continue;
+                    }
+                    doc.push_str(&format!("<li><a href=\"#/{}/{}\">{}</a></li>", i, j + 1, t));
+                }
+                doc.push_str("</ul>");
+            }
+            doc.push_str("</ul></section>");
         }
         doc.push_str("</section>");
     }
