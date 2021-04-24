@@ -5,6 +5,9 @@ authors = ["KmolYuan <pyslvs@gmail.com>"]
 edition = "2018"
 description = "A YAML project manager serving Reveal.js slides."
 include = ["assets/**/*"]
+license = "MIT"
+repository = "https://github.com/KmolYuan/reveal-yaml-rs"
+readme = "README.md"
 
 [features]
 cli = ["clap"]
@@ -17,11 +20,8 @@ required-features = ["cli"]
 clap = { version = "2.33", optional = true }
 temp-dir = "0.1"
 zip = "0.5"
+reqwest = { version = "0.11", features = ["blocking"] }
 actix-web = "3.3"
 actix-files = "0.5"
 yaml-rust = "0.4"
 pulldown-cmark = "0.8"
-
-[dependencies.reqwest]
-version = "0.11"
-features = ["blocking"]
