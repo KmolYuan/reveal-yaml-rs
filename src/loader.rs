@@ -1,4 +1,4 @@
-use pulldown_cmark::{html::push_html, Options, Parser};
+use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag};
 use yaml_rust::yaml::Hash;
 use yaml_rust::{Yaml, YamlLoader};
 
@@ -41,7 +41,28 @@ fn parse(text: &str) -> Result<String, String> {
             | Options::ENABLE_SMART_PUNCTUATION
             | Options::ENABLE_TASKLISTS
             | Options::ENABLE_STRIKETHROUGH,
-    );
+    )
+    .map(|e| match e {
+        Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(info))) => {
+            let info = info.replace(' ', "");
+            let mut head = String::new();
+            if info.is_empty() {
+                head.push_str("<pre><code>")
+            } else {
+                let lang = info.split('[').next().unwrap();
+                let line = info
+                    .replace(lang, "")
+                    .replace(|s| (s == '[') | (s == ']'), "");
+                head.push_str(&format!("<pre><code class=\"language-{}\"", lang));
+                if !line.is_empty() {
+                    head.push_str(&format!(" data-line-numbers=\"{}\"", line));
+                }
+                head.push_str(">");
+            }
+            Event::Html(head.into())
+        }
+        _ => e,
+    });
     let mut html_output = String::new();
     push_html(&mut html_output, parser);
     Ok(html_output)
@@ -55,9 +76,7 @@ fn check_slide(slide: &Hash, i: usize, j: usize) -> Result<String, String> {
         let mut t =
             String::from(unpack!(slide => "title" = yaml_str![], as_str, "wrong title", (i, j)));
         if !t.is_empty() {
-            doc.push_str("<h2>");
-            doc.push_str(&t);
-            doc.push_str("</h2><hr/>");
+            doc.push_str(&format!("<h2>{}</h2><hr/>", t));
         }
         t = String::from(unpack!(slide => "doc" = yaml_str![], as_str, "wrong doc", (i, j)));
         if !t.is_empty() {
@@ -65,9 +84,7 @@ fn check_slide(slide: &Hash, i: usize, j: usize) -> Result<String, String> {
         }
         t = String::from(unpack!(slide => "math" = yaml_str![], as_str, "wrong math", (i, j)));
         if !t.is_empty() {
-            doc.push_str("\\[");
-            doc.push_str(&t);
-            doc.push_str("\\]");
+            doc.push_str(&format!("\\[{}\\]", t));
         }
         doc.push_str("</section>");
         Ok(doc)
@@ -97,16 +114,12 @@ fn inner_loader(yaml_str: &String) -> Result<String, String> {
         unpack!(meta => "theme" = yaml_str!["serif"], as_str, "wrong theme", (0, 0)),
     );
     let mut doc = String::new();
-    let mut title = String::new();
     for (i, s) in unpack!(yaml[1], as_vec, "slides must be array", 0)
         .iter()
         .enumerate()
     {
         doc.push_str("<section>");
         let slide = unpack!(s, as_hash, "unpack slide failed", (i, 0));
-        if i == 0 {
-            title.push_str(unpack!(slide => "title" = yaml_str![], as_str, "wrong title", (i, 0)));
-        }
         doc.push_str(&err!(check_slide(slide, i, 0)));
         for (j, s) in unpack!(slide => "sub" = yaml_vec![], as_vec, "wrong title", (i, 0))
             .iter()
@@ -116,6 +129,10 @@ fn inner_loader(yaml_str: &String) -> Result<String, String> {
             doc.push_str(&err!(check_slide(slide, i, j)));
         }
         if i == 0 {
+            template = template.replace(
+                "{@title}",
+                &unpack!(slide => "title" = yaml_str![], as_str, "wrong title", (i, 0)),
+            );
             doc.push_str("<section><h2>Outline</h2><hr/><ul>");
             for (i, s) in unpack!(yaml[1], as_vec).iter().enumerate() {
                 let s = unpack!(s, as_hash);
@@ -143,7 +160,6 @@ fn inner_loader(yaml_str: &String) -> Result<String, String> {
         }
         doc.push_str("</section>");
     }
-    template = template.replace("{@title}", &title);
     template = template.replace("{@slides}", &doc);
     Ok(template)
 }

@@ -480,7 +480,7 @@ footer:
 
         ```markdown
         doc: |
-          ```python [1-2]
+          ```python[1-2]
           import sys
           print(sys.path)
           for i in range(10):
@@ -488,7 +488,7 @@ footer:
           \```
         ```
 
-        ```python [1-2]
+        ```python[1-2]
         import sys
         print(sys.path)
         for i in range(10):
