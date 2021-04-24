@@ -1,8 +1,5 @@
-use crate::serve::{launch, new_project, update};
 use clap::{clap_app, AppSettings};
-
-mod loader;
-mod serve;
+use reveal_yaml::{launch, new_project, update};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

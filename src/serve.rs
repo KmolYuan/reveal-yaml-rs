@@ -27,7 +27,7 @@ thread_local! {
         .join("reveal.js-master.zip");
 }
 
-pub(crate) fn update() -> Result<()> {
+pub fn update() -> Result<()> {
     let b = reqwest::blocking::get(REVEAL).unwrap().bytes().unwrap();
     println!("Download archive: {}", REVEAL);
     RESOURCE.with(|path| -> Result<()> {
@@ -39,7 +39,7 @@ pub(crate) fn update() -> Result<()> {
     Ok(())
 }
 
-pub(crate) async fn new_project(path: &str) -> Result<()> {
+pub async fn new_project(path: &str) -> Result<()> {
     let path = canonicalize(Path::new(path))?;
     let path_str = path.join("img");
     match create_dir(&path_str) {
@@ -57,7 +57,7 @@ pub(crate) async fn new_project(path: &str) -> Result<()> {
     Ok(())
 }
 
-#[get("/help")]
+#[get("/help/")]
 async fn help_page() -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html")
@@ -76,7 +76,7 @@ async fn index() -> Result<HttpResponse> {
         .body(loader(buf)))
 }
 
-pub(crate) async fn launch(port: u16, path: &str) -> Result<()> {
+pub async fn launch(port: u16, path: &str) -> Result<()> {
     let path = canonicalize(Path::new(path))?.join("img");
     let d = TempDir::new().unwrap();
     // Expand Reveal.js

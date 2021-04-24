@@ -6,12 +6,15 @@ edition = "2018"
 description = "A YAML project manager serving Reveal.js slides."
 include = ["assets/**/*"]
 
+[features]
+cli = ["clap"]
+
 [[bin]]
 name = "rym"
-path = "src/main.rs"
+required-features = ["cli"]
 
 [dependencies]
-clap = "2.33"
+clap = { version = "2.33", optional = true }
 temp-dir = "0.1"
 zip = "0.5"
 actix-web = "3.3"

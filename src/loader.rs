@@ -164,7 +164,7 @@ fn inner_loader(yaml_str: &String) -> Result<String, String> {
     Ok(template)
 }
 
-pub(crate) fn loader(yaml_str: String) -> String {
+pub fn loader(yaml_str: String) -> String {
     match inner_loader(&yaml_str) {
         Ok(v) => v,
         Err(e) => {
