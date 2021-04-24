@@ -13,7 +13,6 @@ async fn main() -> std::io::Result<()> {
         (about: env!("CARGO_PKG_DESCRIPTION"))
         (setting: AppSettings::ArgRequiredElseHelp)
         (@subcommand update =>
-            (alias: "upgrade")
             (about: "Download the Reveal.js resources")
         )
         (@subcommand new =>

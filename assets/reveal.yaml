@@ -1,6 +1,5 @@
 description: A YAML, Markdown, reveal.js based Flask application.
 author: Yuan Chang
-cdn: https://raw.githubusercontent.com/KmolYuan/reveal-yaml/master/reveal_yaml/static/
 watermark: img/watermark.png
 watermark-size: 50%
 footer:
@@ -481,12 +480,12 @@ footer:
 
         ```markdown
         doc: |
-          &#96;&#96;&#96;python [1-2]
+          ```python [1-2]
           import sys
           print(sys.path)
           for i in range(10):
               print("Hello World!")
-          &#96;&#96;&#96;
+          \```
         ```
 
         ```python [1-2]

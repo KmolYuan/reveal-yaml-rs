@@ -1,6 +1,7 @@
 use crate::loader::loader;
 use actix_files::Files;
 use actix_web::{get, App, HttpResponse, HttpServer};
+use std::process::exit;
 use std::{
     env::current_exe,
     fs::{canonicalize, create_dir, File},
@@ -76,7 +77,7 @@ async fn index() -> Result<HttpResponse> {
 }
 
 pub(crate) async fn launch(port: u16, path: &str) -> Result<()> {
-    let path = canonicalize(Path::new(path))?;
+    let path = canonicalize(Path::new(path))?.join("img");
     let d = TempDir::new().unwrap();
     // Expand Reveal.js
     RESOURCE.with(|path| {
@@ -86,7 +87,8 @@ pub(crate) async fn launch(port: u16, path: &str) -> Result<()> {
                 .extract(d.path())
                 .unwrap();
         } else {
-            panic!("Archive not exist, please update first");
+            println!("Archive not exist, please update first");
+            exit(1);
         }
     });
     // Start server
@@ -94,14 +96,14 @@ pub(crate) async fn launch(port: u16, path: &str) -> Result<()> {
     let assets = assets.into_os_string().into_string().unwrap();
     let path = path.into_os_string().into_string().unwrap();
     println!("Serve at: http://localhost:{}/", port);
-    println!("Local assets at: {}", path.as_str());
     println!("Global assets at: {}", assets.as_str());
+    println!("Local assets at: {}", path.as_str());
     HttpServer::new(move || {
         App::new()
             .service(index)
             .service(help_page)
-            .service(Files::new("/", path.as_str()))
-            .service(Files::new("/", assets.as_str()))
+            .service(Files::new("/static", assets.as_str()))
+            .service(Files::new("/img", path.as_str()))
     })
     .bind(("localhost", port))?
     .run()
