@@ -1,17 +1,8 @@
 use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag};
-use yaml_rust::yaml::Hash;
-use yaml_rust::{Yaml, YamlLoader};
+use std::io::{Error, ErrorKind, Result};
+use yaml_rust::{yaml::Hash, Yaml, YamlLoader};
 
 const TEMPLATE: &str = include_str!("assets/template.html");
-
-macro_rules! err {
-    ($v:expr) => {
-        match $v {
-            Ok(v) => v,
-            Err(e) => e,
-        }
-    };
-}
 
 macro_rules! yaml_str {
     [] => { yaml_str![""] };
@@ -26,7 +17,7 @@ macro_rules! unpack {
     ($v:expr$(=>$key:literal = $default:expr)?, $method:ident, $msg:literal, $pos:expr) => {
         match $v$(.get(yaml_str!($key)).unwrap_or($default))?.$method() {
             Some(v) => v,
-            None => return Err(format!("{}: {:?}", $msg, $pos).into()),
+            None => return Err(Error::new(ErrorKind::InvalidData, format!("{}: {:?}", $msg, $pos))),
         }
     };
     ($v:expr$(=>$key:literal = $default:expr)?, $method:ident) => {
@@ -34,7 +25,7 @@ macro_rules! unpack {
     }
 }
 
-fn parse(text: &str) -> Result<String, String> {
+fn parse(text: &str) -> String {
     let parser = Parser::new_ext(
         text,
         Options::ENABLE_TABLES
@@ -63,14 +54,17 @@ fn parse(text: &str) -> Result<String, String> {
         }
         _ => e,
     });
-    let mut html_output = String::new();
-    push_html(&mut html_output, parser);
-    Ok(html_output)
+    let mut out = String::new();
+    push_html(&mut out, parser);
+    out
 }
 
-fn check_slide(slide: &Hash, i: usize, j: usize) -> Result<String, String> {
+fn check_slide(slide: &Hash, i: usize, j: usize) -> Result<String> {
     if slide.is_empty() {
-        Err(format!("empty slide block, {:?}", (i, j)).to_string())
+        Err(Error::new(
+            ErrorKind::InvalidData,
+            format!("empty slide block, {:?}", (i, j)),
+        ))
     } else {
         let mut doc = String::from("<section>");
         let mut t =
@@ -80,7 +74,7 @@ fn check_slide(slide: &Hash, i: usize, j: usize) -> Result<String, String> {
         }
         t = String::from(unpack!(slide => "doc" = yaml_str![], as_str, "wrong doc", (i, j)));
         if !t.is_empty() {
-            doc.push_str(&err!(parse(&t)));
+            doc.push_str(&parse(&t));
         }
         t = String::from(unpack!(slide => "math" = yaml_str![], as_str, "wrong math", (i, j)));
         if !t.is_empty() {
@@ -91,13 +85,13 @@ fn check_slide(slide: &Hash, i: usize, j: usize) -> Result<String, String> {
     }
 }
 
-fn inner_loader(yaml_str: &String) -> Result<String, String> {
+pub fn loader(yaml_str: String) -> Result<String> {
     let yaml = match YamlLoader::load_from_str(yaml_str.as_str()) {
         Ok(v) => v,
-        Err(e) => return Err(e.to_string()),
+        Err(e) => return Err(Error::new(ErrorKind::InvalidData, e.to_string())),
     };
     if yaml.len() < 2 {
-        return Err(format!("Missing metadata").into());
+        return Err(Error::new(ErrorKind::InvalidData, "Missing metadata"));
     }
     let mut template = String::from(TEMPLATE);
     let meta = unpack!(yaml[0], as_hash, "meta must be key values", 0);
@@ -120,13 +114,13 @@ fn inner_loader(yaml_str: &String) -> Result<String, String> {
     {
         doc.push_str("<section>");
         let slide = unpack!(s, as_hash, "unpack slide failed", (i, 0));
-        doc.push_str(&err!(check_slide(slide, i, 0)));
+        doc.push_str(&check_slide(slide, i, 0)?);
         for (j, s) in unpack!(slide => "sub" = yaml_vec![], as_vec, "wrong title", (i, 0))
             .iter()
             .enumerate()
         {
             let slide = unpack!(s, as_hash, "unpack slide failed", (i, j));
-            doc.push_str(&err!(check_slide(slide, i, j)));
+            doc.push_str(&check_slide(slide, i, j)?);
         }
         if i == 0 {
             template = template.replace(
@@ -162,14 +156,4 @@ fn inner_loader(yaml_str: &String) -> Result<String, String> {
     }
     template = template.replace("{@slides}", &doc);
     Ok(template)
-}
-
-pub fn loader(yaml_str: String) -> String {
-    match inner_loader(&yaml_str) {
-        Ok(v) => v,
-        Err(e) => {
-            println!("ERROR: {}", e);
-            String::from(format!("<section>{}</section>", e))
-        }
-    }
 }

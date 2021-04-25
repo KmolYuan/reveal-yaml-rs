@@ -1,15 +1,14 @@
 use crate::loader::loader;
 use actix_files::Files;
 use actix_web::{get, App, HttpResponse, HttpServer};
-use std::process::exit;
 use std::{
     env::{current_exe, set_current_dir},
     fs::{canonicalize, create_dir, File},
     io::{Read, Result, Write},
-    path::Path,
-    path::PathBuf,
+    path::{Path, PathBuf},
 };
 use temp_dir::TempDir;
+use zip::ZipArchive;
 
 const ROOT: &str = "reveal.yaml";
 const WATERMARK_PATH: &str = "img/watermark.png";
@@ -61,19 +60,17 @@ pub async fn new_project(path: &str) -> Result<()> {
 async fn help_page() -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html")
-        .body(loader(String::from(HELP_DOC))))
+        .body(loader(String::from(HELP_DOC))?))
 }
 
 #[get("/")]
 async fn index() -> Result<HttpResponse> {
     let mut buf = String::new();
-    {
-        let mut f = File::open(ROOT)?;
-        f.read_to_string(&mut buf)?;
-    }
+    let mut f = File::open(ROOT)?;
+    f.read_to_string(&mut buf)?;
     Ok(HttpResponse::Ok()
         .content_type("text/html;charset=utf-8")
-        .body(loader(buf)))
+        .body(loader(buf)?))
 }
 
 pub async fn launch(port: u16, path: &str) -> Result<()> {
@@ -82,16 +79,15 @@ pub async fn launch(port: u16, path: &str) -> Result<()> {
     path.push("img");
     let d = TempDir::new().unwrap();
     // Expand Reveal.js
-    RESOURCE.with(|path| {
-        if path.exists() {
-            zip::read::ZipArchive::new(File::open(path).unwrap())
-                .unwrap()
-                .extract(d.path())
-                .unwrap();
-        } else {
-            println!("Archive not exist, please update first");
-            exit(1);
+    RESOURCE.with(|path| -> Result<()> {
+        if !path.exists() {
+            update()?;
         }
+        ZipArchive::new(File::open(path).unwrap())
+            .unwrap()
+            .extract(d.path())
+            .unwrap();
+        Ok(())
     });
     // Start server
     let assets = d.path().join("reveal.js-master");
