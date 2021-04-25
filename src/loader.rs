@@ -59,7 +59,7 @@ fn parse(text: &str) -> String {
     out
 }
 
-fn check_slide(slide: &Hash, i: usize, j: usize) -> Result<String> {
+fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
     if slide.is_empty() {
         Err(Error::new(
             ErrorKind::InvalidData,
@@ -85,6 +85,7 @@ fn check_slide(slide: &Hash, i: usize, j: usize) -> Result<String> {
     }
 }
 
+/// Load YAML string as HTML.
 pub fn loader(yaml_str: String) -> Result<String> {
     let yaml = match YamlLoader::load_from_str(yaml_str.as_str()) {
         Ok(v) => v,
@@ -93,17 +94,17 @@ pub fn loader(yaml_str: String) -> Result<String> {
     if yaml.len() < 2 {
         return Err(Error::new(ErrorKind::InvalidData, "Missing metadata"));
     }
-    let mut template = String::from(TEMPLATE);
+    let mut reveal = String::from(TEMPLATE);
     let meta = unpack!(yaml[0], as_hash, "meta must be key values", 0);
-    template = template.replace(
+    reveal = reveal.replace(
         "{@description}",
         unpack!(meta => "description" = yaml_str![], as_str, "wrong description", (0, 0)),
     );
-    template = template.replace(
+    reveal = reveal.replace(
         "{@author}",
         unpack!(meta => "author" = yaml_str![], as_str, "wrong author", (0, 0)),
     );
-    template = template.replace(
+    reveal = reveal.replace(
         "{@theme}",
         unpack!(meta => "theme" = yaml_str!["serif"], as_str, "wrong theme", (0, 0)),
     );
@@ -114,16 +115,16 @@ pub fn loader(yaml_str: String) -> Result<String> {
     {
         doc.push_str("<section>");
         let slide = unpack!(s, as_hash, "unpack slide failed", (i, 0));
-        doc.push_str(&check_slide(slide, i, 0)?);
+        doc.push_str(&slide_block(slide, i, 0)?);
         for (j, s) in unpack!(slide => "sub" = yaml_vec![], as_vec, "wrong title", (i, 0))
             .iter()
             .enumerate()
         {
             let slide = unpack!(s, as_hash, "unpack slide failed", (i, j));
-            doc.push_str(&check_slide(slide, i, j)?);
+            doc.push_str(&slide_block(slide, i, j)?);
         }
         if i == 0 {
-            template = template.replace(
+            reveal = reveal.replace(
                 "{@title}",
                 &unpack!(slide => "title" = yaml_str![], as_str, "wrong title", (i, 0)),
             );
@@ -154,6 +155,6 @@ pub fn loader(yaml_str: String) -> Result<String> {
         }
         doc.push_str("</section>");
     }
-    template = template.replace("{@slides}", &doc);
-    Ok(template)
+    reveal = reveal.replace("{@slides}", &doc);
+    Ok(reveal)
 }

@@ -26,6 +26,7 @@ thread_local! {
         .join("reveal.js-master.zip");
 }
 
+/// Download the archive from Reveal.js repository.
 pub fn update() -> Result<()> {
     let b = reqwest::blocking::get(REVEAL).unwrap().bytes().unwrap();
     println!("Download archive: {}", REVEAL);
@@ -38,7 +39,8 @@ pub fn update() -> Result<()> {
     Ok(())
 }
 
-pub async fn new_project(path: &str) -> Result<()> {
+/// Create new project.
+pub fn new_project(path: &str) -> Result<()> {
     let path = canonicalize(Path::new(path))?;
     let path_str = path.join("img");
     match create_dir(&path_str) {
@@ -73,6 +75,7 @@ async fn index() -> Result<HttpResponse> {
         .body(loader(buf)?))
 }
 
+/// Launch function.
 pub async fn launch(port: u16, path: &str) -> Result<()> {
     let mut path = canonicalize(Path::new(path))?;
     set_current_dir(&path)?;
@@ -88,7 +91,7 @@ pub async fn launch(port: u16, path: &str) -> Result<()> {
             .extract(d.path())
             .unwrap();
         Ok(())
-    });
+    })?;
     // Start server
     let assets = d.path().join("reveal.js-master");
     let assets = assets.into_os_string().into_string().unwrap();
