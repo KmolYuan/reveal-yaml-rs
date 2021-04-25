@@ -1,5 +1,5 @@
 use clap::{clap_app, AppSettings};
-use reveal_yaml::{launch, new_project, update};
+use reveal_yaml::{launch, new_project, pack, update};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -19,12 +19,12 @@ async fn main() -> std::io::Result<()> {
         )
         (@subcommand serve =>
             (about: "Serve the current project")
-            (@arg DIR: "Set current path")
+            (@arg DIR: "Project dir")
             (@arg PORT: --port +takes_value "Set port")
         )
         (@subcommand pack =>
             (about: "Pack the current project")
-            (@arg DIR: -c +takes_value "Set current path")
+            (@arg DIR: "Project dir")
         )
     }
     .get_matches();
@@ -37,6 +37,9 @@ async fn main() -> std::io::Result<()> {
         let port = cmd.value_of("PORT").unwrap_or("8080");
         let path = cmd.value_of("DIR").unwrap_or(".");
         launch(port.parse().unwrap(), path).await?;
+    } else if let Some(cmd) = args.subcommand_matches("pack") {
+        let path = cmd.value_of("DIR").unwrap_or(".");
+        pack(path)?;
     }
     Ok(())
 }
