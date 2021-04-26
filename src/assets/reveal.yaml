@@ -20,7 +20,6 @@ footer:
     Scroll right → to see the tutorial.
 
     Scroll down ↓ to see an auto-generated outline.
-
 - title: Quick Start
   doc: |
     Install from PyPI:
@@ -70,7 +69,6 @@ footer:
         chmod 400 localhost.key
         openssl req -new -x509 -nodes -sha256 -days 365 -key localhost.key -out localhost.crt
         ```
-
     - doc: |
         # CLI Autocompletion
 
@@ -81,7 +79,6 @@ footer:
         ```sh
         eval "$(register-python-argcomplete rym)"
         ```
-
     - title: From Repository
       doc: |
         Install requirements:
@@ -102,7 +99,6 @@ footer:
         ```
 
         See `rym` or `rym --help` command for more CLI information.
-
     - title: GH Pages
       doc: |
         The Github actions can deploy "build" to gh-pages automatically.
@@ -119,7 +115,6 @@ footer:
         At last, each commit will enable auto deployment on "gh-pages" branch.
 
         Powered by [JamesIves/github-pages-deploy-action](https://github.com/JamesIves/github-pages-deploy-action).
-
     - title: Browser Compatibility
       doc: |
         Table from MDN JavaScript. Icons are [icons8](https://icons8.com/).
@@ -141,27 +136,6 @@ footer:
         [opera]: https://img.icons8.com/color/96/000000/opera--v1.png
         [safari]: https://img.icons8.com/color/96/000000/safari--v1.png
         [android]: https://img.icons8.com/color/96/000000/android-os.png
-
-    - title: Editor
-      doc: |
-        RYM provides a basic web YAML editor for:
-
-        + Validate the project syntax and field types.
-        + Preview slides in two columns.
-        + Save YAML project.
-        + Pack function.
-        + Content delivery network (CDN) support.
-
-        Start it with CLI:
-
-        ```bash
-        rym editor --port=5000
-        ```
-
-        If it starts in a project root, "reveal.yaml" will be opened in first time.
-
-        There also has a [Heroku version](https://reveal-yaml.herokuapp.com/).
-
 - title: Reveal.js Slides
   doc: |
     The slides are 2D arrary-like.
@@ -169,11 +143,12 @@ footer:
     Scroll down ↓ to learn the rules.
 
     ```yaml
-    nav:
-      - title: ...
-        doc: ...
-        img:
-          src: ...
+    # metadata
+    ---
+    - title: ...
+      doc: ...
+      img:
+        src: ...
     ```
   sub:
     - title: Slides in HTML
@@ -190,17 +165,17 @@ footer:
         ...
         </section>
         ```
-
     - title: Slides in YAML
       doc: |
-        The **horizontal** slides are as list in the `nav` node.
+        The **horizontal** slides are as list in the second array.
         And a slide can work with at least **one** attribute structure:
 
         ```yaml
-        nav:
-          - title: ...  # Works!
-          - doc: ...  # Works!
-          - img: ...  # Works!
+        # metadata
+        ---
+        - title: ...  # Works!
+        - doc: ...  # Works!
+        - img: ...  # Works!
         ```
 
         The **vertical** slides work under the `sub` node of first slide.
@@ -208,14 +183,12 @@ footer:
         Or just use `sub` at first slide without other attributes.
 
         ```yaml
-        nav:
-          - title: Horizontal slide 1
-            sub:
-              - title: Vertical slide 1
-              - title: Vertical slide 2
-          - title: Horizontal slide 2
+        - title: Horizontal slide 1
+          sub:
+            - title: Vertical slide 1
+            - title: Vertical slide 2
+        - title: Horizontal slide 2
         ```
-
     - doc: |
         YAML Flow style and anchors is also valid in this project.
 
@@ -239,7 +212,6 @@ footer:
         - <<: *my-title-page  # Extend from anchor
           title: Hello Again
         ```
-
     - title: Sized Attributes
       doc: |
         Some options are support resize. Based on HTML.
@@ -265,16 +237,13 @@ footer:
         <<: *sized
         ...: # other options
         ```
-
 - title: Project Options
   doc: |
     | Key | Description | Type |
     |:---:|:------------|:----:|
-    | lang | Page language, default is "en" | `str` |
-    | title | Page title, default is same as first page | `str` |
+    | title | The page title, default to the first page | `str` |
     | description | Page description | `str` |
     | author | Page author | `str` |
-    | [cdn](#/3/3) | Accessible CDN path if missing local files | `str` |
     | watermark | Watermark source | `str` |
     | watermark-size | Source width | `int` / `str` |
     | outline | Outline page under first column with depth | `int` {0, 1, 2} |
@@ -303,28 +272,6 @@ footer:
         | [footer](#/3/4) | Footer option | `Footer` |
         | [plugin](#/3/5) | Plugin enable / disable options | `Plugin` |
         | nav | Horizontal slides | `List[HSlide]` |
-
-    - doc: |
-        # Content Delivery Network (CDN)
-
-        You can store resources in a public CDN, such as github.
-
-        ```yaml
-        cdn: https://raw.githubusercontent.com/.../static/
-        nav:
-          - title: Load My Files
-            include: template/code_demo.md
-            img:
-              src: img/logo.png
-            embed:
-              src: pdf/report.pdf
-        ```
-
-        The editor can found the files from local static folder.
-        If the resources are not exist, CDN path will be used.
-
-        This option is required on editor server,
-        otherwise the resource will not be found.
     - doc: |
         # Footer
 
@@ -348,7 +295,6 @@ footer:
           label: Reveal.yaml
           link: https://github.com/KmolYuan/reveal-yaml/
         ```
-
     - doc: |
         # Plugins
 
@@ -361,7 +307,6 @@ footer:
         + `search`: Disabled
         + `highlight`: Enabled
         + `math`: Disabled (auto enabled)
-
 - title: Slide Attributes
   doc: |
     All attributes are default to disable.
@@ -369,18 +314,17 @@ footer:
     | Key | Description | Type |
     |:---:|:------------|:----:|
     | title | Single line Markdown level 2 title | `str` |
+    | no-title | Unrecorded title | `str` |
     | [doc](#/4/2) | Multiline Markdown pargraph | `str` |
     | include | Include a Markdown file from path, append after "doc" | `str` |
     | math | Latex math without "$$" brackets | `str` |
     | [img](#/4/3) | A list of image source | `Img` / `List[Img]` |
-    | youtube / embed | YouTube or external resource like PDF | `Sized` |
   sub:
     - doc: |
         | Key | Description | Type |
         |:---:|:------------|:----:|
         | [fragment](#/4/4) | Fragment option | `Fragment` |
         | sub | Vertical slides, for horizontal slides only | `List[Slide]` |
-
     - title: Markdown Article
       doc: |
         Paragarphs are written in [Markdown](https://daringfireball.net/projects/markdown/syntax).
@@ -404,7 +348,6 @@ footer:
 
         note:
         Shows in speaker view!
-
     - title: Image Attributes
       doc: |
         Must have at least `src` attribute to become a valid image.
@@ -429,7 +372,6 @@ footer:
 
         If there has only one image, the options can under `img` key directly
         without to list them.
-
     - title: Fragment Elements
       doc: |
         Each slide can be added [Fragment option](https://revealjs.com/fragments).
@@ -443,7 +385,6 @@ footer:
         ```yaml
         fragment: {img: grow}
         ```
-
 - title: Examples
   doc: |
     You can found [the source](https://github.com/KmolYuan/reveal-yaml/blob/master/reveal.yaml)
@@ -451,9 +392,8 @@ footer:
 
     Scroll down ↓ to see the examples.
   sub:
-    - doc: |
-        # Markdown
-
+    - no-title: Markdown
+      doc: |
         ```yaml
         doc: |
           *Something* **important**.
@@ -474,10 +414,8 @@ footer:
 
         + Item 1 <!-- .element: class="fragment" data-fragment-index="2" -->
         + Item 2 <!-- .element: class="fragment" data-fragment-index="1" -->
-
-    - doc: |
-        # Code block
-
+    - no-title: Code block
+      doc: |
         <pre><code class="language-markdown">doc: |
           ```python[1-2]
           import sys
@@ -493,10 +431,8 @@ footer:
         for i in range(10):
             print("Hello World!")
         ```
-
-    - doc: |
-        # Images
-
+    - no-title: Images
+      doc: |
         ```yaml
         img:
         - label: Ubuntu Logo
@@ -516,9 +452,8 @@ footer:
       fragment:
         img: fade-in-then-out
 
-    - doc: |
-        # Maths
-
+    - no-title: Maths
+      doc: |
         Inline math text $x^2$.
 
         ```yaml
@@ -543,27 +478,3 @@ footer:
         \end{aligned}
       fragment:
         math: highlight-blue
-
-    - doc: |
-        # YouTube Video
-
-        ```yaml
-        youtube:
-          src: https://www.youtube.com/embed/LcuvxJNIgfE
-          width: 800pt
-          height: 500pt
-        ```
-      youtube:
-        src: https://www.youtube.com/embed/LcuvxJNIgfE
-        width: 600pt
-        height: 400pt
-
-    - doc: |
-        # Embedded PDF
-
-        ```yaml
-        embed:
-          src: https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf
-        ```
-      embed:
-        src: https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf

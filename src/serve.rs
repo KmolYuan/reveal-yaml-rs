@@ -114,9 +114,12 @@ pub fn pack(path: &str) -> Result<()> {
         &dist.join("index.html"),
         loader(read_to_string(path.join(ROOT))?)?,
     )?;
-    dist.push("img");
-    create_dir(&dist)?;
-    copy_dir(path.join("img"), dist)?;
+    let assets = path.join("img");
+    if assets.is_dir() {
+        dist.push("img");
+        create_dir(&dist)?;
+        copy_dir(assets, dist)?;
+    }
     println!("Done");
     Ok(())
 }
