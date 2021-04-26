@@ -153,8 +153,8 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
 }
 
 /// Load YAML string as HTML.
-pub fn loader(yaml_str: String, mount: &str) -> Result<String> {
-    let yaml = match YamlLoader::load_from_str(&yaml_str) {
+pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
+    let yaml = match YamlLoader::load_from_str(yaml_str) {
         Ok(v) => v,
         Err(e) => return err!(e.to_string()),
     };

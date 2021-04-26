@@ -146,7 +146,7 @@ where
     }
     write(
         archive.join("index.html"),
-        loader(read_to_string(ROOT)?, "")?,
+        loader(&read_to_string(ROOT)?, "")?,
     )?;
     for assets in listdir(".")? {
         if assets == archive {
@@ -167,14 +167,14 @@ where
 async fn help_page() -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html")
-        .body(loader(String::from(HELP_DOC), "/static/")?))
+        .body(loader(HELP_DOC, "/static/")?))
 }
 
 #[get("/")]
 async fn index() -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html;charset=utf-8")
-        .body(loader(read_to_string(ROOT)?, "/static/")?))
+        .body(loader(&read_to_string(ROOT)?, "/static/")?))
 }
 
 /// Launch function.
