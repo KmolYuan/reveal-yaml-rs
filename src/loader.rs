@@ -153,7 +153,7 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
 }
 
 /// Load YAML string as HTML.
-pub fn loader(yaml_str: String) -> Result<String> {
+pub fn loader(yaml_str: String, mount: &str) -> Result<String> {
     let yaml = match YamlLoader::load_from_str(&yaml_str) {
         Ok(v) => v,
         Err(e) => return err!(e.to_string()),
@@ -161,7 +161,7 @@ pub fn loader(yaml_str: String) -> Result<String> {
     if yaml.len() < 2 {
         return err!("Missing metadata or slides");
     }
-    let mut reveal = String::from(TEMPLATE);
+    let mut reveal = String::from(TEMPLATE).replace("{@mount}", mount);
     let mut title = String::new();
     let meta = unpack!(yaml[0], as_hash, "meta must be key values");
     let mut doc = String::new();

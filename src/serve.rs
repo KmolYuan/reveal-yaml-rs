@@ -5,7 +5,7 @@ use std::{
     env::{current_exe, set_current_dir},
     fs::{
         canonicalize, copy, create_dir, read_dir, read_to_string, remove_dir_all, remove_file,
-        write, File,
+        rename, write, File,
     },
     io::{Result, Write},
     path::{Path, PathBuf},
@@ -30,14 +30,23 @@ thread_local! {
         .join(format!("{}.zip", ARCHIVE));
 }
 
-fn extract(d: &Path) -> Result<()> {
+macro_rules! path_string {
+    ($v:expr) => {
+        $v.into_os_string().into_string().unwrap()
+    };
+}
+
+fn extract<D>(d: D) -> Result<()>
+where
+    D: AsRef<Path>,
+{
     RESOURCE.with(|path| -> Result<()> {
         if !path.exists() {
             update()?;
         }
         ZipArchive::new(File::open(path).unwrap())
             .unwrap()
-            .extract(d)
+            .extract(d.as_ref())
             .unwrap();
         Ok(())
     })
@@ -57,8 +66,11 @@ pub fn update() -> Result<()> {
 }
 
 /// Create new project.
-pub fn new_project(path: &str) -> Result<()> {
-    let path = canonicalize(Path::new(path))?;
+pub fn new_project<P>(path: P) -> Result<()>
+where
+    P: AsRef<Path>,
+{
+    let path = path.as_ref();
     let path_str = path.join("img");
     match create_dir(&path_str) {
         Ok(_) => println!("Create directory: {}", path_str.to_str().unwrap()),
@@ -89,37 +101,64 @@ where
             copy_dir(&path, dist.join(file_name))?;
         } else if path.is_file() {
             let dist = dist.join(file_name);
-            println!("{:?} > {:?}", &path, &dist);
+            println!("{:?} > {:?}", &path, dist);
             copy(&path, dist)?;
         }
     }
     Ok(())
 }
 
-pub fn pack(path: &str) -> Result<()> {
-    let path = canonicalize(Path::new(path))?;
-    let mut dist = path.join(ARCHIVE);
+fn listdir<P>(path: P) -> Result<Vec<PathBuf>>
+where
+    P: AsRef<Path>,
+{
+    let mut list = Vec::new();
+    for entry in read_dir(path)? {
+        list.push(entry?.path());
+    }
+    Ok(list)
+}
+
+pub fn pack<P, D>(path: P, dist: D) -> Result<()>
+where
+    P: AsRef<Path>,
+    D: AsRef<Path>,
+{
+    let path = path.as_ref();
+    set_current_dir(path)?;
+    let dist = dist.as_ref();
     if dist.is_dir() {
         println!("Remove {:?}", &dist);
         remove_dir_all(&dist)?;
     }
-    extract(path.as_path())?;
-    for e in read_dir(&dist)? {
+    let archive = format!("./{}", ARCHIVE);
+    let archive = Path::new(&archive);
+    extract(".")?;
+    for e in read_dir(&archive)? {
         let path = e?.path();
         if path.is_file() {
             remove_file(path)?;
+        } else if [".github", "examples", "test"]
+            .contains(&path.file_name().unwrap().to_str().unwrap())
+        {
+            remove_dir_all(path)?;
         }
     }
     write(
-        &dist.join("index.html"),
-        loader(read_to_string(path.join(ROOT))?)?,
+        archive.join("index.html"),
+        loader(read_to_string(ROOT)?, "")?,
     )?;
-    let assets = path.join("img");
-    if assets.is_dir() {
-        dist.push("img");
-        create_dir(&dist)?;
-        copy_dir(assets, dist)?;
+    for assets in listdir(".")? {
+        if assets == archive {
+            continue;
+        }
+        if assets.is_dir() {
+            let dist = archive.join(assets.file_name().unwrap().to_os_string());
+            create_dir(&dist)?;
+            copy_dir(&assets, dist)?;
+        }
     }
+    rename(archive, dist)?;
     println!("Done");
     Ok(())
 }
@@ -128,37 +167,54 @@ pub fn pack(path: &str) -> Result<()> {
 async fn help_page() -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html")
-        .body(loader(String::from(HELP_DOC))?))
+        .body(loader(String::from(HELP_DOC), "/static/")?))
 }
 
 #[get("/")]
 async fn index() -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html;charset=utf-8")
-        .body(loader(read_to_string(ROOT)?)?))
+        .body(loader(read_to_string(ROOT)?, "/static/")?))
 }
 
 /// Launch function.
-pub async fn launch(port: u16, path: &str) -> Result<()> {
-    let mut path = canonicalize(Path::new(path))?;
-    set_current_dir(&path)?;
-    path.push("img");
+pub async fn launch<P>(port: u16, path: P) -> Result<()>
+where
+    P: AsRef<Path>,
+{
+    let path = path.as_ref();
+    set_current_dir(path)?;
+    let assets = listdir(path)?;
     let d = TempDir::new().unwrap();
     // Expand Reveal.js
     extract(d.path())?;
     // Start server
-    let assets = d.path().join(ARCHIVE);
-    let assets = assets.into_os_string().into_string().unwrap();
-    let path = path.into_os_string().into_string().unwrap();
+    let archive = d.path().join(ARCHIVE);
+    let archive = path_string!(archive);
     println!("Serve at: http://localhost:{}/", port);
-    println!("Global assets at: {}", assets.as_str());
-    println!("Local assets at: {}", path.as_str());
+    println!("Global assets at: {}", archive.as_str());
+    println!("Local assets at: {}", path_string!(canonicalize(path)?));
     HttpServer::new(move || {
-        App::new()
+        let mut app = App::new()
             .service(index)
             .service(help_page)
-            .service(Files::new("/static", assets.as_str()))
-            .service(Files::new("/img", path.as_str()))
+            .service(Files::new("/static", archive.as_str()));
+        for asset in &assets {
+            let name = format!(
+                "/{}",
+                asset
+                    .file_name()
+                    .unwrap()
+                    .to_os_string()
+                    .into_string()
+                    .unwrap()
+            );
+            app = app.service(Files::new(
+                name.as_str(),
+                path_string!(asset.clone()).as_str(),
+            ));
+        }
+        app
     })
     .bind(("localhost", port))?
     .run()

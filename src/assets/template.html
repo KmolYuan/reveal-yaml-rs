@@ -7,11 +7,11 @@
     <meta name="description" content="{@description}">
     <meta name="author" content="{@author}">
     <link rel="icon" href="{@icon}">
-    <link rel="stylesheet" href="/static/dist/reset.css">
-    <link rel="stylesheet" href="/static/dist/reveal.css">
-    <link rel="stylesheet" href="/static/dist/theme/{@theme}.css" id="theme">
+    <link rel="stylesheet" href="{@mount}dist/reset.css">
+    <link rel="stylesheet" href="{@mount}dist/reveal.css">
+    <link rel="stylesheet" href="{@mount}dist/theme/{@theme}.css" id="theme">
     <!-- Theme used for syntax highlighted code -->
-    <link rel="stylesheet" href="/static/plugin/highlight/{@code-theme}.css" id="highlight-theme">
+    <link rel="stylesheet" href="{@mount}plugin/highlight/{@code-theme}.css" id="highlight-theme">
     <style>
         #footer-left {
             position: absolute;
@@ -119,11 +119,11 @@
         {@slides}
     </div>
 </div>
-<script src="/static/dist/reveal.js"></script>
-<script src="/static/plugin/notes/notes.js"></script>
-<script src="/static/plugin/search/search.js"></script>
-<script src="/static/plugin/highlight/highlight.js"></script>
-<script src="/static/plugin/math/math.js"></script>
+<script src="{@mount}dist/reveal.js"></script>
+<script src="{@mount}plugin/notes/notes.js"></script>
+<script src="{@mount}plugin/search/search.js"></script>
+<script src="{@mount}plugin/highlight/highlight.js"></script>
+<script src="{@mount}plugin/math/math.js"></script>
 <script>
     Reveal.initialize({
         hash: true,

@@ -25,6 +25,7 @@ async fn main() -> std::io::Result<()> {
         (@subcommand pack =>
             (about: "Pack the current project")
             (@arg DIR: "Project dir")
+            (@arg DIST: -o "Output dir")
         )
     }
     .get_matches();
@@ -39,7 +40,8 @@ async fn main() -> std::io::Result<()> {
         launch(port.parse().unwrap(), path).await?;
     } else if let Some(cmd) = args.subcommand_matches("pack") {
         let path = cmd.value_of("DIR").unwrap_or(".");
-        pack(path)?;
+        let dist = cmd.value_of("DIST").unwrap_or("./package");
+        pack(path, dist)?;
     }
     Ok(())
 }
