@@ -1,5 +1,5 @@
 use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag};
-use std::{fs::read_to_string, io::Result};
+use std::{fs::read_to_string, io::Result, slice::Iter};
 use yaml_rust::{yaml::Hash, Yaml, YamlLoader};
 
 const TEMPLATE: &str = include_str!("assets/template.html");
@@ -22,7 +22,7 @@ macro_rules! yaml_vec {
 trait Unpack {
     fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool>;
     fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String>;
-    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<&Vec<Yaml>>;
+    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<Iter<Yaml>>;
 }
 
 impl Unpack for Hash {
@@ -44,13 +44,14 @@ impl Unpack for Hash {
             _ => err!(format!("wrong {}: {}:{}", key, i, j)),
         }
     }
-    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<&Vec<Yaml>> {
-        match self
-            .get(&Yaml::String(String::from(key)))
-            .unwrap_or(&Yaml::Boolean(false))
-        {
-            Yaml::Array(a) => Ok(a),
-            _ => err!(format!("wrong {}: {}:{}", key, i, j)),
+    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<Iter<Yaml>> {
+        if let Some(v) = self.get(&Yaml::String(String::from(key))) {
+            match v {
+                Yaml::Array(a) => Ok(a.iter()),
+                _ => err!(format!("wrong {}: {}:{}", key, i, j)),
+            }
+        } else {
+            Ok([].iter())
         }
     }
 }
@@ -205,7 +206,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         doc.push_str("<section>");
         let slide = s.assert_hash(&format!("unpack slide failed: {}:0", i))?;
         doc.push_str(&slide_block(slide, i, 0)?);
-        for (j, s) in slide.get_vec("sub", i, 0)?.iter().enumerate() {
+        for (j, s) in slide.get_vec("sub", i, 0)?.enumerate() {
             let slide = s.assert_hash(&format!("unpack slide failed: {}:{}", i, 0))?;
             doc.push_str(&slide_block(slide, i, j)?);
         }
@@ -222,12 +223,12 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
                     continue;
                 }
                 doc.push_str(&format!("<li><a href=\"#/{}\">{}</a></li>", i, t));
-                let sub = s.get_vec("sub", i, 0)?;
-                if sub.is_empty() {
+                let mut sub = s.get_vec("sub", i, 0)?.peekable();
+                if sub.peek().is_none() {
                     continue;
                 }
                 doc.push_str("<ul>");
-                for (j, s) in sub.iter().enumerate() {
+                for (j, s) in sub.enumerate() {
                     let s = s.assert_hash("unpack slide failed")?;
                     let t = s.get_string("title", "", i, j)?;
                     if t.is_empty() {
@@ -241,7 +242,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         }
         doc.push_str("</section>");
     }
-    let mut reveal = String::from(TEMPLATE).replace("{@mount}", mount);
+    let mut reveal = String::from(TEMPLATE).replace("{%mount}", mount);
     for (key, default) in &[
         ("icon", "img/icon.png"),
         ("title", &title),
@@ -256,6 +257,6 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
             &meta.get_string(key, default, 0, 0)?,
         );
     }
-    reveal = reveal.replace("{@slides}", &doc);
+    reveal = reveal.replace("{%slides}", &doc);
     Ok(reveal)
 }
