@@ -10,10 +10,6 @@ const MARKED: Options = Options::from_bits_truncate(
         | Options::ENABLE_STRIKETHROUGH.bits(),
 );
 
-macro_rules! yaml_bool {
-    [$bool:literal] => { &Yaml::Boolean($bool) };
-}
-
 macro_rules! yaml_str {
     [] => { yaml_str![""] };
     [$text:expr] => { &Yaml::String(String::from($text)) };
@@ -23,15 +19,62 @@ macro_rules! yaml_vec {
     [] => { &Yaml::Array(vec![]) };
 }
 
-macro_rules! unpack {
-    ($v:expr$(=>$key:expr => $default:expr)?, $method:ident, $msg:expr) => {
-        match $v$(.get(yaml_str!($key)).unwrap_or($default).clone())?.$method() {
-            Some(v) => v,
-            None => return err!($msg),
+trait Unpack {
+    fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool>;
+    fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String>;
+    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<&Vec<Yaml>>;
+}
+
+impl Unpack for Hash {
+    fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool> {
+        match self
+            .get(&Yaml::String(String::from(key)))
+            .unwrap_or(&Yaml::Boolean(default))
+        {
+            Yaml::Boolean(b) => Ok(*b),
+            _ => err!(format!("wrong {}: {}:{}", key, i, j)),
         }
-    };
-    ($v:expr$(=>$key:literal => $default:expr)?, $method:ident) => {
-        $v$(.get(yaml_str!($key)).unwrap_or($default).clone())?.$method().unwrap()
+    }
+    fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String> {
+        match self
+            .get(&Yaml::String(String::from(key)))
+            .unwrap_or(&Yaml::String(default.into()))
+        {
+            Yaml::String(s) => Ok(s.clone()),
+            _ => err!(format!("wrong {}: {}:{}", key, i, j)),
+        }
+    }
+    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<&Vec<Yaml>> {
+        match self
+            .get(&Yaml::String(String::from(key)))
+            .unwrap_or(&Yaml::Boolean(false))
+        {
+            Yaml::Array(a) => Ok(a),
+            _ => err!(format!("wrong {}: {}:{}", key, i, j)),
+        }
+    }
+}
+
+trait ToContainer
+where
+    Self: Sized,
+{
+    fn assert_hash(&self, msg: &str) -> Result<&Hash>;
+    fn assert_vec(&self, msg: &str) -> Result<&Vec<Self>>;
+}
+
+impl ToContainer for Yaml {
+    fn assert_hash(&self, msg: &str) -> Result<&Hash> {
+        match self {
+            Yaml::Hash(h) => Ok(h),
+            _ => err!(msg),
+        }
+    }
+    fn assert_vec(&self, msg: &str) -> Result<&Vec<Self>> {
+        match self {
+            Yaml::Array(a) => Ok(a),
+            _ => err!(msg),
+        }
     }
 }
 
@@ -81,13 +124,12 @@ fn sized_block(img: &Hash, i: usize, j: usize) -> Result<String> {
 
 fn img_block(img: &Hash, i: usize, j: usize) -> Result<String> {
     let mut doc = String::from("<div class=\"img-column\"><figure>");
-    let src = unpack!(img => "src" => yaml_str![], into_string, format!("wrong src: {}:{}", i, j));
+    let src = img.get_string("src", "", i, j)?;
     if src.is_empty() {
         return err!(format!("No image source: {}:{}", i, j));
     }
     doc.push_str(&format!("<img src=\"{}\"{}>", src, sized_block(img, i, j)?));
-    let label =
-        unpack!(img => "label" => yaml_str![], into_string, format!("wrong label: {}:{}", i, j));
+    let label = img.get_string("label", "", i, j)?;
     if !label.is_empty() {
         doc.push_str(&format!("<figcaption>{}</figcaption>", label));
     }
@@ -100,25 +142,24 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
         return err!(format!("empty slide block, {}:{}", i, j));
     }
     let mut doc = String::from("<section");
-    let mut t = unpack!(slide => "bg-color" => yaml_str![],
-        into_string, format!("wrong bg-color: {}:{}", i, j));
+    let mut t = slide.get_string("bg-color", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!(" data-background-color=\"{}\"", t));
     }
     doc.push_str(">");
-    t = unpack!(slide => "title" => yaml_str![], into_string, format!("wrong title: {}:{}", i, j));
+    t = slide.get_string("title", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!("<h2>{}</h2><hr/>", t));
     }
-    t = unpack!(slide => "no-title" => yaml_str![], into_string, format!("wrong no-title: {}:{}", i, j));
+    t = slide.get_string("no-title", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!("<h2>{}</h2><hr/>", t));
     }
-    t = unpack!(slide => "doc" => yaml_str![], into_string, format!("wrong doc: {}:{}", i, j));
+    t = slide.get_string("doc", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&parse(&t));
     }
-    t = unpack!(slide => "include" => yaml_str![], into_string, format!("wrong include: {}:{}", i, j));
+    t = slide.get_string("include", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&parse(&read_to_string(t)?));
     }
@@ -126,8 +167,7 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
         Yaml::Array(imgs) => {
             doc.push_str("<div class=\"img-row\">");
             for img in imgs {
-                let img = unpack!(img, as_hash, format!("img must be key values: {}:{}", i, j));
-                doc.push_str(&img_block(&img, i, j)?);
+                doc.push_str(&img_block(&img.as_hash().unwrap(), i, j)?);
             }
             doc.push_str("</div>");
         }
@@ -136,11 +176,11 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
         }
         _ => return err!(format!("wrong img: {}:{}", i, j)),
     }
-    t = unpack!(slide => "math" => yaml_str![], into_string, format!("wrong math: {}:{}", i, j));
+    t = slide.get_string("math", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!("\\[{}\\]", t));
     }
-    t = unpack!(slide => "note" => yaml_str![], into_string, format!("wrong note: {}:{}", i, j));
+    t = slide.get_string("note", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!("<aside class=\"notes\">{}</aside>", parse(&t)));
     }
@@ -158,44 +198,38 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         return err!("Missing metadata or slides");
     }
     let mut title = String::new();
-    let meta = unpack!(yaml[0], as_hash, "meta must be key values");
+    let meta = yaml[0].assert_hash("meta must be key values")?;
+    let slides = yaml[1].assert_vec("slides must be array")?;
     let mut doc = String::new();
-    for (i, s) in unpack!(yaml[1], as_vec, "slides must be array: 0")
-        .iter()
-        .enumerate()
-    {
+    for (i, s) in slides.iter().enumerate() {
         doc.push_str("<section>");
-        let slide = unpack!(s, as_hash, format!("unpack slide failed: {}:0", i));
+        let slide = s.assert_hash(&format!("unpack slide failed: {}:0", i))?;
         doc.push_str(&slide_block(slide, i, 0)?);
-        for (j, s) in
-            unpack!(slide => "sub" => yaml_vec![], as_vec, format!("wrong sub-slides: {}", i))
-                .iter()
-                .enumerate()
-        {
-            let slide = unpack!(s, as_hash, format!("unpack slide failed: {}:{}", i, j));
+        for (j, s) in slide.get_vec("sub", i, 0)?.iter().enumerate() {
+            let slide = s.assert_hash(&format!("unpack slide failed: {}:{}", i, 0))?;
             doc.push_str(&slide_block(slide, i, j)?);
         }
         if i == 0 {
-            title = unpack!(slide => "title" => yaml_str![], into_string, format!("wrong title: {}", i));
-            if !unpack!(meta => "outline" => yaml_bool![true], as_bool, "wrong outline") {
+            title = slide.get_string("title", "", i, 0)?;
+            if !meta.get_bool("outline", true, i, 0)? {
                 continue;
             }
             doc.push_str("<section><h2>Outline</h2><hr/><ul>");
-            for (i, s) in unpack!(yaml[1], as_vec).iter().enumerate() {
-                let s = unpack!(s, as_hash);
-                let t = unpack!(s => "title" => yaml_str![], into_string);
+            for (i, s) in slides.iter().enumerate() {
+                let s = s.assert_hash("unpack slide failed")?;
+                let t = s.get_string("title", "", i, 0)?;
                 if t.is_empty() {
                     continue;
                 }
                 doc.push_str(&format!("<li><a href=\"#/{}\">{}</a></li>", i, t));
-                let sub = unpack!(s => "sub" => yaml_vec![], into_vec);
+                let sub = s.get_vec("sub", i, 0)?;
                 if sub.is_empty() {
                     continue;
                 }
                 doc.push_str("<ul>");
                 for (j, s) in sub.iter().enumerate() {
-                    let s = unpack!(s, as_hash);
-                    let t = unpack!(s => "title" => yaml_str![], into_string);
+                    let s = s.assert_hash("unpack slide failed")?;
+                    let t = s.get_string("title", "", i, j)?;
                     if t.is_empty() {
                         continue;
                     }
@@ -208,7 +242,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         doc.push_str("</section>");
     }
     let mut reveal = String::from(TEMPLATE).replace("{@mount}", mount);
-    for (attr, default) in &[
+    for (key, default) in &[
         ("icon", "img/icon.png"),
         ("title", &title),
         ("description", ""),
@@ -218,8 +252,8 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         ("style", ""),
     ] {
         reveal = reveal.replace(
-            &format!("{{%{}}}", attr),
-            &unpack!(meta => *attr => yaml_str![*default], into_string, format!("wrong {}", attr)),
+            &format!("{{%{}}}", key),
+            &meta.get_string(key, default, 0, 0)?,
         );
     }
     reveal = reveal.replace("{@slides}", &doc);
