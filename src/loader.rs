@@ -1,5 +1,5 @@
 use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag};
-use std::io::Result;
+use std::{fs::read_to_string, io::Result};
 use yaml_rust::{yaml::Hash, Yaml, YamlLoader};
 
 const TEMPLATE: &str = include_str!("assets/template.html");
@@ -25,13 +25,13 @@ macro_rules! yaml_vec {
 
 macro_rules! unpack {
     ($v:expr$(=>$key:expr => $default:expr)?, $method:ident, $msg:expr) => {
-        match $v$(.get(yaml_str!($key)).unwrap_or($default))?.$method() {
+        match $v$(.get(yaml_str!($key)).unwrap_or($default).clone())?.$method() {
             Some(v) => v,
             None => return err!($msg),
         }
     };
     ($v:expr$(=>$key:literal => $default:expr)?, $method:ident) => {
-        $v$(.get(yaml_str!($key)).unwrap_or($default))?.$method().unwrap()
+        $v$(.get(yaml_str!($key)).unwrap_or($default).clone())?.$method().unwrap()
     }
 }
 
@@ -81,16 +81,13 @@ fn sized_block(img: &Hash, i: usize, j: usize) -> Result<String> {
 
 fn img_block(img: &Hash, i: usize, j: usize) -> Result<String> {
     let mut doc = String::from("<div class=\"img-column\"><figure>");
-    let src = String::from(
-        unpack!(img => "src" => yaml_str![], as_str, format!("wrong src: {}:{}", i, j)),
-    );
+    let src = unpack!(img => "src" => yaml_str![], into_string, format!("wrong src: {}:{}", i, j));
     if src.is_empty() {
         return err!(format!("No image source: {}:{}", i, j));
     }
     doc.push_str(&format!("<img src=\"{}\"{}>", src, sized_block(img, i, j)?));
-    let label = String::from(
-        unpack!(img => "label" => yaml_str![], as_str, format!("wrong label: {}:{}", i, j)),
-    );
+    let label =
+        unpack!(img => "label" => yaml_str![], into_string, format!("wrong label: {}:{}", i, j));
     if !label.is_empty() {
         doc.push_str(&format!("<figcaption>{}</figcaption>", label));
     }
@@ -100,49 +97,47 @@ fn img_block(img: &Hash, i: usize, j: usize) -> Result<String> {
 
 fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
     if slide.is_empty() {
-        return err!(format!("empty slide block, {:?}", (i, j)));
+        return err!(format!("empty slide block, {}:{}", i, j));
     }
     let mut doc = String::from("<section>");
-    let mut t = String::from(
-        unpack!(slide => "title" => yaml_str![], as_str, format!("wrong title: {}:{}", i, j)),
-    );
+    let mut t =
+        unpack!(slide => "title" => yaml_str![], into_string, format!("wrong title: {}:{}", i, j));
     if !t.is_empty() {
         doc.push_str(&format!("<h2>{}</h2><hr/>", t));
     }
-    t = String::from(
-        unpack!(slide => "no-title" => yaml_str![], as_str, format!("wrong no-title: {}:{}", i, j)),
-    );
+    t = unpack!(slide => "no-title" => yaml_str![], into_string, format!("wrong no-title: {}:{}", i, j));
     if !t.is_empty() {
         doc.push_str(&format!("<h2>{}</h2><hr/>", t));
     }
-    t = String::from(
-        unpack!(slide => "doc" => yaml_str![], as_str, format!("wrong doc: {}:{}", i, j)),
-    );
+    t = unpack!(slide => "doc" => yaml_str![], into_string, format!("wrong doc: {}:{}", i, j));
     if !t.is_empty() {
         doc.push_str(&parse(&t));
+    }
+    t = unpack!(slide => "include" => yaml_str![], into_string, format!("wrong include: {}:{}", i, j));
+    if !t.is_empty() {
+        doc.push_str(&parse(&read_to_string(t)?));
     }
     match slide.get(yaml_str!["img"]).unwrap_or(yaml_vec![]) {
         Yaml::Array(imgs) => {
             doc.push_str("<div class=\"img-row\">");
             for img in imgs {
-                doc.push_str(&img_block(
-                    unpack!(img, as_hash, format!("img must be key values: {}:{}", i, j)),
-                    i,
-                    j,
-                )?);
+                let img = unpack!(img, as_hash, format!("img must be key values: {}:{}", i, j));
+                doc.push_str(&img_block(&img, i, j)?);
             }
             doc.push_str("</div>");
         }
         Yaml::Hash(img) => {
             doc.push_str(&img_block(img, i, j)?);
         }
-        _ => return err!(format!("wrong img: {:?}", (i, j))),
+        _ => return err!(format!("wrong img: {}:{}", i, j)),
     }
-    t = String::from(
-        unpack!(slide => "math" => yaml_str![], as_str, format!("wrong math: {}:{}", i, j)),
-    );
+    t = unpack!(slide => "math" => yaml_str![], into_string, format!("wrong math: {}:{}", i, j));
     if !t.is_empty() {
         doc.push_str(&format!("\\[{}\\]", t));
+    }
+    t = unpack!(slide => "note" => yaml_str![], into_string, format!("wrong note: {}:{}", i, j));
+    if !t.is_empty() {
+        doc.push_str(&format!("<aside class=\"notes\">{}</aside>", parse(&t)));
     }
     doc.push_str("</section>");
     Ok(doc)
@@ -177,28 +172,26 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
             doc.push_str(&slide_block(slide, i, j)?);
         }
         if i == 0 {
-            title.push_str(
-                unpack!(slide => "title" => yaml_str![], as_str, format!("wrong title: {}", i)),
-            );
+            title = unpack!(slide => "title" => yaml_str![], into_string, format!("wrong title: {}", i));
             if !unpack!(meta => "outline" => yaml_bool![true], as_bool, "wrong outline") {
                 continue;
             }
             doc.push_str("<section><h2>Outline</h2><hr/><ul>");
             for (i, s) in unpack!(yaml[1], as_vec).iter().enumerate() {
                 let s = unpack!(s, as_hash);
-                let t = String::from(unpack!(s => "title" => yaml_str![], as_str));
+                let t = unpack!(s => "title" => yaml_str![], into_string);
                 if t.is_empty() {
                     continue;
                 }
                 doc.push_str(&format!("<li><a href=\"#/{}\">{}</a></li>", i, t));
-                let sub = Vec::from(unpack!(s => "sub" => yaml_vec![], as_vec).as_slice());
+                let sub = unpack!(s => "sub" => yaml_vec![], into_vec);
                 if sub.is_empty() {
                     continue;
                 }
                 doc.push_str("<ul>");
                 for (j, s) in sub.iter().enumerate() {
                     let s = unpack!(s, as_hash);
-                    let t = String::from(unpack!(s => "title" => yaml_str![], as_str));
+                    let t = unpack!(s => "title" => yaml_str![], into_string);
                     if t.is_empty() {
                         continue;
                     }
@@ -217,10 +210,11 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         ("author", ""),
         ("theme", "serif"),
         ("code-theme", "zenburn"),
+        ("style", ""),
     ] {
         reveal = reveal.replace(
-            &format!("{{@{}}}", attr),
-            unpack!(meta => *attr => yaml_str![*default], as_str, format!("wrong {}", attr)),
+            &format!("{{%{}}}", attr),
+            &unpack!(meta => *attr => yaml_str![*default], into_string, format!("wrong {}", attr)),
         );
     }
     reveal = reveal.replace("{@slides}", &doc);

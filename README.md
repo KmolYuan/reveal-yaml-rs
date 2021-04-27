@@ -78,7 +78,7 @@ Metadata contains HTML settings and global slide settings.
 + [x] theme: Reveal.js theme, "serif" by default.
 + [x] code-theme: Highlight theme, "zenburn" by default.
 + [x] icon: Icon path, “img/icon.png” by default.
-+ [ ] style: Extra CSS style path.
++ [x] style: Extra CSS style path.
 + [ ] Other Reveal.js options.
 + [ ] footer: Global footer option.
 
@@ -87,10 +87,10 @@ Metadata contains HTML settings and global slide settings.
 + [x] title: Markdown h2 title.
 + [x] no-title: Same as `title` but excluding in TOC.
 + [x] doc: Multiline Markdown text.
-+ [ ] include: Include a Markdown file from path, append after `doc`.
++ [x] include: Include a Markdown file from path, append after `doc`.
 + [x] math: Latex math without “$$” brackets.
 + [x] img: A list of image source.
-+ [ ] note: Speak view note.
++ [x] note: Speak view note.
 + [ ] background: Background setting.
 + [ ] Fragment option.
 + [x] sub: Vertical slides, for horizontal slides only.

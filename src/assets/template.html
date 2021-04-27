@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{@title}</title>
-    <meta name="description" content="{@description}">
-    <meta name="author" content="{@author}">
-    <link rel="icon" href="{@icon}">
-    <link rel="stylesheet" href="{@mount}dist/reset.css">
-    <link rel="stylesheet" href="{@mount}dist/reveal.css">
-    <link rel="stylesheet" href="{@mount}dist/theme/{@theme}.css" id="theme">
+    <title>{%title}</title>
+    <meta name="description" content="{%description}">
+    <meta name="author" content="{%author}">
+    <link rel="icon" href="{%icon}">
+    <link rel="stylesheet" href="{%mount}dist/reset.css">
+    <link rel="stylesheet" href="{%mount}dist/reveal.css">
+    <link rel="stylesheet" href="{%mount}dist/theme/{%theme}.css" id="theme">
     <!-- Theme used for syntax highlighted code -->
-    <link rel="stylesheet" href="{@mount}plugin/highlight/{@code-theme}.css" id="highlight-theme">
+    <link rel="stylesheet" href="{%mount}plugin/highlight/{%code-theme}.css" id="highlight-theme">
     <style>
         #footer-left {
             position: absolute;
@@ -102,6 +102,7 @@
             color: #877b68;
             background-color: transparent;
         }
+        {%style}
     </style>
 </head>
 <body>
@@ -116,14 +117,14 @@
 <!--</div>-->
 <div class="reveal">
     <div class="slides">
-        {@slides}
+        {%slides}
     </div>
 </div>
-<script src="{@mount}dist/reveal.js"></script>
-<script src="{@mount}plugin/notes/notes.js"></script>
-<script src="{@mount}plugin/search/search.js"></script>
-<script src="{@mount}plugin/highlight/highlight.js"></script>
-<script src="{@mount}plugin/math/math.js"></script>
+<script src="{%mount}dist/reveal.js"></script>
+<script src="{%mount}plugin/notes/notes.js"></script>
+<script src="{%mount}plugin/search/search.js"></script>
+<script src="{%mount}plugin/highlight/highlight.js"></script>
+<script src="{%mount}plugin/math/math.js"></script>
 <script>
     Reveal.initialize({
         hash: true,
