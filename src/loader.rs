@@ -3,6 +3,12 @@ use std::io::Result;
 use yaml_rust::{yaml::Hash, Yaml, YamlLoader};
 
 const TEMPLATE: &str = include_str!("assets/template.html");
+const MARKED: Options = Options::from_bits_truncate(
+    Options::ENABLE_TABLES.bits()
+        | Options::ENABLE_SMART_PUNCTUATION.bits()
+        | Options::ENABLE_TASKLISTS.bits()
+        | Options::ENABLE_STRIKETHROUGH.bits(),
+);
 
 macro_rules! yaml_bool {
     [$bool:literal] => { &Yaml::Boolean($bool) };
@@ -29,15 +35,8 @@ macro_rules! unpack {
     }
 }
 
-fn parse(text: &str) -> String {
-    let parser = Parser::new_ext(
-        text,
-        Options::ENABLE_TABLES
-            | Options::ENABLE_SMART_PUNCTUATION
-            | Options::ENABLE_TASKLISTS
-            | Options::ENABLE_STRIKETHROUGH,
-    )
-    .map(|e| match e {
+fn marked(e: Event) -> Event {
+    match e {
         Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(info))) => {
             let info = info.replace(' ', "");
             let mut head = String::new();
@@ -57,9 +56,12 @@ fn parse(text: &str) -> String {
             Event::Html(head.into())
         }
         _ => e,
-    });
+    }
+}
+
+fn parse(text: &str) -> String {
     let mut out = String::new();
-    push_html(&mut out, parser);
+    push_html(&mut out, Parser::new_ext(text, MARKED).map(marked));
     out
 }
 
