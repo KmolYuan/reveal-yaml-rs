@@ -91,6 +91,7 @@ Metadata contains HTML settings and global slide settings.
 + [x] math: Latex math without “$$” brackets.
 + [x] img: A list of image source.
 + [x] note: Speak view note.
++ [x] bg-color: Background color.
 + [ ] background: Background setting.
 + [ ] Fragment option.
 + [x] sub: Vertical slides, for horizontal slides only.

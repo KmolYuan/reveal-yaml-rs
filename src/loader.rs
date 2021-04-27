@@ -99,9 +99,14 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
     if slide.is_empty() {
         return err!(format!("empty slide block, {}:{}", i, j));
     }
-    let mut doc = String::from("<section>");
-    let mut t =
-        unpack!(slide => "title" => yaml_str![], into_string, format!("wrong title: {}:{}", i, j));
+    let mut doc = String::from("<section");
+    let mut t = unpack!(slide => "bg-color" => yaml_str![],
+        into_string, format!("wrong bg-color: {}:{}", i, j));
+    if !t.is_empty() {
+        doc.push_str(&format!(" data-background-color=\"{}\"", t));
+    }
+    doc.push_str(">");
+    t = unpack!(slide => "title" => yaml_str![], into_string, format!("wrong title: {}:{}", i, j));
     if !t.is_empty() {
         doc.push_str(&format!("<h2>{}</h2><hr/>", t));
     }
@@ -152,7 +157,6 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
     if yaml.len() < 2 {
         return err!("Missing metadata or slides");
     }
-    let mut reveal = String::from(TEMPLATE).replace("{@mount}", mount);
     let mut title = String::new();
     let meta = unpack!(yaml[0], as_hash, "meta must be key values");
     let mut doc = String::new();
@@ -203,6 +207,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         }
         doc.push_str("</section>");
     }
+    let mut reveal = String::from(TEMPLATE).replace("{@mount}", mount);
     for (attr, default) in &[
         ("icon", "img/icon.png"),
         ("title", &title),
