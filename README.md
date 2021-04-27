@@ -2,7 +2,7 @@
 
 Rust implementation of Reveal.js YAML server.
 
-This project was transferred from Python and now operates in a way that is easier to maintain and release, and it is Rust.
+This project was transferred from Python language and now operates in a way that is easier to maintain and release, and it is Rust.
 Some old functions might be deprecated, and some functions are improved.
 
 This manager downloads the latest Reveal.js archive to provide serving and packing function, and had same licensed as Reveal.js.
@@ -93,5 +93,6 @@ Metadata contains HTML settings and global slide settings.
 + [x] note: Speak view note.
 + [x] bg-color: Background color.
 + [ ] background: Background setting.
++ [ ] trans: Transition option.
 + [ ] Fragment option.
 + [x] sub: Vertical slides, for horizontal slides only.
