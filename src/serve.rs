@@ -119,6 +119,7 @@ where
     Ok(list)
 }
 
+/// Pack project to an archive.
 pub fn pack<P, D>(path: P, dist: D) -> Result<()>
 where
     P: AsRef<Path>,

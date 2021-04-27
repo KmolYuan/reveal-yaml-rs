@@ -23,14 +23,12 @@ trait Unpack {
     fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool>;
     fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String>;
     fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<Iter<Yaml>>;
+    fn get_hash_string(&self, key: &[&str], default: &str, i: usize, j: usize) -> Result<String>;
 }
 
 impl Unpack for Hash {
     fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool> {
-        match self
-            .get(&Yaml::String(String::from(key)))
-            .unwrap_or(&Yaml::Boolean(default))
-        {
+        match self.get(yaml_str!(key)).unwrap_or(&Yaml::Boolean(default)) {
             Yaml::Boolean(b) => Ok(*b),
             _ => err!(format!("wrong {}: {}:{}", key, i, j)),
         }
@@ -45,13 +43,27 @@ impl Unpack for Hash {
         }
     }
     fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<Iter<Yaml>> {
-        if let Some(v) = self.get(&Yaml::String(String::from(key))) {
+        if let Some(v) = self.get(yaml_str!(key)) {
             match v {
                 Yaml::Array(a) => Ok(a.iter()),
                 _ => err!(format!("wrong {}: {}:{}", key, i, j)),
             }
         } else {
             Ok([].iter())
+        }
+    }
+    fn get_hash_string(&self, keys: &[&str], default: &str, i: usize, j: usize) -> Result<String> {
+        assert!(keys.len() > 0);
+        let key = keys[0];
+        if keys.len() > 1 {
+            if let Some(v) = self.get(yaml_str!(key)) {
+                let v = v.assert_hash(&format!("wrong {}: {}:{}", key, i, j))?;
+                v.get_hash_string(&keys[1..], default, i, j)
+            } else {
+                Ok("".into())
+            }
+        } else {
+            self.get_string(key, default, i, j)
         }
     }
 }
@@ -110,26 +122,29 @@ fn parse(text: &str) -> String {
 }
 
 fn sized_block(img: &Hash, i: usize, j: usize) -> Result<String> {
-    let mut doc = String::new();
+    let src = img.get_string("src", "", i, j)?;
+    if src.is_empty() {
+        return err!(format!("No image source: {}:{}", i, j));
+    }
+    let mut doc = format!(" src=\"{}\"", src);
     for attr in &["width", "height"] {
-        doc.push_str(&format!(" {}=", attr));
         let value = match img.get(yaml_str![*attr]).unwrap_or(yaml_str![]) {
             Yaml::Real(v) | Yaml::String(v) => v.clone(),
             Yaml::Integer(v) => v.to_string(),
             _ => return err!(format!("invalid attribute: {}:{}", i, j)),
         };
-        doc.push_str(&format!("\"{}\"", value));
+        if !value.is_empty() {
+            doc.push_str(&format!(" {}=\"{}\"", attr, value));
+        }
     }
     Ok(doc)
 }
 
 fn img_block(img: &Hash, i: usize, j: usize) -> Result<String> {
-    let mut doc = String::from("<div class=\"img-column\"><figure>");
-    let src = img.get_string("src", "", i, j)?;
-    if src.is_empty() {
-        return err!(format!("No image source: {}:{}", i, j));
-    }
-    doc.push_str(&format!("<img src=\"{}\"{}>", src, sized_block(img, i, j)?));
+    let mut doc = format!(
+        "<div class=\"img-column\"><figure><img{}/>",
+        sized_block(img, i, j)?
+    );
     let label = img.get_string("label", "", i, j)?;
     if !label.is_empty() {
         doc.push_str(&format!("<figcaption>{}</figcaption>", label));
@@ -186,6 +201,32 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
         doc.push_str(&format!("<aside class=\"notes\">{}</aside>", parse(&t)));
     }
     doc.push_str("</section>");
+    Ok(doc)
+}
+
+fn footer_block(meta: &Hash) -> Result<String> {
+    let src = meta.get_hash_string(&["footer", "src"], "", 0, 0)?;
+    let label = meta.get_hash_string(&["footer", "label"], "", 0, 0)?;
+    if src.is_empty() && label.is_empty() {
+        return Ok("".into());
+    }
+    let footer = meta[yaml_str!["footer"]].assert_hash("invalid footer")?;
+    let mut doc = String::from(
+        "<div id=\"hidden\" style=\"display: none;\"><div id=\"footer\"><div id=\"footer-left\">\n",
+    );
+    let link = footer.get_string("link", "", 0, 0)?;
+    if !link.is_empty() {
+        doc.push_str(&format!("<a href=\"{}\">", link));
+    }
+    doc.push_str(&format!("<img{}/>", sized_block(footer, 0, 0)?));
+    let label = footer.get_string("label", "", 0, 0)?;
+    if !label.is_empty() {
+        doc.push_str(&format!("<span>&nbsp;{}</span>", label));
+    }
+    if !link.is_empty() {
+        doc.push_str("</a>");
+    }
+    doc.push_str("\n</div></div></div>");
     Ok(doc)
 }
 
@@ -257,6 +298,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
             &meta.get_string(key, default, 0, 0)?,
         );
     }
+    reveal = reveal.replace("{%footer}", &footer_block(meta)?);
     reveal = reveal.replace("{%slides}", &doc);
     Ok(reveal)
 }

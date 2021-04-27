@@ -79,8 +79,8 @@ Metadata contains HTML settings and global slide settings.
 + [x] code-theme: Highlight theme, "zenburn" by default.
 + [x] icon: Icon path, “img/icon.png” by default.
 + [x] style: Extra CSS style path.
++ [x] footer: Global footer option.
 + [ ] Other Reveal.js options.
-+ [ ] footer: Global footer option.
 
 ### Slides
 
