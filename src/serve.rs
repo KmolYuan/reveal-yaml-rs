@@ -172,9 +172,13 @@ async fn help_page() -> Result<HttpResponse> {
 
 #[get("/")]
 async fn index() -> Result<HttpResponse> {
+    let yaml = match read_to_string(ROOT) {
+        Ok(s) => s,
+        Err(_) => return err!("can not found reveal.yaml file"),
+    };
     Ok(HttpResponse::Ok()
         .content_type("text/html;charset=utf-8")
-        .body(loader(&read_to_string(ROOT)?, "/static/")?))
+        .body(loader(&yaml, "/static/")?))
 }
 
 /// Launch function.

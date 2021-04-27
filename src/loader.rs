@@ -1,5 +1,5 @@
 use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag};
-use std::io::{Error, ErrorKind, Result};
+use std::io::Result;
 use yaml_rust::{yaml::Hash, Yaml, YamlLoader};
 
 const TEMPLATE: &str = include_str!("assets/template.html");
@@ -27,12 +27,6 @@ macro_rules! unpack {
     ($v:expr$(=>$key:literal => $default:expr)?, $method:ident) => {
         $v$(.get(yaml_str!($key)).unwrap_or($default))?.$method().unwrap()
     }
-}
-
-macro_rules! err {
-    ($msg:expr) => {
-        Err(Error::new(ErrorKind::InvalidData, $msg))
-    };
 }
 
 fn parse(text: &str) -> String {
@@ -76,7 +70,7 @@ fn sized_block(img: &Hash, i: usize, j: usize) -> Result<String> {
         let value = match img.get(yaml_str![*attr]).unwrap_or(yaml_str![]) {
             Yaml::Real(v) | Yaml::String(v) => v.clone(),
             Yaml::Integer(v) => v.to_string(),
-            _ => return err!(format!("invalid attribute: {:?}", (i, j))),
+            _ => return err!(format!("invalid attribute: {}:{}", i, j)),
         };
         doc.push_str(&format!("\"{}\"", value));
     }
