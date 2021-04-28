@@ -25,12 +25,15 @@ jobs:
       - shell: bash
         run: |
           cargo build --all-features --release
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
+      - name: Pack binaries
+        uses: papeloto/action-zip@v1
         with:
-          repo_token: ${{ secrets.PUBLISH_TOKEN }}
-          file: target/release/${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.asset_name }}
-          tag: ${{ github.ref }}
-          overwrite: true
+          files: target/release/${{ matrix.artifact_name }}
+          dest: ${{ matrix.asset_name }}.zip
+      - name: Upload binaries to release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        with:
+          files: ${{ matrix.asset_name }}.zip
           body: Automatically published from Github Actions.
