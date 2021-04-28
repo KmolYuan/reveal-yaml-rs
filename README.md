@@ -9,7 +9,7 @@ This manager downloads the latest Reveal.js archive to provide serving and packi
 
 ### Why should use this?
 
-Use Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides.
+Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides.
 
 Difference to the before work, the Markdown to HTML translation is done by this parser instead of using markdown.js, so **there is no more HTML escaping since they will be handled enough**. (except using Markdown in your code block recursively, this needs to use `<code>` tag by yourself)
 
@@ -26,7 +26,7 @@ Difference to the before work, the Markdown to HTML translation is done by this 
   ...
 </section>
 ```
-**Slides in YAML**: The horizontal slides are as list in the second block, which is an array. A slide can work with at least one attribute structure.
+**Slides in YAML**: The horizontal slides are as listed in the second block, which is an array. A slide can work with at least one attribute structure.
 ```yaml
 # metadata block
 ...
