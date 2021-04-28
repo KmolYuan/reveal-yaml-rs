@@ -1,0 +1,36 @@
+name: Github Deploy
+on:
+  push:
+    tags: [ v* ]
+jobs:
+  build_and_test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: rym
+            asset_name: reveal-yaml-linux-amd64
+          - os: macOS-latest
+            artifact_name: rym
+            asset_name: reveal-yaml-macos-amd64
+          - os: windows-latest
+            artifact_name: rym.exe
+            asset_name: reveal-yaml-windows-amd64
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - shell: bash
+        run: |
+          cargo build --all-features --release
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.PUBLISH_TOKEN }}
+          file: target/release/${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: Automatically published from Github Actions.
