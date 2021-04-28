@@ -3,7 +3,7 @@ author: Yuan Chang
 background:
   src: img/watermark.png
   size: 50%
-  opacity: 0.5
+  opacity: 0.7
 footer:
   src: img/icon.png
   width: 50pt
@@ -120,22 +120,23 @@ footer:
         trans: convex-in convex-out
         background: false
         bg-color: rgb(70, 70, 255)
-        doc: <h2>🐳</h2>
+        doc: "# 🐳"
         ```
 
-        <h2>🐳</h2>
+        # 🐳
     - title: Image Background & Background Transition
       bg-trans: fade-in fade-out
       background:
-        src: img/watermark.png
-        width: 50%
+        src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
         size: 25%
+        opacity: 0.5
       doc: |
         ```yaml
         bg-trans: fade-in fade-out
         background:
           src: img/watermark.png
           size: 25%
+          opacity: 0.5
         ```
     - title: Note
       note: Note text here!
