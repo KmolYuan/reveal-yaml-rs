@@ -36,4 +36,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
         with:
           files: ${{ matrix.asset_name }}.zip
-          body: Automatically published from Github Actions.
