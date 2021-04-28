@@ -35,7 +35,7 @@ impl Unpack for Hash {
     }
     fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String> {
         match self
-            .get(&Yaml::String(String::from(key)))
+            .get(yaml_str!(key))
             .unwrap_or(&Yaml::String(default.into()))
         {
             Yaml::String(s) => Ok(s.clone()),
@@ -161,6 +161,10 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
     let mut t = slide.get_string("bg-color", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!(" data-background-color=\"{}\"", t));
+    }
+    t = slide.get_string("trans", "", i, j)?;
+    if !t.is_empty() {
+        doc.push_str(&format!(" data-transition=\"{}\"", t));
     }
     doc.push_str(">");
     t = slide.get_string("title", "", i, j)?;
@@ -291,13 +295,17 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         ("author", ""),
         ("theme", "serif"),
         ("code-theme", "zenburn"),
-        ("style", ""),
+        ("trans", "slide"),
     ] {
         reveal = reveal.replace(
             &format!("{{%{}}}", key),
             &meta.get_string(key, default, 0, 0)?,
         );
     }
+    reveal = reveal.replace(
+        &format!("/*{{%{}}}*/", "style"),
+        &meta.get_string("style", "", 0, 0)?,
+    );
     reveal = reveal.replace("{%footer}", &footer_block(meta)?);
     reveal = reveal.replace("{%slides}", &doc);
     Ok(reveal)

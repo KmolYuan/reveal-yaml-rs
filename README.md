@@ -29,7 +29,8 @@ Difference to the before work, the Markdown to HTML translation is done by this 
 **Slides in YAML**: The horizontal slides are as list in the second block, which is an array. A slide can work with at least one attribute structure.
 ```yaml
 # metadata block
-...
+description: ...
+author: ...
 ---
 # slides block
 - title: ...  # Works!
@@ -45,6 +46,18 @@ The vertical slides work under the `sub` node of first slide, the attributes are
 - title: Horizontal slide 2
 ```
 This work supports YAML 1.2.
+
+### Sized Attribute
+
+The images and resizeable items are support "sized" attribute, which contains three options: `src`, `width` and `height`. The `src` option is required, otherwise the feature will be disabled or invalid.
+
+The `width` and `height` options are same as the attributes on `<img>` tag, which are optional.
+
+```yaml
+img:
+  src: img/icon.png
+  width: 50%  # same as width="50%"
+```
 
 ## Command Line Interface
 
@@ -69,17 +82,21 @@ Some functions are planed to be demonstrated in the help page.
 ### Metadata
 
 Metadata contains HTML settings and global slide settings.
+The definition contains in the first YAML doc, split by horizontal line `---`.
 
 + [x] title: The webpage title, defaults to the first page.
 + [x] description: Webpage description.
 + [x] author: Webpage author.
 + [ ] background: Global background setting.
-+ [x] outline: Auto generated table of the contents (TOC). This value is boolean.
++ [x] outline: Auto generated table of the contents (TOC). (**boolean**)
 + [x] theme: Reveal.js theme, "serif" by default.
 + [x] code-theme: Highlight theme, "zenburn" by default.
 + [x] icon: Icon path, “img/icon.png” by default.
 + [x] style: Extra CSS style path.
-+ [x] footer: Global footer option.
++ [x] footer: Global footer option. (**sized**)
+  + label: Footer text.
+  + link: Footer link, works on image and text.
++ [x] trans: Global transition option.
 + [ ] Other Reveal.js options.
 
 ### Slides
@@ -90,9 +107,13 @@ Metadata contains HTML settings and global slide settings.
 + [x] include: Include a Markdown file from path, append after `doc`.
 + [x] math: Latex math without “$$” brackets.
 + [x] img: A list of image source.
+  + **Array**, can be map if there is only one image.
+  + (**sized**)
+  + label: Image caption.
 + [x] note: Speak view note.
 + [x] bg-color: Background color.
 + [ ] background: Background setting.
-+ [ ] trans: Transition option.
-+ [ ] Fragment option.
++ [x] trans: Transition option.
++ [ ] fragment: Fragment option.
++ [ ] stack: Horizontal stack of columns view.
 + [x] sub: Vertical slides, for horizontal slides only.
