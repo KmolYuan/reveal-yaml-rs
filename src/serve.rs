@@ -125,8 +125,7 @@ where
     P: AsRef<Path>,
     D: AsRef<Path>,
 {
-    let path = path.as_ref();
-    set_current_dir(path)?;
+    set_current_dir(path.as_ref())?;
     let dist = dist.as_ref();
     if dist.is_dir() {
         println!("Remove {:?}", &dist);
@@ -187,10 +186,12 @@ pub async fn launch<P>(port: u16, path: P) -> Result<()>
 where
     P: AsRef<Path>,
 {
-    let path = path.as_ref();
-    set_current_dir(path)?;
-    let assets = listdir(path)?;
-    let d = TempDir::new().unwrap();
+    set_current_dir(path.as_ref())?;
+    let assets = listdir(".")?;
+    let d = match TempDir::new() {
+        Ok(v) => v,
+        Err(s) => return err!(s),
+    };
     // Expand Reveal.js
     extract(d.path())?;
     // Start server
@@ -198,7 +199,7 @@ where
     let archive = path_string!(archive);
     println!("Serve at: http://localhost:{}/", port);
     println!("Global assets at: {}", archive.as_str());
-    println!("Local assets at: {}", path_string!(canonicalize(path)?));
+    println!("Local assets at: {}", path_string!(canonicalize(".")?));
     HttpServer::new(move || {
         let mut app = App::new()
             .service(index)
