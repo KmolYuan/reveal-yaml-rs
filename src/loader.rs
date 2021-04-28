@@ -64,7 +64,7 @@ impl Background {
 trait Unpack {
     fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool>;
     fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String>;
-    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<Iter<Yaml>>;
+    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<(Iter<Yaml>, usize)>;
     fn get_hash_string(&self, key: &[&str], default: &str, i: usize, j: usize) -> Result<String>;
     fn is_enabled(&self, key: &str) -> bool;
 }
@@ -86,14 +86,14 @@ impl Unpack for Hash {
             _ => err!(format!("wrong {}: {}:{}", key, i, j)),
         }
     }
-    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<Iter<Yaml>> {
+    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<(Iter<Yaml>, usize)> {
         if let Some(v) = self.get(yaml_str!(key)) {
             match v {
-                Yaml::Array(a) => Ok(a.iter()),
+                Yaml::Array(a) => Ok((a.iter(), a.len())),
                 _ => err!(format!("wrong {}: {}:{}", key, i, j)),
             }
         } else {
-            Ok([].iter())
+            Ok(([].iter(), 0))
         }
     }
     fn get_hash_string(&self, keys: &[&str], default: &str, i: usize, j: usize) -> Result<String> {
@@ -264,19 +264,16 @@ fn slide_block(slide: &Hash, bg: &Background, i: usize, j: usize) -> Result<Stri
         }
     }
     doc.push_str(&content_block(slide, i, j)?);
-    let mut stack = slide.get_vec("stack", i, j)?.peekable();
-    if stack.peek().is_some() {
-        let mut content = Vec::new();
+    let (stack, stack_len) = slide.get_vec("stack", i, j)?;
+    if stack_len > 0 {
+        doc.push_str("<div style=\"display: flex\">");
+        let width = 100. / stack_len as f32;
         for slide in stack {
             let slide = slide.assert_hash("unpack stack failed")?;
-            content.push(content_block(slide, i, j)?);
-        }
-        doc.push_str("<div style=\"display: flex\">");
-        let width = 100. / content.len() as f32;
-        for slide in content.iter() {
             doc.push_str(&format!(
                 "<div style=\"width: {}%;text-align: center\">{}</div>",
-                width, slide
+                width,
+                content_block(slide, i, j)?
             ));
         }
         doc.push_str("</div>");
@@ -333,7 +330,8 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         doc.push_str("<section>");
         let slide = s.assert_hash(&format!("unpack slide failed: {}:0", i))?;
         doc.push_str(&slide_block(slide, &bg, i, 0)?);
-        for (j, s) in slide.get_vec("sub", i, 0)?.enumerate() {
+        let (sub, _) = slide.get_vec("sub", i, 0)?;
+        for (j, s) in sub.enumerate() {
             let slide = s.assert_hash(&format!("unpack slide failed: {}:{}", i, 0))?;
             doc.push_str(&slide_block(slide, &bg, i, j)?);
         }
@@ -354,8 +352,8 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
                     continue;
                 }
                 doc.push_str(&format!("<li><a href=\"#/{}\">{}</a></li>", i, t));
-                let mut sub = s.get_vec("sub", i, 0)?.peekable();
-                if sub.peek().is_none() {
+                let (sub, sub_len) = s.get_vec("sub", i, 0)?;
+                if sub_len == 0 {
                     continue;
                 }
                 doc.push_str("<ul>");
