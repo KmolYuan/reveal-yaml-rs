@@ -9,7 +9,7 @@ This manager downloads the latest Reveal.js archive to provide serving and packi
 
 ### Why should use this?
 
-Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides.
+Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides, an auto-generated outline, and a live demo when editing.
 
 Difference to the before work, the Markdown to HTML translation is done by this parser instead of using markdown.js, so **there is no more HTML escaping since they will be handled enough**. (except using Markdown in your code block recursively, this needs to use `<code>` tag by yourself)
 
@@ -51,12 +51,13 @@ This work supports YAML 1.2.
 
 The images and resizeable items are support "sized" attribute, which contains three options: `src`, `width` and `height`. The `src` option is required, otherwise the feature will be disabled or invalid.
 
-The `width` and `height` options are same as the attributes on `<img>` tag, which are optional.
+The `width` and `height` options are the same as the attributes on the `<img>` tag, they are optional.
 
 ```yaml
 img:
   src: img/icon.png
   width: 50%  # same as width="50%"
+  height: 70  # same as height="70"
 ```
 
 ## Command Line Interface
@@ -77,7 +78,7 @@ rym pack
 
 Here are the implemented features, or the functions are designed in progress.
 
-Some functions are planed to be demonstrated in the help page.
+Some functions are planed to be demonstrated in the help page. Open the help page by adding `/help/` after URL, like `http://localhost:8080/help/`.
 
 ### Metadata
 
@@ -102,10 +103,10 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 ### Slides
 
 + [x] title: Markdown h2 title.
-+ [x] no-title: Same as `title` but excluding in TOC.
-+ [x] doc: Multiline Markdown text.
++ [x] no-title: Same as `title` but will be excluded in TOC.
++ [x] doc: Multiline Markdown text, accept HTML.
 + [x] include: Include a Markdown file from path, append after `doc`.
-+ [x] math: Latex math without “$$” brackets.
++ [x] math: Latex math without "$$" brackets.
 + [x] img: A list of image source.
   + **Array**, can be map if there is only one image.
   + (**sized**)

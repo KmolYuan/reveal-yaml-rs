@@ -185,11 +185,13 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
     }
     match slide.get(yaml_str!["img"]).unwrap_or(yaml_vec![]) {
         Yaml::Array(imgs) => {
-            doc.push_str("<div class=\"img-row\">");
-            for img in imgs {
-                doc.push_str(&img_block(&img.as_hash().unwrap(), i, j)?);
+            if !imgs.is_empty() {
+                doc.push_str("<div class=\"img-row\">");
+                for img in imgs {
+                    doc.push_str(&img_block(&img.as_hash().unwrap(), i, j)?);
+                }
+                doc.push_str("</div>");
             }
-            doc.push_str("</div>");
         }
         Yaml::Hash(img) => {
             doc.push_str(&img_block(img, i, j)?);
