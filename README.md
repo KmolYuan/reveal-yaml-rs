@@ -109,7 +109,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 
 + [x] title: Markdown h2 title.
 + [x] no-title: Same as `title` but will be excluded in TOC.
-+ Content:
++ [x] Content:
   + [x] doc: Multiline Markdown text, accept HTML.
   + [x] include: Include a Markdown file from path, append after `doc`.
   + [x] math: Latex math without "$$" brackets.
@@ -117,7 +117,8 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + **Array**, can be map if there is only one image.
     + (**sized**)
     + label: Image caption.
-+ [x] stack: Columns view of contents. (**Array**)
+  + [x] stack: Columns view of contents. (**Array**)
+    + This function can be recursive.
 + [x] note: Speak view note.
 + [x] bg-color: Background color.
 + [x] background: Background setting, as same as global.

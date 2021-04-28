@@ -232,6 +232,20 @@ fn content_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
     if !t.is_empty() {
         doc.push_str(&format!("\\[{}\\]", t));
     }
+    let (stack, stack_len) = slide.get_vec("stack", i, j)?;
+    if stack_len > 0 {
+        doc.push_str("<div style=\"display: flex\">");
+        let width = 100. / stack_len as f32;
+        for slide in stack {
+            let slide = slide.assert_hash("unpack stack failed")?;
+            doc.push_str(&format!(
+                "<div style=\"width: {}%;text-align: center\">{}</div>",
+                width,
+                content_block(slide, i, j)?
+            ));
+        }
+        doc.push_str("</div>");
+    }
     Ok(doc)
 }
 
@@ -264,20 +278,6 @@ fn slide_block(slide: &Hash, bg: &Background, i: usize, j: usize) -> Result<Stri
         }
     }
     doc.push_str(&content_block(slide, i, j)?);
-    let (stack, stack_len) = slide.get_vec("stack", i, j)?;
-    if stack_len > 0 {
-        doc.push_str("<div style=\"display: flex\">");
-        let width = 100. / stack_len as f32;
-        for slide in stack {
-            let slide = slide.assert_hash("unpack stack failed")?;
-            doc.push_str(&format!(
-                "<div style=\"width: {}%;text-align: center\">{}</div>",
-                width,
-                content_block(slide, i, j)?
-            ));
-        }
-        doc.push_str("</div>");
-    }
     t = slide.get_string("note", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!("<aside class=\"notes\">{}</aside>", parse(&t)));
