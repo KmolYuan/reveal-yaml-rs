@@ -203,6 +203,38 @@ fn img_block(img: &Hash, i: usize, j: usize) -> Result<String> {
     Ok(doc)
 }
 
+fn content_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
+    let mut doc = String::new();
+    let mut t = slide.get_string("doc", "", i, j)?;
+    if !t.is_empty() {
+        doc.push_str(&parse(&t));
+    }
+    t = slide.get_string("include", "", i, j)?;
+    if !t.is_empty() {
+        doc.push_str(&parse(&read_to_string(t)?));
+    }
+    match slide.get(yaml_str!["img"]).unwrap_or(yaml_vec![]) {
+        Yaml::Array(imgs) => {
+            if !imgs.is_empty() {
+                doc.push_str("<div class=\"img-row\">");
+                for img in imgs {
+                    doc.push_str(&img_block(&img.as_hash().unwrap(), i, j)?);
+                }
+                doc.push_str("</div>");
+            }
+        }
+        Yaml::Hash(img) => {
+            doc.push_str(&img_block(img, i, j)?);
+        }
+        _ => return err!(format!("wrong img: {}:{}", i, j)),
+    }
+    t = slide.get_string("math", "", i, j)?;
+    if !t.is_empty() {
+        doc.push_str(&format!("\\[{}\\]", t));
+    }
+    Ok(doc)
+}
+
 fn slide_block(slide: &Hash, bg: &Background, i: usize, j: usize) -> Result<String> {
     if slide.is_empty() {
         return err!(format!("empty slide block, {}:{}", i, j));
@@ -231,33 +263,7 @@ fn slide_block(slide: &Hash, bg: &Background, i: usize, j: usize) -> Result<Stri
             doc.push_str(&format!("<h2>{}</h2><hr/>", t));
         }
     }
-    t = slide.get_string("doc", "", i, j)?;
-    if !t.is_empty() {
-        doc.push_str(&parse(&t));
-    }
-    t = slide.get_string("include", "", i, j)?;
-    if !t.is_empty() {
-        doc.push_str(&parse(&read_to_string(t)?));
-    }
-    match slide.get(yaml_str!["img"]).unwrap_or(yaml_vec![]) {
-        Yaml::Array(imgs) => {
-            if !imgs.is_empty() {
-                doc.push_str("<div class=\"img-row\">");
-                for img in imgs {
-                    doc.push_str(&img_block(&img.as_hash().unwrap(), i, j)?);
-                }
-                doc.push_str("</div>");
-            }
-        }
-        Yaml::Hash(img) => {
-            doc.push_str(&img_block(img, i, j)?);
-        }
-        _ => return err!(format!("wrong img: {}:{}", i, j)),
-    }
-    t = slide.get_string("math", "", i, j)?;
-    if !t.is_empty() {
-        doc.push_str(&format!("\\[{}\\]", t));
-    }
+    doc.push_str(&content_block(slide, i, j)?);
     t = slide.get_string("note", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!("<aside class=\"notes\">{}</aside>", parse(&t)));

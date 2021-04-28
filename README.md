@@ -109,13 +109,15 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 
 + [x] title: Markdown h2 title.
 + [x] no-title: Same as `title` but will be excluded in TOC.
-+ [x] doc: Multiline Markdown text, accept HTML.
-+ [x] include: Include a Markdown file from path, append after `doc`.
-+ [x] math: Latex math without "$$" brackets.
-+ [x] img: A list of image source.
-  + **Array**, can be map if there is only one image.
-  + (**sized**)
-  + label: Image caption.
++ Content:
+  + [x] doc: Multiline Markdown text, accept HTML.
+  + [x] include: Include a Markdown file from path, append after `doc`.
+  + [x] math: Latex math without "$$" brackets.
+  + [x] img: A list of image source.
+    + **Array**, can be map if there is only one image.
+    + (**sized**)
+    + label: Image caption.
++ [ ] stack: Columns view of contents. (**Array**)
 + [x] note: Speak view note.
 + [x] bg-color: Background color.
 + [x] background: Background setting, as same as global.
@@ -123,5 +125,4 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 + [x] trans: Transition option.
 + [x] bg-trans: Background transition option.
 + [ ] fragment: Fragment option.
-+ [ ] stack: Horizontal stack of columns view.
 + [x] sub: Vertical slides, for horizontal slides only.
