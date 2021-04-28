@@ -11,16 +11,16 @@ const MARKED: Options = Options::from_bits_truncate(
 );
 
 macro_rules! yaml_bool {
-    [$text:expr] => { &Yaml::Boolean($text) };
+    [$b:expr] => { &Yaml::Boolean($b) };
 }
 
 macro_rules! yaml_str {
     [] => { yaml_str![""] };
-    [$text:expr] => { &Yaml::String(String::from($text)) };
+    [$t:expr] => { &Yaml::String(String::from($t)) };
 }
 
 macro_rules! yaml_vec {
-    [] => { &Yaml::Array(vec![]) };
+    [$($v:tt)?] => { &Yaml::Array(vec![$($v)?]) };
 }
 
 struct Background {
@@ -220,20 +220,16 @@ fn slide_block(slide: &Hash, bg: &Background, i: usize, j: usize) -> Result<Stri
     if !t.is_empty() {
         doc.push_str(&format!(" data-background-transition=\"{}\"", t));
     }
-    if bg.is_valid() {
-        if slide.is_enabled("background") {
-            let local_bg = Background::new(slide)?;
-            doc.push_str(&if local_bg.is_valid() { &local_bg } else { bg }.attr());
-        }
+    if bg.is_valid() && slide.is_enabled("background") {
+        let local_bg = Background::new(slide)?;
+        doc.push_str(&if local_bg.is_valid() { &local_bg } else { bg }.attr());
     }
     doc.push_str(">");
-    t = slide.get_string("title", "", i, j)?;
-    if !t.is_empty() {
-        doc.push_str(&format!("<h2>{}</h2><hr/>", t));
-    }
-    t = slide.get_string("no-title", "", i, j)?;
-    if !t.is_empty() {
-        doc.push_str(&format!("<h2>{}</h2><hr/>", t));
+    for title in &["title", "no-title"] {
+        t = slide.get_string(title, "", i, j)?;
+        if !t.is_empty() {
+            doc.push_str(&format!("<h2>{}</h2><hr/>", t));
+        }
     }
     t = slide.get_string("doc", "", i, j)?;
     if !t.is_empty() {
