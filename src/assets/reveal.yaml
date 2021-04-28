@@ -1,7 +1,9 @@
 description: A YAML, Markdown, reveal.js based Flask application.
 author: Yuan Chang
-watermark: img/watermark.png
-watermark-size: 50%
+background:
+  src: img/watermark.png
+  size: 50%
+  opacity: 0.5
 footer:
   src: img/icon.png
   width: 50pt
@@ -110,16 +112,31 @@ footer:
       fragment:
         math: highlight-blue
     - title: Background Color & Transition
-      trans: fade-in fade-out
+      trans: convex-in convex-out
+      background: false
       bg-color: rgb(70, 70, 255)
       doc: |
         ```yaml
-        trans: fade-in fade-out
+        trans: convex-in convex-out
+        background: false
         bg-color: rgb(70, 70, 255)
         doc: <h2>🐳</h2>
         ```
 
         <h2>🐳</h2>
+    - title: Image Background & Background Transition
+      bg-trans: fade-in fade-out
+      background:
+        src: img/watermark.png
+        width: 50%
+        size: 25%
+      doc: |
+        ```yaml
+        bg-trans: fade-in fade-out
+        background:
+          src: img/watermark.png
+          size: 25%
+        ```
     - title: Note
       note: Note text here!
       doc: |

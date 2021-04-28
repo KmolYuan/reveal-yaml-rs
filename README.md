@@ -88,7 +88,12 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 + [x] title: The webpage title, defaults to the first page.
 + [x] description: Webpage description.
 + [x] author: Webpage author.
-+ [ ] background: Global background setting.
++ [x] background: Global background setting.
+  + src: Background source.
+  + size: Background size.
+  + position: Background position.
+  + repeat: Background repeat. (repeat / no-repeat)
+  + opacity: Background opacity from zero to one. (**float**)
 + [x] outline: Auto generated table of the contents (TOC). (**boolean**)
 + [x] theme: Reveal.js theme, "serif" by default.
 + [x] code-theme: Highlight theme, "zenburn" by default.
@@ -97,7 +102,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 + [x] footer: Global footer option. (**sized**)
   + label: Footer text.
   + link: Footer link, works on image and text.
-+ [x] trans: Global transition option.
++ [x] bg-trans: Global background transition option.
 + [ ] Other Reveal.js options.
 
 ### Slides
@@ -113,8 +118,10 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
   + label: Image caption.
 + [x] note: Speak view note.
 + [x] bg-color: Background color.
-+ [ ] background: Background setting.
++ [x] background: Background setting, as same as global.
+  + Local background option can be boolean `false` to disable global background.
 + [x] trans: Transition option.
++ [x] bg-trans: Background transition option.
 + [ ] fragment: Fragment option.
 + [ ] stack: Horizontal stack of columns view.
 + [x] sub: Vertical slides, for horizontal slides only.

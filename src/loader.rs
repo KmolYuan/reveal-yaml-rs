@@ -10,6 +10,10 @@ const MARKED: Options = Options::from_bits_truncate(
         | Options::ENABLE_STRIKETHROUGH.bits(),
 );
 
+macro_rules! yaml_bool {
+    [$text:expr] => { &Yaml::Boolean($text) };
+}
+
 macro_rules! yaml_str {
     [] => { yaml_str![""] };
     [$text:expr] => { &Yaml::String(String::from($text)) };
@@ -19,16 +23,55 @@ macro_rules! yaml_vec {
     [] => { &Yaml::Array(vec![]) };
 }
 
+struct Background {
+    src: String,
+    size: String,
+    position: String,
+    repeat: String,
+    opacity: String,
+}
+
+impl Background {
+    fn new(meta: &Hash) -> Result<Self> {
+        Ok(Self {
+            src: meta.get_hash_string(&["background", "src"], "", 0, 0)?,
+            size: meta.get_hash_string(&["background", "size"], "", 0, 0)?,
+            position: meta.get_hash_string(&["background", "position"], "", 0, 0)?,
+            repeat: meta.get_hash_string(&["background", "repeat"], "", 0, 0)?,
+            opacity: meta.get_hash_string(&["background", "opacity"], "", 0, 0)?,
+        })
+    }
+    fn is_valid(&self) -> bool {
+        !self.src.is_empty()
+    }
+    fn attr(&self) -> String {
+        let mut doc = String::new();
+        for (attr, member) in &[
+            ("", self.src.clone()),
+            ("-size", self.size.clone()),
+            ("-position", self.position.clone()),
+            ("-repeat", self.repeat.clone()),
+            ("-opacity", self.opacity.clone()),
+        ] {
+            if !member.is_empty() {
+                doc.push_str(&format!(" data-background{}=\"{}\"", attr, member))
+            }
+        }
+        doc
+    }
+}
+
 trait Unpack {
     fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool>;
     fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String>;
     fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<Iter<Yaml>>;
     fn get_hash_string(&self, key: &[&str], default: &str, i: usize, j: usize) -> Result<String>;
+    fn is_enabled(&self, key: &str) -> bool;
 }
 
 impl Unpack for Hash {
     fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool> {
-        match self.get(yaml_str!(key)).unwrap_or(&Yaml::Boolean(default)) {
+        match self.get(yaml_str!(key)).unwrap_or(yaml_bool!(default)) {
             Yaml::Boolean(b) => Ok(*b),
             _ => err!(format!("wrong {}: {}:{}", key, i, j)),
         }
@@ -38,7 +81,8 @@ impl Unpack for Hash {
             .get(yaml_str!(key))
             .unwrap_or(&Yaml::String(default.into()))
         {
-            Yaml::String(s) => Ok(s.clone()),
+            Yaml::Real(s) | Yaml::String(s) => Ok(s.clone()),
+            Yaml::Integer(v) => Ok(v.to_string()),
             _ => err!(format!("wrong {}: {}:{}", key, i, j)),
         }
     }
@@ -64,6 +108,12 @@ impl Unpack for Hash {
             }
         } else {
             self.get_string(key, default, i, j)
+        }
+    }
+    fn is_enabled(&self, key: &str) -> bool {
+        match self.get(yaml_str!(key)).unwrap_or(yaml_bool!(true)) {
+            Yaml::Boolean(false) => false,
+            _ => true,
         }
     }
 }
@@ -153,7 +203,7 @@ fn img_block(img: &Hash, i: usize, j: usize) -> Result<String> {
     Ok(doc)
 }
 
-fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
+fn slide_block(slide: &Hash, bg: &Background, i: usize, j: usize) -> Result<String> {
     if slide.is_empty() {
         return err!(format!("empty slide block, {}:{}", i, j));
     }
@@ -165,6 +215,16 @@ fn slide_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
     t = slide.get_string("trans", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!(" data-transition=\"{}\"", t));
+    }
+    t = slide.get_string("bg-trans", "", i, j)?;
+    if !t.is_empty() {
+        doc.push_str(&format!(" data-background-transition=\"{}\"", t));
+    }
+    if bg.is_valid() {
+        if slide.is_enabled("background") {
+            let local_bg = Background::new(slide)?;
+            doc.push_str(&if local_bg.is_valid() { &local_bg } else { bg }.attr());
+        }
     }
     doc.push_str(">");
     t = slide.get_string("title", "", i, j)?;
@@ -248,21 +308,26 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
     let mut title = String::new();
     let meta = yaml[0].assert_hash("meta must be key values")?;
     let slides = yaml[1].assert_vec("slides must be array")?;
+    let bg = Background::new(meta)?;
     let mut doc = String::new();
     for (i, s) in slides.iter().enumerate() {
         doc.push_str("<section>");
         let slide = s.assert_hash(&format!("unpack slide failed: {}:0", i))?;
-        doc.push_str(&slide_block(slide, i, 0)?);
+        doc.push_str(&slide_block(slide, &bg, i, 0)?);
         for (j, s) in slide.get_vec("sub", i, 0)?.enumerate() {
             let slide = s.assert_hash(&format!("unpack slide failed: {}:{}", i, 0))?;
-            doc.push_str(&slide_block(slide, i, j)?);
+            doc.push_str(&slide_block(slide, &bg, i, j)?);
         }
         if i == 0 {
             title = slide.get_string("title", "", i, 0)?;
             if !meta.get_bool("outline", true, i, 0)? {
                 continue;
             }
-            doc.push_str("<section><h2>Outline</h2><hr/><ul>");
+            doc.push_str("<section");
+            if bg.is_valid() {
+                doc.push_str(&bg.attr());
+            }
+            doc.push_str("><h2>Outline</h2><hr/><ul>");
             for (i, s) in slides.iter().enumerate() {
                 let s = s.assert_hash("unpack slide failed")?;
                 let t = s.get_string("title", "", i, 0)?;
@@ -297,7 +362,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         ("author", ""),
         ("theme", "serif"),
         ("code-theme", "zenburn"),
-        ("trans", "slide"),
+        ("bg-trans", "slide"),
     ] {
         reveal = reveal.replace(
             &format!("{{%{}}}", key),
