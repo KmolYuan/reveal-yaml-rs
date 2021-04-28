@@ -264,6 +264,23 @@ fn slide_block(slide: &Hash, bg: &Background, i: usize, j: usize) -> Result<Stri
         }
     }
     doc.push_str(&content_block(slide, i, j)?);
+    let mut stack = slide.get_vec("stack", i, j)?.peekable();
+    if stack.peek().is_some() {
+        let mut content = Vec::new();
+        for slide in stack {
+            let slide = slide.assert_hash("unpack stack failed")?;
+            content.push(content_block(slide, i, j)?);
+        }
+        doc.push_str("<div style=\"display: flex\">");
+        let width = 100. / content.len() as f32;
+        for slide in content.iter() {
+            doc.push_str(&format!(
+                "<div style=\"width: {}%;text-align: center\">{}</div>",
+                width, slide
+            ));
+        }
+        doc.push_str("</div>");
+    }
     t = slide.get_string("note", "", i, j)?;
     if !t.is_empty() {
         doc.push_str(&format!("<aside class=\"notes\">{}</aside>", parse(&t)));
@@ -280,7 +297,7 @@ fn footer_block(meta: &Hash) -> Result<String> {
     }
     let footer = meta[yaml_str!["footer"]].assert_hash("invalid footer")?;
     let mut doc = String::from(
-        "<div id=\"hidden\" style=\"display: none;\"><div id=\"footer\"><div id=\"footer-left\">\n",
+        "<div id=\"hidden\" style=\"display: none\"><div id=\"footer\"><div id=\"footer-left\">\n",
     );
     let link = footer.get_string("link", "", 0, 0)?;
     if !link.is_empty() {

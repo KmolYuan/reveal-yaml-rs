@@ -117,7 +117,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + **Array**, can be map if there is only one image.
     + (**sized**)
     + label: Image caption.
-+ [ ] stack: Columns view of contents. (**Array**)
++ [x] stack: Columns view of contents. (**Array**)
 + [x] note: Speak view note.
 + [x] bg-color: Background color.
 + [x] background: Background setting, as same as global.
