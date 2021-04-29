@@ -71,26 +71,23 @@ trait Unpack {
 
 impl Unpack for Hash {
     fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool> {
-        match self.get(yaml_str!(key)).unwrap_or(yaml_bool!(default)) {
+        match self.get(yaml_str![key]).unwrap_or(yaml_bool![default]) {
             Yaml::Boolean(b) => Ok(*b),
-            _ => err!(format!("wrong {}: {}:{}", key, i, j)),
+            _ => err!(format!("wrong {}: must be boolean ({}:{})", key, i, j)),
         }
     }
     fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String> {
-        match self
-            .get(yaml_str!(key))
-            .unwrap_or(&Yaml::String(default.into()))
-        {
+        match self.get(yaml_str![key]).unwrap_or(yaml_str![default]) {
             Yaml::Real(s) | Yaml::String(s) => Ok(s.clone()),
             Yaml::Integer(v) => Ok(v.to_string()),
-            _ => err!(format!("wrong {}: {}:{}", key, i, j)),
+            _ => err!(format!("wrong {}: must be string ({}:{})", key, i, j)),
         }
     }
     fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<(Iter<Yaml>, usize)> {
-        if let Some(v) = self.get(yaml_str!(key)) {
+        if let Some(v) = self.get(yaml_str![key]) {
             match v {
                 Yaml::Array(a) => Ok((a.iter(), a.len())),
-                _ => err!(format!("wrong {}: {}:{}", key, i, j)),
+                _ => err!(format!("wrong {}: must be array ({}:{})", key, i, j)),
             }
         } else {
             Ok(([].iter(), 0))
@@ -100,8 +97,8 @@ impl Unpack for Hash {
         assert!(keys.len() > 0);
         let key = keys[0];
         if keys.len() > 1 {
-            if let Some(v) = self.get(yaml_str!(key)) {
-                let v = v.assert_hash(&format!("wrong {}: {}:{}", key, i, j))?;
+            if let Some(v) = self.get(yaml_str![key]) {
+                let v = v.assert_hash(&format!("wrong {}: must be map ({}:{})", key, i, j))?;
                 v.get_hash_string(&keys[1..], default, i, j)
             } else {
                 Ok("".into())
@@ -111,7 +108,7 @@ impl Unpack for Hash {
         }
     }
     fn is_enabled(&self, key: &str) -> bool {
-        match self.get(yaml_str!(key)).unwrap_or(yaml_bool!(true)) {
+        match self.get(yaml_str![key]).unwrap_or(yaml_bool![true]) {
             Yaml::Boolean(false) => false,
             _ => true,
         }
@@ -174,14 +171,14 @@ fn parse(text: &str) -> String {
 fn sized_block(img: &Hash, i: usize, j: usize) -> Result<String> {
     let src = img.get_string("src", "", i, j)?;
     if src.is_empty() {
-        return err!(format!("No image source: {}:{}", i, j));
+        return err!(format!("No image source: ({}:{})", i, j));
     }
     let mut doc = format!(" src=\"{}\"", src);
     for attr in &["width", "height"] {
         let value = match img.get(yaml_str![*attr]).unwrap_or(yaml_str![]) {
             Yaml::Real(v) | Yaml::String(v) => v.clone(),
             Yaml::Integer(v) => v.to_string(),
-            _ => return err!(format!("invalid attribute: {}:{}", i, j)),
+            _ => return err!(format!("invalid attribute: {} ({}:{})", attr, i, j)),
         };
         if !value.is_empty() {
             doc.push_str(&format!(" {}=\"{}\"", attr, value));
@@ -226,7 +223,7 @@ fn content_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
         Yaml::Hash(img) => {
             doc.push_str(&img_block(img, i, j)?);
         }
-        _ => return err!(format!("wrong img: {}:{}", i, j)),
+        _ => return err!(format!("wrong img: must be map or array {}:{}", i, j)),
     }
     t = slide.get_string("math", "", i, j)?;
     if !t.is_empty() {
@@ -251,7 +248,7 @@ fn content_block(slide: &Hash, i: usize, j: usize) -> Result<String> {
 
 fn slide_block(slide: &Hash, bg: &Background, i: usize, j: usize) -> Result<String> {
     if slide.is_empty() {
-        return err!(format!("empty slide block, {}:{}", i, j));
+        return err!(format!("empty slide block, ({}:{})", i, j));
     }
     let mut doc = String::from("<section");
     let mut t = slide.get_string("bg-color", "", i, j)?;
@@ -332,7 +329,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         doc.push_str(&slide_block(slide, &bg, i, 0)?);
         let (sub, _) = slide.get_vec("sub", i, 0)?;
         for (j, s) in sub.enumerate() {
-            let slide = s.assert_hash(&format!("unpack slide failed: {}:{}", i, 0))?;
+            let slide = s.assert_hash(&format!("unpack slide failed: ({}:{})", i, 0))?;
             doc.push_str(&slide_block(slide, &bg, i, j)?);
         }
         if i == 0 {
@@ -386,10 +383,30 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
             &meta.get_string(key, default, 0, 0)?,
         );
     }
-    reveal = reveal.replace(
-        &format!("/*{{%{}}}*/", "style"),
-        &meta.get_string("style", "", 0, 0)?,
-    );
+    let mut option = String::new();
+    for (key, attr) in &[
+        ("bg-trans", "backgroundTransition"),
+        ("width", "width"),
+        ("height", "height"),
+    ] {
+        let opt = match &meta.get(yaml_str![*key]).unwrap_or(yaml_str![]) {
+            Yaml::Boolean(b) => b.to_string(),
+            Yaml::String(s) => {
+                if s.is_empty() {
+                    "".into()
+                } else {
+                    format!("\"{}\"", s)
+                }
+            }
+            Yaml::Integer(i) => i.to_string(),
+            _ => return err!(format!("invalid options: {}", key)),
+        };
+        if !opt.is_empty() {
+            option.push_str(&format!("{}: \"{}\",", attr, opt));
+        }
+    }
+    reveal = reveal.replace("/* {%option} */", &option);
+    reveal = reveal.replace("/* {%style} */", &meta.get_string("style", "", 0, 0)?);
     reveal = reveal.replace("{%footer}", &footer_block(meta)?);
     reveal = reveal.replace("{%slides}", &doc);
     Ok(reveal)
