@@ -149,7 +149,7 @@ footer:
               + sturct
               + enum
               + union
-          - math: \small c = \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
+          - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
           - img:
               label: Google Logo
               src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
@@ -162,7 +162,7 @@ footer:
             + sturct
             + enum
             + union
-        - math: \small c = \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
+        - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
         - img:
             label: Google Logo
             src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
