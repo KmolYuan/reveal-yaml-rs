@@ -4,8 +4,8 @@ use actix_web::{get, App, HttpResponse, HttpServer};
 use std::{
     env::{current_exe, set_current_dir},
     fs::{
-        canonicalize, copy, create_dir, read_dir, read_to_string, remove_dir_all, remove_file,
-        rename, write, File,
+        canonicalize, copy, create_dir, create_dir_all, read_dir, read_to_string, remove_dir_all,
+        remove_file, rename, write, File,
     },
     io::{Result, Write},
     path::{Path, PathBuf},
@@ -72,7 +72,7 @@ where
 {
     let path = path.as_ref();
     let path_str = path.join("img");
-    match create_dir(&path_str) {
+    match create_dir_all(&path_str) {
         Ok(_) => println!("Create directory: {}", path_str.to_str().unwrap()),
         Err(_) => println!("Directory exist: {}", path_str.to_str().unwrap()),
     }
@@ -131,8 +131,7 @@ where
         println!("Remove {:?}", &dist);
         remove_dir_all(&dist)?;
     }
-    let archive = format!("./{}", ARCHIVE);
-    let archive = Path::new(&archive);
+    let archive = Path::new(ARCHIVE);
     extract(".")?;
     for e in read_dir(&archive)? {
         let path = e?.path();
@@ -149,7 +148,7 @@ where
         loader(&read_to_string(ROOT)?, "")?,
     )?;
     for assets in listdir(".")? {
-        if assets == archive {
+        if assets.file_name().unwrap() == archive {
             continue;
         }
         if assets.is_dir() {
