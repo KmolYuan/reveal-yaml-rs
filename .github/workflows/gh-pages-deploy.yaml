@@ -1,9 +1,9 @@
 name: GH-Pages Deploy
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 jobs:
-  build_and_test:
+  gh-pages:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

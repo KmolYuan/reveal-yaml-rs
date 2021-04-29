@@ -3,7 +3,7 @@ on:
   push:
     tags: [ v* ]
 jobs:
-  build_and_test:
+  gh-release:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
