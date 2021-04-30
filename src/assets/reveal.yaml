@@ -1,4 +1,4 @@
-description: A YAML, Markdown, reveal.js based Flask application.
+description: Rust implementation of Reveal.js YAML server.
 author: Yuan Chang
 background:
   src: img/watermark.png
