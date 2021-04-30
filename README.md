@@ -9,6 +9,8 @@ This manager downloads the latest Reveal.js archive to provide serving and packi
 
 Static demo on gh-pages: <https://kmolyuan.github.io/reveal-yaml-rs/>
 
+Download CLI executable from GitHub release: <https://github.com/KmolYuan/reveal-yaml-rs/releases/>
+
 ### Why should use this?
 
 Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides, an auto-generated outline, and a live demo when editing.
