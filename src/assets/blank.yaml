@@ -1,5 +1,7 @@
 description: ""
 author: ""
+option:
+  hash: true
 ---
 - title: Untitled
   doc: |

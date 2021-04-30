@@ -1,3 +1,4 @@
+use heck::MixedCase;
 use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag};
 use std::{fs::read_to_string, io::Result, slice::Iter};
 use yaml_rust::{yaml::Hash, Yaml, YamlLoader};
@@ -9,6 +10,10 @@ const MARKED: Options = Options::from_bits_truncate(
         | Options::ENABLE_TASKLISTS.bits()
         | Options::ENABLE_STRIKETHROUGH.bits(),
 );
+
+macro_rules! yaml_bad {
+    [] => { &Yaml::BadValue };
+}
 
 macro_rules! yaml_bool {
     [$b:expr] => { &Yaml::Boolean($b) };
@@ -33,12 +38,18 @@ struct Background {
 
 impl Background {
     fn new(meta: &Hash) -> Result<Self> {
+        let h = Hash::new();
+        let bg = match meta.get(yaml_str!["background"]).unwrap_or(yaml_bad![]) {
+            Yaml::Hash(h) => h,
+            Yaml::BadValue => &h,
+            _ => return err!("background must be hash"),
+        };
         Ok(Self {
-            src: meta.get_hash_string(&["background", "src"], "", 0, 0)?,
-            size: meta.get_hash_string(&["background", "size"], "", 0, 0)?,
-            position: meta.get_hash_string(&["background", "position"], "", 0, 0)?,
-            repeat: meta.get_hash_string(&["background", "repeat"], "", 0, 0)?,
-            opacity: meta.get_hash_string(&["background", "opacity"], "", 0, 0)?,
+            src: bg.get_string("src", "", 0, 0)?,
+            size: bg.get_value("size", "", 0, 0)?,
+            position: bg.get_string("position", "", 0, 0)?,
+            repeat: bg.get_string("repeat", "", 0, 0)?,
+            opacity: bg.get_value("opacity", "", 0, 0)?,
         })
     }
     fn is_valid(&self) -> bool {
@@ -64,8 +75,9 @@ impl Background {
 trait Unpack {
     fn get_bool(&self, key: &str, default: bool, i: usize, j: usize) -> Result<bool>;
     fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String>;
+    fn get_value(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String>;
     fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<(Iter<Yaml>, usize)>;
-    fn get_hash_string(&self, key: &[&str], default: &str, i: usize, j: usize) -> Result<String>;
+    fn get_custom_pairs(&self, key: &str, i: usize, j: usize) -> Result<String>;
     fn is_enabled(&self, key: &str) -> bool;
 }
 
@@ -78,33 +90,56 @@ impl Unpack for Hash {
     }
     fn get_string(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String> {
         match self.get(yaml_str![key]).unwrap_or(yaml_str![default]) {
-            Yaml::Real(s) | Yaml::String(s) => Ok(s.clone()),
-            Yaml::Integer(v) => Ok(v.to_string()),
+            Yaml::String(s) => Ok(s.clone()),
             _ => err!(format!("wrong {}: must be string ({}:{})", key, i, j)),
         }
     }
-    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<(Iter<Yaml>, usize)> {
-        if let Some(v) = self.get(yaml_str![key]) {
-            match v {
-                Yaml::Array(a) => Ok((a.iter(), a.len())),
-                _ => err!(format!("wrong {}: must be array ({}:{})", key, i, j)),
-            }
-        } else {
-            Ok(([].iter(), 0))
+    fn get_value(&self, key: &str, default: &str, i: usize, j: usize) -> Result<String> {
+        match self.get(yaml_str![key]).unwrap_or(yaml_str![default]) {
+            Yaml::Real(s) | Yaml::String(s) => Ok(s.clone()),
+            Yaml::Integer(v) => Ok(v.to_string()),
+            _ => err!(format!(
+                "wrong {}: must be integer, float or string ({}:{})",
+                key, i, j
+            )),
         }
     }
-    fn get_hash_string(&self, keys: &[&str], default: &str, i: usize, j: usize) -> Result<String> {
-        assert!(keys.len() > 0);
-        let key = keys[0];
-        if keys.len() > 1 {
-            if let Some(v) = self.get(yaml_str![key]) {
-                let v = v.assert_hash(&format!("wrong {}: must be map ({}:{})", key, i, j))?;
-                v.get_hash_string(&keys[1..], default, i, j)
-            } else {
-                Ok("".into())
+    fn get_vec(&self, key: &str, i: usize, j: usize) -> Result<(Iter<Yaml>, usize)> {
+        match self.get(yaml_str![key]).unwrap_or(yaml_bad![]) {
+            Yaml::Array(a) => Ok((a.iter(), a.len())),
+            Yaml::BadValue => Ok(([].iter(), 0)),
+            _ => err!(format!("wrong {}: must be array ({}:{})", key, i, j)),
+        }
+    }
+    fn get_custom_pairs(&self, key: &str, i: usize, j: usize) -> Result<String> {
+        match self.get(yaml_str![key]).unwrap_or(yaml_bad![]) {
+            Yaml::Hash(h) => {
+                let mut doc = String::new();
+                for (k, v) in h {
+                    let k = match k.as_str() {
+                        Some(v) => v,
+                        None => return err!(format!("invalid key {:?}: ({}:{})", k, i, j)),
+                    }
+                    .to_mixed_case();
+                    let v = match v {
+                        Yaml::Real(s) => s.clone(),
+                        Yaml::String(s) => {
+                            if s.is_empty() {
+                                "".into()
+                            } else {
+                                format!("\"{}\"", s)
+                            }
+                        }
+                        Yaml::Integer(v) => v.to_string(),
+                        Yaml::Boolean(b) => b.to_string(),
+                        _ => return err!(format!("invalid value {}: ({}:{})", k, i, j)),
+                    };
+                    doc.push_str(&format!("{}: {}, \n", k, v));
+                }
+                Ok(doc)
             }
-        } else {
-            self.get_string(key, default, i, j)
+            Yaml::BadValue => Ok("".into()),
+            _ => err!(format!("wrong {}: must be map ({}:{})", key, i, j)),
         }
     }
     fn is_enabled(&self, key: &str) -> bool {
@@ -175,11 +210,7 @@ fn sized_block(img: &Hash, i: usize, j: usize) -> Result<String> {
     }
     let mut doc = format!(" src=\"{}\"", src);
     for attr in &["width", "height"] {
-        let value = match img.get(yaml_str![*attr]).unwrap_or(yaml_str![]) {
-            Yaml::Real(v) | Yaml::String(v) => v.clone(),
-            Yaml::Integer(v) => v.to_string(),
-            _ => return err!(format!("invalid attribute: {} ({}:{})", attr, i, j)),
-        };
+        let value = img.get_value(attr, "", i, j)?;
         if !value.is_empty() {
             doc.push_str(&format!(" {}=\"{}\"", attr, value));
         }
@@ -284,12 +315,17 @@ fn slide_block(slide: &Hash, bg: &Background, i: usize, j: usize) -> Result<Stri
 }
 
 fn footer_block(meta: &Hash) -> Result<String> {
-    let src = meta.get_hash_string(&["footer", "src"], "", 0, 0)?;
-    let label = meta.get_hash_string(&["footer", "label"], "", 0, 0)?;
+    let h = Hash::new();
+    let footer = match meta.get(yaml_str!["footer"]).unwrap_or(yaml_bad![]) {
+        Yaml::Hash(h) => h,
+        Yaml::BadValue => &h,
+        _ => return err!("invalid footer"),
+    };
+    let src = footer.get_string("src", "", 0, 0)?;
+    let label = footer.get_string("label", "", 0, 0)?;
     if src.is_empty() && label.is_empty() {
         return Ok("".into());
     }
-    let footer = meta[yaml_str!["footer"]].assert_hash("invalid footer")?;
     let mut doc = String::from(
         "<div id=\"hidden\" style=\"display: none\"><div id=\"footer\"><div id=\"footer-left\">\n",
     );
@@ -371,6 +407,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
     let mut reveal = String::from(TEMPLATE).replace("{%mount}", mount);
     for (key, default) in &[
         ("icon", "img/icon.png"),
+        ("lang", "en"),
         ("title", &title),
         ("description", ""),
         ("author", ""),
@@ -383,29 +420,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
             &meta.get_string(key, default, 0, 0)?,
         );
     }
-    let mut option = String::new();
-    for (key, attr) in &[
-        ("bg-trans", "backgroundTransition"),
-        ("width", "width"),
-        ("height", "height"),
-    ] {
-        let opt = match &meta.get(yaml_str![*key]).unwrap_or(yaml_str![]) {
-            Yaml::Boolean(b) => b.to_string(),
-            Yaml::String(s) => {
-                if s.is_empty() {
-                    "".into()
-                } else {
-                    format!("\"{}\"", s)
-                }
-            }
-            Yaml::Integer(i) => i.to_string(),
-            _ => return err!(format!("invalid options: {}", key)),
-        };
-        if !opt.is_empty() {
-            option.push_str(&format!("{}: \"{}\",", attr, opt));
-        }
-    }
-    reveal = reveal.replace("/* {%option} */", &option);
+    reveal = reveal.replace("/* {%option} */", &meta.get_custom_pairs("option", 0, 0)?);
     reveal = reveal.replace("/* {%style} */", &meta.get_string("style", "", 0, 0)?);
     reveal = reveal.replace("{%footer}", &footer_block(meta)?);
     reveal = reveal.replace("{%slides}", &doc);

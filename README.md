@@ -87,6 +87,8 @@ Some functions are planed to be demonstrated in the help page. Open the help pag
 Metadata contains HTML settings and global slide settings.
 The definition contains in the first YAML doc, split by horizontal line `---`.
 
++ [x] icon: Icon path, "img/icon.png" by default.
++ [x] lang: Set the "lang" attribute for the page, "en" by default.
 + [x] title: The webpage title, defaults to the first page.
 + [x] description: Webpage description.
 + [x] author: Webpage author.
@@ -99,13 +101,13 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 + [x] outline: Auto generated table of the contents (TOC). (**boolean**)
 + [x] theme: Reveal.js theme, "serif" by default.
 + [x] code-theme: Highlight theme, "zenburn" by default.
-+ [x] icon: Icon path, “img/icon.png” by default.
 + [x] style: Extra CSS style path.
 + [x] footer: Global footer option. (**sized**)
   + label: Footer text.
   + link: Footer link, works on image and text.
-+ [x] bg-trans: Global background transition option.
-+ [ ] Other Reveal.js options.
++ [x] option: Other Reveal.js options.
+  + Use any case string to indicate the option, this function will translate into lower camelcase, for example, YAML `slide number: c/t` will be JavaScript `slideNumber: "c/t"`.
+  + Please see <https://revealjs.com/config/> for more information.
 
 ### Slides
 

@@ -4,6 +4,9 @@ background:
   src: img/watermark.png
   size: 50%
   opacity: 0.7
+option:
+  hash: true
+  slide number: c/t
 footer:
   src: img/icon.png
   width: 50pt
@@ -22,7 +25,9 @@ footer:
     Scroll down ↓ to see an auto-generated outline.
 - title: Examples
   doc: |
-    You can see the source of this doc to see those example.
+    You can see the source of this doc to see those example:
+
+    + [KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
 
     Scroll down ↓ to see the examples.
   sub:
@@ -87,9 +92,8 @@ footer:
         img: fade-in-then-out
     - title: Maths
       doc: |
-        Inline math text $x^2$.
-
         ```yaml
+        doc: Inline math text $x^2$.
         math: |
           \small\begin{aligned}
           \min_{x_1, x_2}&f(x)
@@ -101,6 +105,7 @@ footer:
         fragment:
           math: highlight-blue
         ```
+        Inline math text $x^2$.
       math: |
         \small\begin{aligned}
         \min_{x_1, x_2}&f(x)
