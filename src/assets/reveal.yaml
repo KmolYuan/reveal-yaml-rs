@@ -171,30 +171,33 @@ footer:
         - img:
             label: Google Logo
             src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
-    - title: Stack Fragment
+    - title: Fragment in Stack
       doc: |
         ```yaml
         stack:
-          - doc: AAA
-            fragment:
-              - doc: fade-in-then-out
-          - doc: BBB
-            fragment:
-              - doc: fade-in-then-out
-          - doc: CCC
-            fragment:
-              - doc: fade-in-then-out
+        - doc: AAA
+          math: f(x)
+          # one action
+          fragment: [ { doc: fade-in, math: fade-in } ]
+        - doc: BBB
+          math: f(y)
+          # two action
+          fragment: [ doc: fade-in, math: fade-in ]
+        - doc: CCC
+          math: f(z)
+          # one element
+          fragment: [ math: fade-in ]
         ```
       stack:
         - doc: AAA
-          fragment:
-            - doc: fade-in-then-out
+          math: f(x)
+          fragment: [ { doc: fade-in, math: fade-in } ]
         - doc: BBB
-          fragment:
-            - doc: fade-in-then-out
+          math: f(y)
+          fragment: [ doc: fade-in, math: fade-in ]
         - doc: CCC
-          fragment:
-            - doc: fade-in-then-out
+          math: f(z)
+          fragment: [ math: fade-in ]
     - title: Note
       note: Note text here!
       doc: |
