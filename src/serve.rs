@@ -1,68 +1,25 @@
-use crate::loader::loader;
+use crate::*;
 use actix_files::Files;
 use actix_web::{get, App, HttpResponse, HttpServer};
 use std::{
-    env::{current_exe, set_current_dir},
-    fs::{
-        canonicalize, copy, create_dir, create_dir_all, read_dir, read_to_string, remove_dir_all,
-        remove_file, rename, write, File,
-    },
+    env::set_current_dir,
+    fs::{canonicalize, create_dir_all, read_to_string, File},
     io::{Result, Write},
-    path::{Path, PathBuf},
+    path::Path,
 };
 use temp_dir::TempDir;
-use zip::ZipArchive;
 
-const ROOT: &str = "reveal.yaml";
 const WATERMARK_PATH: &str = "img/watermark.png";
 const ICON_PATH: &str = "img/icon.png";
 const WATERMARK: &[u8] = include_bytes!("assets/img/watermark.png");
 const ICON: &[u8] = include_bytes!("assets/img/icon.png");
 const BLANK_DOC: &[u8] = include_bytes!("assets/blank.yaml");
 const HELP_DOC: &str = include_str!("assets/reveal.yaml");
-const REVEAL: &str = "https://github.com/hakimel/reveal.js/archive/master.zip";
-const ARCHIVE: &str = "reveal.js-master";
-thread_local! {
-    static RESOURCE: PathBuf = current_exe()
-        .unwrap()
-        .parent()
-        .unwrap()
-        .join(format!("{}.zip", ARCHIVE));
-}
 
 macro_rules! path_string {
     ($v:expr) => {
         $v.into_os_string().into_string().unwrap()
     };
-}
-
-fn extract<D>(d: D) -> Result<()>
-where
-    D: AsRef<Path>,
-{
-    RESOURCE.with(|path| -> Result<()> {
-        if !path.exists() {
-            update()?;
-        }
-        ZipArchive::new(File::open(path).unwrap())
-            .unwrap()
-            .extract(d.as_ref())
-            .unwrap();
-        Ok(())
-    })
-}
-
-/// Download the archive from Reveal.js repository.
-pub fn update() -> Result<()> {
-    let b = reqwest::blocking::get(REVEAL).unwrap().bytes().unwrap();
-    println!("Download archive: {}", REVEAL);
-    RESOURCE.with(|path| -> Result<()> {
-        let mut f = File::create(path)?;
-        f.write(b.as_ref())?;
-        Ok(())
-    })?;
-    println!("Done");
-    Ok(())
 }
 
 /// Create new project.
@@ -84,81 +41,6 @@ where
         let mut f = File::create(path.join(data_path))?;
         f.write(content)?;
     }
-    Ok(())
-}
-
-fn copy_dir<P, D>(path: P, dist: D) -> Result<()>
-where
-    P: AsRef<Path>,
-    D: AsRef<Path>,
-{
-    let path = path.as_ref();
-    let dist = dist.as_ref();
-    for entry in read_dir(path)? {
-        let path = entry?.path();
-        let file_name = path.file_name().unwrap();
-        if path.is_dir() {
-            copy_dir(&path, dist.join(file_name))?;
-        } else if path.is_file() {
-            let dist = dist.join(file_name);
-            println!("{:?} > {:?}", &path, dist);
-            copy(&path, dist)?;
-        }
-    }
-    Ok(())
-}
-
-fn listdir<P>(path: P) -> Result<Vec<PathBuf>>
-where
-    P: AsRef<Path>,
-{
-    let mut list = Vec::new();
-    for entry in read_dir(path)? {
-        list.push(entry?.path());
-    }
-    Ok(list)
-}
-
-/// Pack project to an archive.
-pub fn pack<P, D>(path: P, dist: D) -> Result<()>
-where
-    P: AsRef<Path>,
-    D: AsRef<Path>,
-{
-    set_current_dir(path.as_ref())?;
-    let dist = dist.as_ref();
-    if dist.is_dir() {
-        println!("Remove {:?}", &dist);
-        remove_dir_all(&dist)?;
-    }
-    let archive = Path::new(ARCHIVE);
-    extract(".")?;
-    for e in read_dir(&archive)? {
-        let path = e?.path();
-        if path.is_file() {
-            remove_file(path)?;
-        } else if [".github", "examples", "test"]
-            .contains(&path.file_name().unwrap().to_str().unwrap())
-        {
-            remove_dir_all(path)?;
-        }
-    }
-    write(
-        archive.join("index.html"),
-        loader(&read_to_string(ROOT)?, "")?,
-    )?;
-    for assets in listdir(".")? {
-        if assets.file_name().unwrap() == archive {
-            continue;
-        }
-        if assets.is_dir() {
-            let dist = archive.join(assets.file_name().unwrap().to_os_string());
-            create_dir(&dist)?;
-            copy_dir(&assets, dist)?;
-        }
-    }
-    rename(archive, dist)?;
-    println!("Done");
     Ok(())
 }
 

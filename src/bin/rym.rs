@@ -22,6 +22,10 @@ async fn main() -> std::io::Result<()> {
             (@arg DIR: "Project dir")
             (@arg PORT: --port +takes_value "Set port")
         )
+        (@subcommand fmt =>
+            (about: "Format the current project")
+            (@arg DIR: "Project dir")
+        )
         (@subcommand pack =>
             (about: "Pack the current project")
             (@arg DIR: "Project dir")

@@ -175,18 +175,18 @@ footer:
       doc: |
         ```yaml
         stack:
-        - doc: AAA
-          math: f(x)
-          # one action
-          fragment: [ { doc: fade-in, math: fade-in } ]
-        - doc: BBB
-          math: f(y)
-          # two action
-          fragment: [ doc: fade-in, math: fade-in ]
-        - doc: CCC
-          math: f(z)
-          # one element
-          fragment: [ math: fade-in ]
+          - doc: AAA
+            math: f(x)
+            # one action
+            fragment: [ { doc: fade-in, math: fade-in } ]
+          - doc: BBB
+            math: f(y)
+            # two action
+            fragment: [ doc: fade-in, math: fade-in ]
+          - doc: CCC
+            math: f(z)
+            # one element
+            fragment: [ math: fade-in ]
         ```
       stack:
         - doc: AAA
