@@ -41,8 +41,8 @@ footer:
           |:------:|:------:|
           | A | B |
 
-          + Item 1 <!-- .element: class="fragment" data-fragment-index="2" -->
-          + Item 2 <!-- .element: class="fragment" data-fragment-index="1" -->
+          + Item 1
+          + Item 2
         ```
 
         *Something* **important**.
@@ -51,8 +51,8 @@ footer:
         |:------:|:------:|
         | A | B |
 
-        + Item 1 <!-- .element: class="fragment" data-fragment-index="2" -->
-        + Item 2 <!-- .element: class="fragment" data-fragment-index="1" -->
+        + Item 1
+        + Item 2
     - title: Code block
       doc: |
         <pre><code class="language-markdown">doc: |
@@ -80,7 +80,7 @@ footer:
         - label: Google Logo
           src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
         fragment:
-          img: fade-in-then-out
+          - img: fade-in-then-out
         ```
       img:
         - label: Ubuntu Logo
@@ -89,7 +89,7 @@ footer:
         - label: Google Logo
           src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
       fragment:
-        img: fade-in-then-out
+        - img: fade-in-then-out
     - title: Maths
       doc: |
         ```yaml
@@ -103,7 +103,7 @@ footer:
           &c(x) = 0
           \end{aligned}
         fragment:
-          math: highlight-blue
+          - math: highlight-blue
         ```
         Inline math text $x^2$.
       math: |
@@ -115,7 +115,7 @@ footer:
         &c(x) = 0
         \end{aligned}
       fragment:
-        math: highlight-blue
+        - math: highlight-blue
     - title: Background Color & Transition
       trans: convex-in convex-out
       background: false
@@ -171,6 +171,30 @@ footer:
         - img:
             label: Google Logo
             src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+    - title: Stack Fragment
+      doc: |
+        ```yaml
+        stack:
+          - doc: AAA
+            fragment:
+              - doc: fade-in-then-out
+          - doc: BBB
+            fragment:
+              - doc: fade-in-then-out
+          - doc: CCC
+            fragment:
+              - doc: fade-in-then-out
+        ```
+      stack:
+        - doc: AAA
+          fragment:
+            - doc: fade-in-then-out
+        - doc: BBB
+          fragment:
+            - doc: fade-in-then-out
+        - doc: CCC
+          fragment:
+            - doc: fade-in-then-out
     - title: Note
       note: Note text here!
       doc: |

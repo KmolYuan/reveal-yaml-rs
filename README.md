@@ -78,7 +78,7 @@ rym pack
 
 ## Features
 
-Here are the implemented features, or the functions are designed in progress.
+Here are the implemented features, or the functions are designed in progress. Generally, the parser will not check extra key values.
 
 Some functions are planed to be demonstrated in the help page. Open the help page by adding `/help/` after URL, like `http://localhost:8080/help/`.
 
@@ -119,7 +119,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
   + [x] math: Latex math without "$$" brackets.
   + [x] img: A list of image source.
     + **Array**, can be map if there is only one image.
-    + (**sized**)
+    + Each block are **sized**.
     + label: Image caption.
   + [x] stack: Columns view of contents. (**Array**)
     + This function can be recursive.
@@ -129,5 +129,8 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
   + Local background option can be boolean `false` to disable global background.
 + [x] trans: Transition option.
 + [x] bg-trans: Background transition option.
-+ [ ] fragment: Fragment option.
++ [x] fragment: Fragment option.
+  + **Array**, the index are the `data-fragment-index`.
+  + Each block are **content**, but exclude stacks.
+  + Stacks can have local fragment option, but still ordered.
 + [x] sub: Vertical slides, for horizontal slides only.
