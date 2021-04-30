@@ -139,7 +139,7 @@ footer:
         ```yaml
         bg-trans: fade-in fade-out
         background:
-          src: img/watermark.png
+          src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
           size: 25%
           opacity: 0.5
         ```
