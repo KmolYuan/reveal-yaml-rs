@@ -8,6 +8,7 @@ license = "MIT"
 repository = "https://github.com/KmolYuan/reveal-yaml-rs"
 readme = "README.md"
 keywords = ["yaml", "revealjs", "reveal", "slide", "slideshow"]
+categories = ["command-line-interface"]
 
 [features]
 cli = ["clap"]
