@@ -10,8 +10,6 @@ use std::{
 };
 use zip::ZipArchive;
 
-pub(crate) const ROOT: &str = "reveal.yaml";
-
 fn copy_dir<P, D>(path: P, dist: D) -> Result<()>
 where
     P: AsRef<Path>,

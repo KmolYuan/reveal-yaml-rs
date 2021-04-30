@@ -9,6 +9,7 @@ use std::{
 };
 use temp_dir::TempDir;
 
+pub(crate) const ROOT: &str = "reveal.yaml";
 const WATERMARK_PATH: &str = "img/watermark.png";
 const ICON_PATH: &str = "img/icon.png";
 const WATERMARK: &[u8] = include_bytes!("assets/img/watermark.png");

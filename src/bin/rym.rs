@@ -1,5 +1,5 @@
 use clap::{clap_app, AppSettings};
-use reveal_yaml::{launch, new_project, pack, update};
+use reveal_yaml::*;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -42,6 +42,9 @@ async fn main() -> std::io::Result<()> {
         let port = cmd.value_of("PORT").unwrap_or("8080");
         let path = cmd.value_of("DIR").unwrap_or(".");
         launch(port.parse().unwrap(), path).await?;
+    } else if let Some(cmd) = args.subcommand_matches("fmt") {
+        let path = cmd.value_of("DIR").unwrap_or(".");
+        fmt(path)?;
     } else if let Some(cmd) = args.subcommand_matches("pack") {
         let path = cmd.value_of("DIR").unwrap_or(".");
         let dist = cmd.value_of("DIST").unwrap_or("./package");
