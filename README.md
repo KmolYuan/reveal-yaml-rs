@@ -74,6 +74,8 @@ rym update
 rym new .
 # Serve the slides
 rym serve
+# Reformat the project file
+rym fmt
 # Pack the project to HTML archive
 rym pack
 ```

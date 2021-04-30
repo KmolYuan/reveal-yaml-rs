@@ -191,13 +191,18 @@ footer:
       stack:
         - doc: AAA
           math: f(x)
-          fragment: [ { doc: fade-in, math: fade-in } ]
+          fragment:
+            - doc: fade-in
+              math: fade-in
         - doc: BBB
           math: f(y)
-          fragment: [ doc: fade-in, math: fade-in ]
+          fragment:
+            - doc: fade-in
+            - math: fade-in
         - doc: CCC
           math: f(z)
-          fragment: [ math: fade-in ]
+          fragment:
+            - math: fade-in
     - title: Note
       note: Note text here!
       doc: |

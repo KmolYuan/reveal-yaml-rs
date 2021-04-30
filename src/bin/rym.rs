@@ -25,6 +25,7 @@ async fn main() -> std::io::Result<()> {
         (@subcommand fmt =>
             (about: "Format the current project")
             (@arg DIR: "Project dir")
+            (@arg dry: --dry "Dry run")
         )
         (@subcommand pack =>
             (about: "Pack the current project")
@@ -44,7 +45,8 @@ async fn main() -> std::io::Result<()> {
         launch(port.parse().unwrap(), path).await?;
     } else if let Some(cmd) = args.subcommand_matches("fmt") {
         let path = cmd.value_of("DIR").unwrap_or(".");
-        fmt(path)?;
+        let dry = cmd.is_present("dry");
+        fmt(path, dry)?;
     } else if let Some(cmd) = args.subcommand_matches("pack") {
         let path = cmd.value_of("DIR").unwrap_or(".");
         let dist = cmd.value_of("DIST").unwrap_or("./package");
