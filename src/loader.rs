@@ -413,7 +413,6 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
         ("author", ""),
         ("theme", "serif"),
         ("code-theme", "zenburn"),
-        ("bg-trans", "slide"),
     ] {
         reveal = reveal.replace(
             &format!("{{%{}}}", key),
