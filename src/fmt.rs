@@ -24,10 +24,10 @@ impl Dumper for Yaml {
             }
             Yaml::Boolean(b) => b.to_string(),
             Yaml::Array(a) => {
-                let mut doc = String::new();
+                let mut doc = String::from(if level == 0 { "" } else { "\n" });
                 for (i, y) in a.iter().enumerate() {
                     let mut s = format!("- {}\n", y.dump(level + 1));
-                    if i != 0 {
+                    if i != 0 || level != 0 {
                         s = "  ".repeat(level) + &s;
                     }
                     doc.push_str(&s);
