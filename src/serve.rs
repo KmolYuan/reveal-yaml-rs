@@ -39,24 +39,6 @@ where
     Ok(())
 }
 
-#[get("/help/")]
-async fn help_page() -> Result<HttpResponse> {
-    Ok(HttpResponse::Ok()
-        .content_type("text/html")
-        .body(loader(HELP_DOC, "/static/")?))
-}
-
-#[get("/")]
-async fn index() -> Result<HttpResponse> {
-    let yaml = match read_to_string(ROOT) {
-        Ok(s) => s,
-        Err(_) => return err!("can not found reveal.yaml file"),
-    };
-    Ok(HttpResponse::Ok()
-        .content_type("text/html;charset=utf-8")
-        .body(loader(&yaml, "/static/")?))
-}
-
 /// Launch function.
 pub async fn launch<P>(port: u16, path: P) -> Result<()>
 where
@@ -78,8 +60,8 @@ where
     let assets = listdir(".")?;
     HttpServer::new(move || {
         let mut app = App::new()
-            .service(index)
-            .service(help_page)
+            .service(site::index)
+            .service(site::help_page)
             .service(Files::new("/static", &archive));
         for asset in &assets {
             let name = format!("/{}", asset.file_name().unwrap().to_str().unwrap());
@@ -90,4 +72,26 @@ where
     .bind(("localhost", port))?
     .run()
     .await
+}
+
+mod site {
+    use super::*;
+
+    #[get("/help/")]
+    pub(super) async fn help_page() -> Result<HttpResponse> {
+        Ok(HttpResponse::Ok()
+            .content_type("text/html")
+            .body(loader(HELP_DOC, "/static/")?))
+    }
+
+    #[get("/")]
+    pub(super) async fn index() -> Result<HttpResponse> {
+        let yaml = match read_to_string(ROOT) {
+            Ok(s) => s,
+            Err(_) => return err!("can not found reveal.yaml file"),
+        };
+        Ok(HttpResponse::Ok()
+            .content_type("text/html;charset=utf-8")
+            .body(loader(&yaml, "/static/")?))
+    }
 }
