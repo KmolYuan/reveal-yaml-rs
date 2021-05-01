@@ -74,6 +74,7 @@ where
     println!("Serve at: http://localhost:{}/", port);
     println!("Global archive at: {}", archive.to_str().unwrap());
     println!("Local assets at: {}", canonicalize(".")?.to_str().unwrap());
+    println!("Press Ctrl+C to close the server ...");
     let assets = listdir(".")?;
     HttpServer::new(move || {
         let mut app = App::new()

@@ -70,25 +70,23 @@ pub fn fmt<P: AsRef<Path>>(path: P, dry: bool) -> Result<()> {
         Ok(v) => v,
         Err(e) => return err!(e.to_string()),
     };
-    let mut f = File::create(&path)?;
-    for (i, node) in yaml.iter().enumerate() {
-        let s = node
-            .dump(0, false)
-            .split('\n')
-            .map(|s| s.trim_end())
-            .collect::<Vec<_>>()
-            .join("\n");
-        if dry {
-            if i != 0 {
-                println!("---");
-            }
+    let yaml = yaml.iter().enumerate().map(|(i, node)| {
+        String::from(if i == 0 { "" } else { "---\n" })
+            + &node
+                .dump(0, false)
+                .split('\n')
+                .map(|s| s.trim_end())
+                .collect::<Vec<_>>()
+                .join("\n")
+    });
+    if dry {
+        for s in yaml {
             println!("{}", s);
-        } else {
-            if i != 0 {
-                f.write("---\n".as_bytes())?;
-            }
-            f.write(s.as_bytes())?;
-            f.write("\n".as_bytes())?;
+        }
+    } else {
+        let mut f = File::create(&path)?;
+        for s in yaml {
+            f.write((s + "\n").as_bytes())?;
         }
     }
     Ok(())
