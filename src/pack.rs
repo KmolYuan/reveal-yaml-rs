@@ -32,7 +32,7 @@ pub(crate) fn extract<D>(d: D) -> Result<()>
 where
     D: AsRef<Path>,
 {
-    let path = RESOURCE.with(|path| path.to_path_buf());
+    let path = get_archive!();
     if !path.exists() {
         update()?;
     }

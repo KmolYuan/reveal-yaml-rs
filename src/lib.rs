@@ -5,6 +5,15 @@ macro_rules! err {
     }};
 }
 
+macro_rules! get_archive {
+    () => {{
+        use std::env::current_exe;
+        let mut path = current_exe()?.with_file_name(ARCHIVE);
+        path.set_extension("zip");
+        path
+    }};
+}
+
 macro_rules! yaml_bad {
     [] => { &yaml_rust::Yaml::BadValue };
 }
