@@ -17,12 +17,6 @@ const ICON: &[u8] = include_bytes!("assets/img/icon.png");
 const BLANK_DOC: &[u8] = include_bytes!("assets/blank.yaml");
 const HELP_DOC: &str = include_str!("assets/reveal.yaml");
 
-macro_rules! path_string {
-    ($v:expr) => {
-        $v.into_os_string().into_string().unwrap()
-    };
-}
-
 /// Create new project.
 pub fn new_project<P>(path: P) -> Result<()>
 where
@@ -69,7 +63,6 @@ where
     P: AsRef<Path>,
 {
     set_current_dir(path.as_ref())?;
-    let assets = listdir(".")?;
     let temp = match TempDir::new() {
         Ok(v) => v,
         Err(s) => return err!(s),
@@ -78,29 +71,18 @@ where
     extract(temp.path())?;
     // Start server
     let archive = temp.path().join(ARCHIVE);
-    let archive = path_string!(archive);
     println!("Serve at: http://localhost:{}/", port);
-    println!("Global assets at: {}", archive.as_str());
-    println!("Local assets at: {}", path_string!(canonicalize(".")?));
+    println!("Global archive at: {}", archive.to_str().unwrap());
+    println!("Local assets at: {}", canonicalize(".")?.to_str().unwrap());
+    let assets = listdir(".")?;
     HttpServer::new(move || {
         let mut app = App::new()
             .service(index)
             .service(help_page)
-            .service(Files::new("/static", archive.as_str()));
+            .service(Files::new("/static", &archive));
         for asset in &assets {
-            let name = format!(
-                "/{}",
-                asset
-                    .file_name()
-                    .unwrap()
-                    .to_os_string()
-                    .into_string()
-                    .unwrap()
-            );
-            app = app.service(Files::new(
-                name.as_str(),
-                path_string!(asset.clone()).as_str(),
-            ));
+            let name = format!("/{}", asset.file_name().unwrap().to_str().unwrap());
+            app = app.service(Files::new(&name, asset));
         }
         app
     })
