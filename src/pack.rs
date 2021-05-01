@@ -1,10 +1,7 @@
 use crate::*;
 use std::{
     env::set_current_dir,
-    fs::{
-        copy, create_dir, read_dir, read_to_string, remove_dir_all, remove_file, rename, write,
-        File,
-    },
+    fs::{copy, create_dir, read_dir, read_to_string, remove_dir_all, rename, write, File},
     io::Result,
     path::{Path, PathBuf},
 };
@@ -35,16 +32,15 @@ pub(crate) fn extract<D>(d: D) -> Result<()>
 where
     D: AsRef<Path>,
 {
-    RESOURCE.with(|path| -> Result<()> {
-        if !path.exists() {
-            update()?;
-        }
-        ZipArchive::new(File::open(path).unwrap())
-            .unwrap()
-            .extract(d.as_ref())
-            .unwrap();
-        Ok(())
-    })
+    let path = RESOURCE.with(|path| path.to_path_buf());
+    if !path.exists() {
+        update()?;
+    }
+    ZipArchive::new(File::open(path)?)
+        .unwrap()
+        .extract(d.as_ref())
+        .unwrap();
+    Ok(())
 }
 
 pub(crate) fn listdir<P>(path: P) -> Result<Vec<PathBuf>>
@@ -72,16 +68,6 @@ where
     }
     let archive = Path::new(ARCHIVE);
     extract(".")?;
-    for e in read_dir(&archive)? {
-        let path = e?.path();
-        if path.is_file() {
-            remove_file(path)?;
-        } else if [".github", "examples", "test", "js", "css"]
-            .contains(&path.file_name().unwrap().to_str().unwrap())
-        {
-            remove_dir_all(path)?;
-        }
-    }
     write(
         archive.join("index.html"),
         loader(&read_to_string(ROOT)?, "")?,

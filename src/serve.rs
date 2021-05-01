@@ -70,14 +70,14 @@ where
 {
     set_current_dir(path.as_ref())?;
     let assets = listdir(".")?;
-    let d = match TempDir::new() {
+    let temp = match TempDir::new() {
         Ok(v) => v,
         Err(s) => return err!(s),
     };
     // Expand Reveal.js
-    extract(d.path())?;
+    extract(temp.path())?;
     // Start server
-    let archive = d.path().join(ARCHIVE);
+    let archive = temp.path().join(ARCHIVE);
     let archive = path_string!(archive);
     println!("Serve at: http://localhost:{}/", port);
     println!("Global assets at: {}", archive.as_str());
