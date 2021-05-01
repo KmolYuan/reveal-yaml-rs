@@ -37,11 +37,11 @@ impl FragMap {
         let mut end = String::new();
         if let Some(frag) = self.0.get(&tag) {
             for (index, frag) in frag {
-                head.push_str(&format!(
+                head += &format!(
                     "<span class=\"fragment {}\" data-fragment-index=\"{}\">",
                     frag, index
-                ));
-                end.push_str("</span>");
+                );
+                end += "</span>";
             }
         }
         head + inner + &end
@@ -93,7 +93,7 @@ impl Unpack for Hash {
             Yaml::Hash(h) => {
                 let mut doc = String::new();
                 for (k, v) in h.custom_pairs(false, (i, j))? {
-                    doc.push_str(&format!("{}: {}, ", k, v));
+                    doc += &format!("{}: {}, ", k, v);
                 }
                 Ok(doc)
             }
@@ -170,17 +170,17 @@ fn marked(e: Event) -> Event {
             let info = info.replace(' ', "");
             let mut head = String::new();
             if info.is_empty() {
-                head.push_str("<pre><code>")
+                head += "<pre><code>"
             } else {
                 let lang = info.split('[').next().unwrap();
                 let line = info
                     .replace(lang, "")
                     .replace(|s| (s == '[') | (s == ']'), "");
-                head.push_str(&format!("<pre><code class=\"language-{}\"", lang));
+                head += &format!("<pre><code class=\"language-{}\"", lang);
                 if !line.is_empty() {
-                    head.push_str(&format!(" data-line-numbers=\"{}\"", line));
+                    head += &format!(" data-line-numbers=\"{}\"", line);
                 }
-                head.push_str(">");
+                head += ">";
             }
             Event::Html(head.into())
         }
@@ -203,7 +203,7 @@ pub(crate) fn sized_block(img: &Hash, pos: Pos) -> Result<String> {
     for attr in &["width", "height"] {
         let value = img.get_value(attr, "", pos)?;
         if !value.is_empty() {
-            doc.push_str(&format!(" {}=\"{}\"", attr, value));
+            doc += &format!(" {}=\"{}\"", attr, value);
         }
     }
     Ok(doc)
@@ -216,9 +216,9 @@ fn img_block(img: &Hash, pos: Pos) -> Result<String> {
     );
     let label = img.get_string("label", "", pos)?;
     if !label.is_empty() {
-        doc.push_str(&format!("<figcaption>{}</figcaption>", label));
+        doc += &format!("<figcaption>{}</figcaption>", label);
     }
-    doc.push_str("</figure></div>");
+    doc += "</figure></div>";
     Ok(doc)
 }
 
@@ -227,24 +227,24 @@ pub(crate) fn content_block(slide: &Hash, pos: Pos, frag_count: &mut usize) -> R
     let mut frag = FragMap::new(slide, pos, frag_count)?;
     let mut t = slide.get_string("doc", "", pos)?;
     if !t.is_empty() {
-        doc.push_str(&frag.fragment("doc", &parse(&t)));
+        doc += &frag.fragment("doc", &parse(&t));
     }
     t = slide.get_string("include", "", pos)?;
     if !t.is_empty() {
-        doc.push_str(&frag.fragment("include", &parse(&read_to_string(&t)?)));
+        doc += &frag.fragment("include", &parse(&read_to_string(&t)?));
     }
     match slide.get(yaml_str!["img"]).unwrap_or(yaml_vec![]) {
         Yaml::Array(imgs) => {
             if !imgs.is_empty() {
-                doc.push_str("<div class=\"img-row\">");
+                doc += "<div class=\"img-row\">";
                 for img in imgs {
-                    doc.push_str(&frag.fragment("img", &img_block(&img.as_hash().unwrap(), pos)?));
+                    doc += &frag.fragment("img", &img_block(&img.as_hash().unwrap(), pos)?);
                 }
-                doc.push_str("</div>");
+                doc += "</div>";
             }
         }
         Yaml::Hash(img) => {
-            doc.push_str(&frag.fragment("img", &img_block(img, pos)?));
+            doc += &frag.fragment("img", &img_block(img, pos)?);
         }
         _ => {
             return err!(format!(
@@ -255,21 +255,21 @@ pub(crate) fn content_block(slide: &Hash, pos: Pos, frag_count: &mut usize) -> R
     }
     t = slide.get_string("math", "", pos)?;
     if !t.is_empty() {
-        doc.push_str(&frag.fragment("math", &format!("\\[{}\\]", t)));
+        doc += &frag.fragment("math", &format!("\\[{}\\]", t));
     }
     let (stack, stack_len) = slide.get_vec("stack", pos)?;
     if stack_len > 0 {
-        doc.push_str("<div style=\"display: flex\">");
+        doc += "<div style=\"display: flex\">";
         let width = 100. / stack_len as f32;
         for slide in stack {
             let slide = slide.assert_hash("unpack stack failed")?;
-            doc.push_str(&format!(
+            doc += &format!(
                 "<div style=\"width: {}%;text-align: center\">\n{}</div>",
                 width,
                 content_block(slide, pos, frag_count)?
-            ));
+            );
         }
-        doc.push_str("</div>");
+        doc += "</div>";
     }
     Ok(doc)
 }

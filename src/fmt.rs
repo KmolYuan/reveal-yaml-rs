@@ -34,7 +34,7 @@ impl Dumper for Yaml {
                     if i != 0 || level != 0 {
                         s = "  ".repeat(level) + &s;
                     }
-                    doc.push_str(&s);
+                    doc += &s;
                 }
                 doc.pop();
                 doc
@@ -50,7 +50,7 @@ impl Dumper for Yaml {
                     if i != 0 || is_map {
                         s = "  ".repeat(level) + &s;
                     }
-                    doc.push_str(&s);
+                    doc += &s;
                 }
                 doc.pop();
                 doc

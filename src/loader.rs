@@ -41,7 +41,7 @@ impl Background {
             ("-opacity", self.opacity.clone()),
         ] {
             if !member.is_empty() {
-                doc.push_str(&format!(" data-background{}=\"{}\"", attr, member))
+                doc += &format!(" data-background{}=\"{}\"", attr, member);
             }
         }
         doc
@@ -55,33 +55,33 @@ fn slide_block(slide: &Hash, bg: &Background, pos: Pos) -> Result<String> {
     let mut doc = String::from("<section");
     let mut t = slide.get_string("bg-color", "", pos)?;
     if !t.is_empty() {
-        doc.push_str(&format!(" data-background-color=\"{}\"", t));
+        doc += &format!(" data-background-color=\"{}\"", t);
     }
     t = slide.get_string("trans", "", pos)?;
     if !t.is_empty() {
-        doc.push_str(&format!(" data-transition=\"{}\"", t));
+        doc += &format!(" data-transition=\"{}\"", t);
     }
     t = slide.get_string("bg-trans", "", pos)?;
     if !t.is_empty() {
-        doc.push_str(&format!(" data-background-transition=\"{}\"", t));
+        doc += &format!(" data-background-transition=\"{}\"", t);
     }
     if bg.is_valid() && slide.is_enabled("background") {
         let local_bg = Background::new(slide)?;
-        doc.push_str(&if local_bg.is_valid() { &local_bg } else { bg }.attr());
+        doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
-    doc.push_str(">");
+    doc += ">";
     for title in &["title", "no-title"] {
         t = slide.get_string(title, "", pos)?;
         if !t.is_empty() {
-            doc.push_str(&format!("<h2>{}</h2><hr/>", t));
+            doc += &format!("<h2>{}</h2><hr/>", t);
         }
     }
-    doc.push_str(&content_block(slide, pos, &mut 0)?);
+    doc += &content_block(slide, pos, &mut 0)?;
     t = slide.get_string("note", "", pos)?;
     if !t.is_empty() {
-        doc.push_str(&format!("<aside class=\"notes\">{}</aside>", parse(&t)));
+        doc += &format!("<aside class=\"notes\">{}</aside>", parse(&t));
     }
-    doc.push_str("</section>");
+    doc += "</section>";
     Ok(doc)
 }
 
@@ -102,17 +102,17 @@ fn footer_block(meta: &Hash) -> Result<String> {
     );
     let link = footer.get_string("link", "", (0, 0))?;
     if !link.is_empty() {
-        doc.push_str(&format!("<a href=\"{}\">", link));
+        doc += &format!("<a href=\"{}\">", link);
     }
-    doc.push_str(&format!("<img{}/>", sized_block(footer, (0, 0))?));
+    doc += &format!("<img{}/>", sized_block(footer, (0, 0))?);
     let label = footer.get_string("label", "", (0, 0))?;
     if !label.is_empty() {
-        doc.push_str(&format!("<span>&nbsp;{}</span>", label));
+        doc += &format!("<span>&nbsp;{}</span>", label);
     }
     if !link.is_empty() {
-        doc.push_str("</a>");
+        doc += "</a>";
     }
-    doc.push_str("\n</div></div></div>");
+    doc += "\n</div></div></div>";
     Ok(doc)
 }
 
@@ -131,49 +131,49 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
     let bg = Background::new(meta)?;
     let mut doc = String::new();
     for (i, s) in slides.iter().enumerate() {
-        doc.push_str("<section>");
+        doc += "<section>";
         let slide = s.assert_hash(&format!("unpack slide failed: ({}:0)", i))?;
-        doc.push_str(&slide_block(slide, &bg, (i, 0))?);
+        doc += &slide_block(slide, &bg, (i, 0))?;
         let (sub, _) = slide.get_vec("sub", (i, 0))?;
         for (j, s) in sub.enumerate() {
             let slide = s.assert_hash(&format!("unpack slide failed: ({}:0)", i))?;
-            doc.push_str(&slide_block(slide, &bg, (i, j))?);
+            doc += &slide_block(slide, &bg, (i, j))?;
         }
         if i == 0 {
             title = slide.get_string("title", "", (i, 0))?;
             if !meta.get_bool("outline", true, (i, 0))? {
                 continue;
             }
-            doc.push_str("<section");
+            doc += "<section";
             if bg.is_valid() {
-                doc.push_str(&bg.attr());
+                doc += &bg.attr();
             }
-            doc.push_str("><h2>Outline</h2><hr/><ul>");
+            doc += "><h2>Outline</h2><hr/><ul>";
             for (i, s) in slides.iter().enumerate() {
                 let s = s.assert_hash("unpack slide failed")?;
                 let t = s.get_string("title", "", (i, 0))?;
                 if t.is_empty() {
                     continue;
                 }
-                doc.push_str(&format!("<li><a href=\"#/{}\">{}</a></li>", i, t));
+                doc += &format!("<li><a href=\"#/{}\">{}</a></li>", i, t);
                 let (sub, sub_len) = s.get_vec("sub", (i, 0))?;
                 if sub_len == 0 {
                     continue;
                 }
-                doc.push_str("<ul>");
+                doc += "<ul>";
                 for (j, s) in sub.enumerate() {
                     let s = s.assert_hash("unpack slide failed")?;
                     let t = s.get_string("title", "", (i, j))?;
                     if t.is_empty() {
                         continue;
                     }
-                    doc.push_str(&format!("<li><a href=\"#/{}/{}\">{}</a></li>", i, j + 1, t));
+                    doc += &format!("<li><a href=\"#/{}/{}\">{}</a></li>", i, j + 1, t);
                 }
-                doc.push_str("</ul>");
+                doc += "</ul>";
             }
-            doc.push_str("</ul></section>");
+            doc += "</ul></section>";
         }
-        doc.push_str("</section>");
+        doc += "</section>";
     }
     let mut reveal = String::from(TEMPLATE).replace("{%mount}", mount);
     for (key, default) in &[
