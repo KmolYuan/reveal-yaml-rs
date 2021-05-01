@@ -76,7 +76,7 @@ where
         let path = e?.path();
         if path.is_file() {
             remove_file(path)?;
-        } else if [".github", "examples", "test"]
+        } else if [".github", "examples", "test", "js", "css"]
             .contains(&path.file_name().unwrap().to_str().unwrap())
         {
             remove_dir_all(path)?;
