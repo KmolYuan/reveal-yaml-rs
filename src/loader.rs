@@ -180,7 +180,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
     }
     let mut reveal = String::from(TEMPLATE).replace("{%mount}", mount);
     for (key, default) in &[
-        ("icon", "img/icon.png"),
+        ("icon", "help/icon.png"),
         ("lang", "en"),
         ("title", &title),
         ("description", ""),

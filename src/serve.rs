@@ -3,41 +3,16 @@ use actix_files::Files;
 use actix_web::{get, App, HttpResponse, HttpServer};
 use std::{
     env::set_current_dir,
-    fs::{canonicalize, create_dir_all, read_to_string, File},
-    io::{Result, Write},
+    fs::{canonicalize, read_to_string},
+    io::Result,
     path::Path,
 };
 use temp_dir::TempDir;
 
 pub(crate) const ROOT: &str = "reveal.yaml";
-const WATERMARK_PATH: &str = "img/watermark.png";
-const ICON_PATH: &str = "img/icon.png";
 const WATERMARK: &[u8] = include_bytes!("assets/img/watermark.png");
 const ICON: &[u8] = include_bytes!("assets/img/icon.png");
-const BLANK_DOC: &[u8] = include_bytes!("assets/blank.yaml");
 const HELP_DOC: &str = include_str!("assets/reveal.yaml");
-
-/// Create new project.
-pub fn new_project<P>(path: P) -> Result<()>
-where
-    P: AsRef<Path>,
-{
-    let path = path.as_ref();
-    let path_str = path.join("img");
-    match create_dir_all(&path_str) {
-        Ok(_) => println!("Create directory: {}", path_str.to_str().unwrap()),
-        Err(_) => println!("Directory exist: {}", path_str.to_str().unwrap()),
-    }
-    for (data_path, content) in &[
-        (ROOT, BLANK_DOC),
-        (WATERMARK_PATH, WATERMARK),
-        (ICON_PATH, ICON),
-    ] {
-        let mut f = File::create(path.join(data_path))?;
-        f.write(content)?;
-    }
-    Ok(())
-}
 
 /// Launch function.
 pub async fn launch<P>(port: u16, path: P) -> Result<()>
@@ -62,6 +37,8 @@ where
         let mut app = App::new()
             .service(site::index)
             .service(site::help_page)
+            .service(site::icon)
+            .service(site::watermark)
             .service(Files::new("/static", &archive));
         for asset in &assets {
             let name = format!("/{}", asset.file_name().unwrap().to_str().unwrap());
@@ -91,7 +68,17 @@ mod site {
     #[get("/help/")]
     pub(super) async fn help_page() -> Result<HttpResponse> {
         Ok(HttpResponse::Ok()
-            .content_type("text/html")
+            .content_type("text/html;charset=utf-8")
             .body(loader(HELP_DOC, "/static/")?))
+    }
+
+    #[get("/help/icon.png")]
+    pub(super) async fn icon() -> Result<HttpResponse> {
+        Ok(HttpResponse::Ok().content_type("image/png").body(ICON))
+    }
+
+    #[get("/help/watermark.png")]
+    pub(super) async fn watermark() -> Result<HttpResponse> {
+        Ok(HttpResponse::Ok().content_type("image/png").body(WATERMARK))
     }
 }

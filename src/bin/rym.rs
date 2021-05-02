@@ -38,7 +38,7 @@ async fn main() -> std::io::Result<()> {
         update()?;
     } else if let Some(cmd) = args.subcommand_matches("new") {
         let path = cmd.value_of("DIR").unwrap_or(".");
-        new_project(path)?;
+        blank(path)?;
     } else if let Some(cmd) = args.subcommand_matches("serve") {
         let port = cmd.value_of("PORT").unwrap_or("8080");
         let path = cmd.value_of("DIR").unwrap_or(".");

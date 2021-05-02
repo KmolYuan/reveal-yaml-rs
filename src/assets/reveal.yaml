@@ -1,14 +1,15 @@
 description: Rust implementation of Reveal.js YAML server.
 author: Yuan Chang
+icon: help/icon.png
 background:
-  src: img/watermark.png
+  src: help/watermark.png
   size: 50%
   opacity: 0.7
 option:
   hash: true
   slide number: c/t
 footer:
-  src: img/icon.png
+  src: help/icon.png
   width: 50pt
   label: Reveal.yaml
   link: https://github.com/KmolYuan/reveal-yaml/

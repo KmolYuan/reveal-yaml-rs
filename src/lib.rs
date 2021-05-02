@@ -31,12 +31,14 @@ macro_rules! yaml_vec {
     [$($v:tt)?] => { &yaml_rust::Yaml::Array(vec![$($v)?]) };
 }
 
+pub use crate::blank::*;
 pub use crate::fmt::*;
 pub use crate::loader::*;
 pub use crate::pack::*;
 pub use crate::serve::*;
 pub use crate::update::*;
 
+mod blank;
 mod content;
 mod fmt;
 mod loader;

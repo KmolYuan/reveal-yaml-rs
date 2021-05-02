@@ -133,7 +133,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
   + Local background option can be boolean `false` to disable global background.
 + [x] trans: Transition option.
 + [x] bg-trans: Background transition option.
-+ [x] fragment: Fragment option.
++ [ ] fragment: Fragment option. (still in consideration)
   + **Array**, the index are the `data-fragment-index`.
   + Each block are **content**, but exclude stacks.
   + Stacks can have local fragment option, but still ordered.
