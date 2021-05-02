@@ -69,14 +69,18 @@ fn slide_block(slide: &Hash, bg: &Background, pos: Pos) -> Result<String> {
         let local_bg = Background::new(slide)?;
         doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
-    doc += ">";
-    for title in &["title", "no-title"] {
+    for (i, title) in ["title", "none-title"].iter().enumerate() {
         t = slide.get_string(title, "", pos)?;
         if !t.is_empty() {
-            doc += &format!("<h2>{}</h2><hr/>", t);
+            if i == 1 || pos.0 == 0 {
+                doc += " data-visibility=\"uncounted\"";
+            }
+            t = format!("<h2>{}</h2><hr/>", t);
+            break;
         }
     }
-    doc += &content_block(slide, pos, &mut 0)?;
+    doc += ">";
+    doc += &(t + &content_block(slide, pos, &mut 0)?);
     t = slide.get_string("note", "", pos)?;
     if !t.is_empty() {
         doc += &format!("<aside class=\"notes\">{}</aside>", parse(&t));
@@ -144,7 +148,7 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
             if !meta.get_bool("outline", true, (i, 0))? {
                 continue;
             }
-            doc += "<section";
+            doc += "<section data-visibility=\"uncounted\"";
             if bg.is_valid() {
                 doc += &bg.attr();
             }

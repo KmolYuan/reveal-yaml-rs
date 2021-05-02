@@ -116,7 +116,8 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 ### Slides
 
 + [x] title: Markdown h2 title.
-+ [x] no-title: Same as `title` but will be excluded in TOC.
++ [x] none-title: Same as `title` but will be excluded in TOC, this page will uncounted.
+  + If `title` is enabled, `none-title` will not work.
 + [x] Content:
   + [x] doc: Multiline Markdown text, accept HTML.
   + [x] include: Include a Markdown file from path, append after `doc`.
