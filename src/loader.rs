@@ -150,6 +150,9 @@ pub fn loader(yaml_str: &str, mount: &str) -> Result<String> {
             }
             doc += "><h2>Outline</h2><hr/><ul>";
             for (i, s) in slides.iter().enumerate() {
+                if i == 0 {
+                    continue;
+                }
                 let s = s.assert_hash("unpack slide failed")?;
                 let t = s.get_string("title", "", (i, 0))?;
                 if t.is_empty() {

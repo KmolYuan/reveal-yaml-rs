@@ -77,13 +77,6 @@ where
 mod site {
     use super::*;
 
-    #[get("/help/")]
-    pub(super) async fn help_page() -> Result<HttpResponse> {
-        Ok(HttpResponse::Ok()
-            .content_type("text/html")
-            .body(loader(HELP_DOC, "/static/")?))
-    }
-
     #[get("/")]
     pub(super) async fn index() -> Result<HttpResponse> {
         let yaml = match read_to_string(ROOT) {
@@ -93,5 +86,12 @@ mod site {
         Ok(HttpResponse::Ok()
             .content_type("text/html;charset=utf-8")
             .body(loader(&yaml, "/static/")?))
+    }
+
+    #[get("/help/")]
+    pub(super) async fn help_page() -> Result<HttpResponse> {
+        Ok(HttpResponse::Ok()
+            .content_type("text/html")
+            .body(loader(HELP_DOC, "/static/")?))
     }
 }
