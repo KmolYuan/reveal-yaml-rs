@@ -82,7 +82,7 @@ rym pack
 
 ## Features
 
-Here are the implemented features, or the functions are designed in progress. Generally, the parser will not check extra key values.
+Here are the implemented features, or the functions are designed in progress. Generally, the parser will not check extra key values. In addition, almost all values support the `null` placeholder to present the default value (blank, `~`, `null`).
 
 Some functions are planed to be demonstrated in the help page. Open the help page by adding `/help/` after URL, like `http://localhost:8080/help/`.
 

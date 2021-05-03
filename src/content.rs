@@ -60,21 +60,24 @@ pub(crate) trait Unpack {
 
 impl Unpack for Hash {
     fn get_bool(&self, key: &str, default: bool, (i, j): Pos) -> Result<bool> {
-        match self.get(yaml_str![key]).unwrap_or(yaml_bool![default]) {
+        match self.get(yaml_str![key]).unwrap_or(yaml_null![]) {
             Yaml::Boolean(b) => Ok(*b),
+            Yaml::Null => Ok(default),
             _ => err!(format!("wrong {}: must be boolean ({}:{})", key, i, j)),
         }
     }
     fn get_string(&self, key: &str, default: &str, (i, j): Pos) -> Result<String> {
-        match self.get(yaml_str![key]).unwrap_or(yaml_str![default]) {
+        match self.get(yaml_str![key]).unwrap_or(yaml_null![]) {
             Yaml::String(s) => Ok(s.clone()),
+            Yaml::Null => Ok(String::from(default)),
             _ => err!(format!("wrong {}: must be string ({}:{})", key, i, j)),
         }
     }
     fn get_value(&self, key: &str, default: &str, (i, j): Pos) -> Result<String> {
-        match self.get(yaml_str![key]).unwrap_or(yaml_str![default]) {
+        match self.get(yaml_str![key]).unwrap_or(yaml_null![]) {
             Yaml::Real(s) | Yaml::String(s) => Ok(s.clone()),
             Yaml::Integer(v) => Ok(v.to_string()),
+            Yaml::Null => Ok(String::from(default)),
             _ => err!(format!(
                 "wrong {}: must be integer, float or string ({}:{})",
                 key, i, j
@@ -82,14 +85,14 @@ impl Unpack for Hash {
         }
     }
     fn get_vec(&self, key: &str, (i, j): Pos) -> Result<(Iter<Yaml>, usize)> {
-        match self.get(yaml_str![key]).unwrap_or(yaml_bad![]) {
+        match self.get(yaml_str![key]).unwrap_or(yaml_null![]) {
             Yaml::Array(a) => Ok((a.iter(), a.len())),
-            Yaml::BadValue => Ok(([].iter(), 0)),
+            Yaml::Null => Ok(([].iter(), 0)),
             _ => err!(format!("wrong {}: must be array ({}:{})", key, i, j)),
         }
     }
     fn get_custom_pairs(&self, key: &str, (i, j): Pos) -> Result<String> {
-        match self.get(yaml_str![key]).unwrap_or(yaml_bad![]) {
+        match self.get(yaml_str![key]).unwrap_or(yaml_null![]) {
             Yaml::Hash(h) => {
                 let mut doc = String::new();
                 for (k, v) in h.custom_pairs(false, (i, j))? {
@@ -97,7 +100,7 @@ impl Unpack for Hash {
                 }
                 Ok(doc)
             }
-            Yaml::BadValue => Ok("".into()),
+            Yaml::Null => Ok("".into()),
             _ => err!(format!("wrong {}: must be map ({}:{})", key, i, j)),
         }
     }
@@ -238,7 +241,16 @@ pub(crate) fn content_block(slide: &Hash, pos: Pos, frag_count: &mut usize) -> R
             if !imgs.is_empty() {
                 doc += "<div class=\"img-row\">";
                 for img in imgs {
-                    doc += &frag.fragment("img", &img_block(&img.as_hash().unwrap(), pos)?);
+                    doc += &frag.fragment(
+                        "img",
+                        &img_block(
+                            img.assert_hash(&format!(
+                                "wrong img: must be map {}:{}",
+                                pos.0, pos.1
+                            ))?,
+                            pos,
+                        )?,
+                    );
                 }
                 doc += "</div>";
             }

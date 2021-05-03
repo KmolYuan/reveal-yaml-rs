@@ -15,9 +15,9 @@ struct Background {
 impl Background {
     fn new(meta: &Hash) -> Result<Self> {
         let h = Hash::new();
-        let bg = match meta.get(yaml_str!["background"]).unwrap_or(yaml_bad![]) {
+        let bg = match meta.get(yaml_str!["background"]).unwrap_or(yaml_null![]) {
             Yaml::Hash(h) => h,
-            Yaml::BadValue => &h,
+            Yaml::Null => &h,
             _ => return err!("background must be hash"),
         };
         Ok(Self {
@@ -91,9 +91,9 @@ fn slide_block(slide: &Hash, bg: &Background, pos: Pos) -> Result<String> {
 
 fn footer_block(meta: &Hash) -> Result<String> {
     let h = Hash::new();
-    let footer = match meta.get(yaml_str!["footer"]).unwrap_or(yaml_bad![]) {
+    let footer = match meta.get(yaml_str!["footer"]).unwrap_or(yaml_null![]) {
         Yaml::Hash(h) => h,
-        Yaml::BadValue => &h,
+        Yaml::Null => &h,
         _ => return err!("invalid footer"),
     };
     let src = footer.get_string("src", "", (0, 0))?;

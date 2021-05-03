@@ -14,8 +14,8 @@ macro_rules! get_archive {
     }};
 }
 
-macro_rules! yaml_bad {
-    [] => { &yaml_rust::Yaml::BadValue };
+macro_rules! yaml_null {
+    [] => { &yaml_rust::Yaml::Null };
 }
 
 macro_rules! yaml_bool {
