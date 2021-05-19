@@ -11,6 +11,7 @@ keywords = ["yaml", "revealjs", "reveal", "slide", "slideshow"]
 categories = ["command-line-interface"]
 
 [features]
+default = ["cli"]
 cli = ["clap"]
 
 [[bin]]
