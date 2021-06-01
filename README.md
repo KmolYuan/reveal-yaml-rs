@@ -64,6 +64,10 @@ img:
   height: 70  # same as height="70"
 ```
 
+### Reveal Plugins
+
+The plugins excluding `markdown` are enabled by default.
+
 ## Command Line Interface
 
 The command `rym` stands for "Reveal-Yaml Manager".
