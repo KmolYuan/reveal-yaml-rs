@@ -106,7 +106,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
   + position: Background position.
   + repeat: Background repeat. (repeat / no-repeat)
   + opacity: Background opacity from zero to one. (**float**)
-+ [x] outline: Auto generated table of the contents (TOC). (**boolean**)
++ [x] outline: Auto generated table of the contents (TOC). Default to true. (**boolean**)
 + [x] theme: Reveal.js theme, "serif" by default.
 + [x] code-theme: Highlight theme, "zenburn" by default.
 + [x] style: Extra CSS style path.

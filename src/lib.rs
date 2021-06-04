@@ -14,23 +14,6 @@ macro_rules! get_archive {
     }};
 }
 
-macro_rules! yaml_null {
-    [] => { &yaml_rust::Yaml::Null };
-}
-
-macro_rules! yaml_bool {
-    [$b:expr] => { &yaml_rust::Yaml::Boolean($b) };
-}
-
-macro_rules! yaml_str {
-    [] => { yaml_str![""] };
-    [$t:expr] => { &yaml_rust::Yaml::String(String::from($t)) };
-}
-
-macro_rules! yaml_vec {
-    [$($v:tt)?] => { &yaml_rust::Yaml::Array(vec![$($v)?]) };
-}
-
 pub use crate::blank::*;
 pub use crate::fmt::*;
 pub use crate::loader::*;
@@ -39,7 +22,6 @@ pub use crate::serve::*;
 pub use crate::update::*;
 
 mod blank;
-mod content;
 mod fmt;
 mod loader;
 mod pack;
