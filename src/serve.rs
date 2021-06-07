@@ -10,8 +10,8 @@ use std::{
 use temp_dir::TempDir;
 
 pub(crate) const ROOT: &str = "reveal.yaml";
-const WATERMARK: &[u8] = include_bytes!("assets/img/watermark.png");
-const ICON: &[u8] = include_bytes!("assets/img/icon.png");
+const WATERMARK: &[u8] = include_bytes!("assets/help/watermark.png");
+const ICON: &[u8] = include_bytes!("assets/help/icon.png");
 const HELP_DOC: &str = include_str!("assets/reveal.yaml");
 
 /// Launch function.
