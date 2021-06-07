@@ -13,21 +13,21 @@ pub fn update() -> Result<()> {
     let b = get(REVEAL).unwrap().bytes().unwrap();
     println!("Download archive: {}", REVEAL);
     let archive = get_archive!();
-    let mut r = ZipArchive::new(Cursor::new(b)).unwrap();
-    let mut w = ZipWriter::new(File::create(&archive)?);
+    let mut r = ZipArchive::new(Cursor::new(b))?;
+    let mut w = ZipWriter::new(File::create(archive)?);
     let dist = format!("{}/dist/", ARCHIVE);
     let plugin = format!("{}/plugin/", ARCHIVE);
     for i in 0..r.len() {
-        let file = r.by_index(i).unwrap();
+        let file = r.by_index(i)?;
         if file.is_dir() {
             continue;
         }
         let name = file.name();
         if name.starts_with(&dist) || name.starts_with(&plugin) {
-            w.raw_copy_file(file).unwrap();
+            w.raw_copy_file(file)?;
         }
     }
-    w.finish().unwrap();
+    w.finish()?;
     println!("Done");
     Ok(())
 }

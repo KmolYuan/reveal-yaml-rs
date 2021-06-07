@@ -4,7 +4,7 @@ use actix_web::{get, App, HttpResponse, HttpServer};
 use std::{
     env::set_current_dir,
     fs::{canonicalize, read_to_string},
-    io::Result,
+    io::{Error, ErrorKind, Result},
     path::Path,
 };
 use temp_dir::TempDir;
@@ -22,7 +22,7 @@ where
     set_current_dir(path.as_ref())?;
     let temp = match TempDir::new() {
         Ok(v) => v,
-        Err(s) => return err!(s),
+        Err(s) => return Err(Error::new(ErrorKind::InvalidData, s)),
     };
     // Expand Reveal.js
     extract(temp.path())?;
@@ -56,10 +56,7 @@ mod site {
 
     #[get("/")]
     pub(super) async fn index() -> Result<HttpResponse> {
-        let yaml = match read_to_string(ROOT) {
-            Ok(s) => s,
-            Err(_) => return err!("can not found reveal.yaml file"),
-        };
+        let yaml = read_to_string(ROOT)?;
         Ok(HttpResponse::Ok()
             .content_type("text/html;charset=utf-8")
             .body(loader(&yaml, "/static/")?))

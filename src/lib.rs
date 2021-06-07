@@ -1,10 +1,3 @@
-macro_rules! err {
-    ($msg:expr) => {{
-        use std::io::{Error, ErrorKind};
-        Err(Error::new(ErrorKind::InvalidData, $msg))
-    }};
-}
-
 macro_rules! get_archive {
     () => {{
         use std::env::current_exe;

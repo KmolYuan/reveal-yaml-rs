@@ -21,8 +21,8 @@ where
             copy_dir(&path, dist.join(file_name))?;
         } else if path.is_file() {
             let dist = dist.join(file_name);
-            println!("{:?} > {:?}", &path, dist);
-            copy(&path, dist)?;
+            println!("{} > {}", path.to_str().unwrap(), dist.to_str().unwrap());
+            copy(path, dist)?;
         }
     }
     Ok(())
@@ -63,8 +63,8 @@ where
     set_current_dir(path.as_ref())?;
     let dist = dist.as_ref();
     if dist.is_dir() {
-        println!("Remove {:?}", &dist);
-        remove_dir_all(&dist)?;
+        println!("Remove {}", dist.to_str().unwrap());
+        remove_dir_all(dist)?;
     }
     let archive = Path::new(ARCHIVE);
     extract(".")?;
@@ -79,7 +79,7 @@ where
         if assets.is_dir() {
             let dist = archive.join(assets.file_name().unwrap().to_os_string());
             create_dir(&dist)?;
-            copy_dir(&assets, dist)?;
+            copy_dir(assets, dist)?;
         }
     }
     rename(archive, dist)?;

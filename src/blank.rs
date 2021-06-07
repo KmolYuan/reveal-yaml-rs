@@ -12,8 +12,8 @@ pub fn blank<P>(path: P) -> Result<()>
 where
     P: AsRef<Path>,
 {
-    let path = path.as_ref();
-    let mut f = File::create(path.join(ROOT))?;
-    f.write(BLANK_DOC)?;
+    let path = path.as_ref().join(ROOT);
+    File::create(&path)?.write(BLANK_DOC)?;
+    println!("Create {}", path.to_str().unwrap());
     Ok(())
 }
