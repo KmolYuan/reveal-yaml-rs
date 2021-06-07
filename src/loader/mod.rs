@@ -115,7 +115,14 @@ fn options(meta: &Node) -> Result<String, Error> {
     };
     let mut doc = String::new();
     for (k, v) in meta.as_map()? {
-        doc += &format!("{}: {}, ", k.as_str()?.to_mixed_case(), v.as_value()?);
+        doc += &k.as_str()?.to_mixed_case();
+        doc += ": ";
+        if let Ok(s) = v.as_str() {
+            doc += &format!("\"{}\"", s);
+        } else {
+            doc += v.as_value()?;
+        }
+        doc += ", ";
     }
     Ok(doc)
 }
