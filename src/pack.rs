@@ -66,12 +66,10 @@ where
         println!("Remove {}", dist.to_str().unwrap());
         remove_dir_all(dist)?;
     }
+    let contents = loader(&read_to_string(ROOT)?, "")?;
     let archive = Path::new(ARCHIVE);
     extract(".")?;
-    write(
-        archive.join("index.html"),
-        loader(&read_to_string(ROOT)?, "")?,
-    )?;
+    write(archive.join("index.html"), contents)?;
     for assets in listdir(".")? {
         if assets.file_name().unwrap() == archive {
             continue;
