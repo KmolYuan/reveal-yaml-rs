@@ -21,16 +21,19 @@ async fn main() -> std::io::Result<()> {
             (about: "Serve the current project")
             (@arg DIR: "Project dir")
             (@arg PORT: --port +takes_value "Set port")
+            (@arg PROJECT: -n --name +takes_value "Set project name")
         )
         (@subcommand fmt =>
             (about: "Format the current project")
             (@arg DIR: "Project dir")
+            (@arg PROJECT: -n --name +takes_value "Set project name")
             (@arg dry: --dry "Dry run")
         )
         (@subcommand pack =>
             (about: "Pack the current project")
             (@arg DIR: "Project dir")
             (@arg DIST: -o "Output dir")
+            (@arg PROJECT: -n --name +takes_value "Set project name")
         )
     }
     .get_matches();
@@ -42,15 +45,18 @@ async fn main() -> std::io::Result<()> {
     } else if let Some(cmd) = args.subcommand_matches("serve") {
         let port = cmd.value_of("PORT").unwrap_or("8080");
         let path = cmd.value_of("DIR").unwrap_or(".");
-        launch(port.parse().unwrap(), path).await?;
+        let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
+        serve(port.parse().unwrap(), path, project).await?;
     } else if let Some(cmd) = args.subcommand_matches("fmt") {
         let path = cmd.value_of("DIR").unwrap_or(".");
+        let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
         let dry = cmd.is_present("dry");
-        fmt(path, dry)?;
+        fmt(path, dry, project)?;
     } else if let Some(cmd) = args.subcommand_matches("pack") {
         let path = cmd.value_of("DIR").unwrap_or(".");
         let dist = cmd.value_of("DIST").unwrap_or("./package");
-        pack(path, dist)?;
+        let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
+        pack(path, dist, project)?;
     }
     Ok(())
 }

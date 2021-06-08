@@ -1,4 +1,3 @@
-use crate::*;
 use std::{
     fs::{read_to_string, write},
     io::{Error, ErrorKind, Result},
@@ -6,8 +5,9 @@ use std::{
 };
 use yaml_peg::{dump, parse};
 
-pub fn fmt<P: AsRef<Path>>(path: P, dry: bool) -> Result<()> {
-    let path = path.as_ref().join(ROOT);
+/// Reformat the project.
+pub fn fmt<P: AsRef<Path>>(path: P, dry: bool, project: &str) -> Result<()> {
+    let path = path.as_ref().join(project);
     let yaml = match parse(&read_to_string(&path)?) {
         Ok(v) => v,
         Err(s) => return Err(Error::new(ErrorKind::InvalidData, s)),

@@ -1,10 +1,10 @@
-use crate::*;
 use std::{
     fs::File,
     io::{Result, Write},
     path::Path,
 };
 
+pub const ROOT: &str = "reveal.yaml";
 const BLANK_DOC: &[u8] = include_bytes!("assets/blank.yaml");
 
 /// Create new project.

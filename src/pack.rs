@@ -55,7 +55,7 @@ where
 }
 
 /// Pack project to an archive.
-pub fn pack<P, D>(path: P, dist: D) -> Result<()>
+pub fn pack<P, D>(path: P, dist: D, project: &str) -> Result<()>
 where
     P: AsRef<Path>,
     D: AsRef<Path>,
@@ -66,7 +66,7 @@ where
         println!("Remove {}", dist.to_str().unwrap());
         remove_dir_all(dist)?;
     }
-    let contents = loader(&read_to_string(ROOT)?, "")?;
+    let contents = loader(&read_to_string(project)?, "")?;
     let archive = Path::new(ARCHIVE);
     extract(".")?;
     write(archive.join("index.html"), contents)?;
