@@ -2,7 +2,7 @@
 
 Rust implementation of Reveal.js YAML server.
 
-This project was transferred from Python language and now operates in a way that is easier to maintain and release, and it is Rust.
+This project is transferred from Python language and now operates in a way that is easier to maintain and release, and it is Rust.
 Some old functions might be deprecated, and some functions are improved.
 
 This manager downloads the latest Reveal.js archive to provide serving and packing function, and had same licensed as Reveal.js.
@@ -130,7 +130,9 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + **Array**, can be map if there is only one image.
     + Each block are **sized**.
     + label: Image caption.
-  + [x] stack: Columns view of contents. (**Array**)
+  + [ ] stack:
+    + [x] vstack: Columns view of contents. (**Array**)
+    + [ ] hstack: Row view of contents.
     + This function can be recursive.
 + [x] note: Speak view note.
 + [x] bg-color: Background color.
@@ -138,7 +140,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
   + Local background option can be boolean `false` to disable global background.
 + [x] trans: Transition option.
 + [x] bg-trans: Background transition option.
-+ [ ] fragment: Fragment option. (still in consideration)
++ [x] fragment: Fragment option. (still in consideration)
   + **Array**, the index are the `data-fragment-index`.
   + Each block are **content**, but exclude stacks.
   + Stacks can have local fragment option, but still ordered.

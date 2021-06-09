@@ -147,7 +147,7 @@ footer:
     - title: Columns View
       doc: |
         ```yaml
-        stack:
+        vstack:
           - doc: |
               *Data types*
 
@@ -160,7 +160,7 @@ footer:
               label: Google Logo
               src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
         ```
-      stack:
+      vstack:
         - doc: |
             *Data types*
 
@@ -172,10 +172,10 @@ footer:
         - img:
             label: Google Logo
             src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
-    - title: Fragment in Stack
+    - title: Fragment in Stacks
       doc: |
         ```yaml
-        stack:
+        vstack:
           - doc: AAA
             math: f(x)
             # one action
@@ -189,7 +189,7 @@ footer:
             # one element
             fragment: [ math: fade-in ]
         ```
-      stack:
+      vstack:
         - doc: AAA
           math: f(x)
           fragment:

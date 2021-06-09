@@ -142,11 +142,11 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
         doc += &frag.fragment("math", &format!("\\[{}\\]", t));
     }
     let empty = vec![];
-    let stack = slide.get_default(&["stack"], &empty, Node::as_array)?;
-    if !stack.is_empty() {
+    let vstack = slide.get_default(&["vstack"], &empty, Node::as_array)?;
+    if !vstack.is_empty() {
         doc += "<div style=\"display: flex\">";
-        let width = 100. / stack.len() as f32;
-        for slide in stack {
+        let width = 100. / vstack.len() as f32;
+        for slide in vstack {
             doc += &format!(
                 "<div style=\"width: {}%;text-align: center\">\n{}</div>",
                 width,
