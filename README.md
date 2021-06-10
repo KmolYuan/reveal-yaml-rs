@@ -100,7 +100,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 + [x] title: The webpage title, defaults to the first page.
 + [x] description: Webpage description.
 + [x] author: Webpage author.
-+ [x] background: Global background setting.
++ [x] background: Global [background setting](https://revealjs.com/backgrounds/#image-backgrounds).
   + src: Background source.
   + size: Background size.
   + position: Background position.
@@ -110,37 +110,37 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 + [x] theme: Reveal.js theme, "serif" by default.
 + [x] code-theme: Highlight theme, "zenburn" by default.
 + [x] style: Extra CSS style path.
-+ [x] footer: Global footer option. (**sized**)
++ [x] footer: Global footer option. You can add your logo here. (**sized**)
   + label: Footer text.
   + link: Footer link, works on image and text.
-+ [x] option: Other Reveal.js options.
++ [x] option: Other Reveal.js [config](https://revealjs.com/config/) options.
   + Use any case string to indicate the option, this function will translate into lower camelcase, for example, YAML `slide number: c/t` will be JavaScript `slideNumber: "c/t"`.
-  + Please see <https://revealjs.com/config/> for more information.
 
 ### Slides
 
-+ [x] title: Markdown h2 title.
++ [x] title: HTML `<h2>` title.
 + [x] none-title: Same as `title` but will be excluded in TOC, this page will uncounted.
   + If `title` is enabled, `none-title` will not work.
-+ [x] Content:
++ [x] Content: (they are placed in the following order)
   + [x] doc: Multiline Markdown text, accept HTML.
   + [x] include: Include a Markdown file from path, append after `doc`.
-  + [x] math: Latex math without "$$" brackets.
+    + [x] math: Latex math without `$$` / `\[\]` brackets.
   + [x] img: A list of image source.
     + **Array**, can be map if there is only one image.
     + Each block are **sized**.
-    + label: Image caption.
+    + label: Image `<caption>`.
   + [ ] stack:
-    + [x] vstack: Columns view of contents. (**Array**)
-    + [ ] hstack: Row view of contents.
-    + This function can be recursive.
+    + [x] hstack: Columns view of contents. (**Array**)
+    + [x] vstack: Row view of contents.
+    + [ ] border: Make a border between each element.
+    + This function allows nesting.
 + [x] note: Speak view note.
-+ [x] bg-color: Background color.
++ [x] bg-color: [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
 + [x] background: Background setting, as same as global.
   + Local background option can be boolean `false` to disable global background.
-+ [x] trans: Transition option.
-+ [x] bg-trans: Background transition option.
-+ [x] fragment: Fragment option. (still in consideration)
++ [x] trans: [Transition](https://revealjs.com/transitions/) option.
++ [x] bg-trans: [Background transition](https://revealjs.com/transitions/#background-transitions) option.
++ [x] fragment: [Fragment](https://revealjs.com/fragments/) option.
   + **Array**, the index are the `data-fragment-index`.
   + Each block are **content**, but exclude stacks.
   + Stacks can have local fragment option, but still ordered.

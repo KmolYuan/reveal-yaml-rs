@@ -71,15 +71,25 @@ footer:
         for i in range(10):
             print("Hello World!")
         ```
-    - title: Images
+    - title: Single Image
       doc: |
         ```yaml
         img:
-        - label: Ubuntu Logo
+          label: Ubuntu Logo
           src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
-          width: 50%
-        - label: Google Logo
-          src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+        ```
+      img:
+        label: Ubuntu Logo
+        src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+    - title: Multiple Images
+      doc: |
+        ```yaml
+        img:
+          - label: Ubuntu Logo
+            src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+            width: 50%
+          - label: Google Logo
+            src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
         fragment:
           - img: fade-in-then-out
         ```
@@ -147,7 +157,7 @@ footer:
     - title: Columns View
       doc: |
         ```yaml
-        vstack:
+        hstack:
           - doc: |
               *Data types*
 
@@ -160,7 +170,7 @@ footer:
               label: Google Logo
               src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
         ```
-      vstack:
+      hstack:
         - doc: |
             *Data types*
 
@@ -172,10 +182,36 @@ footer:
         - img:
             label: Google Logo
             src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+    - title: Nested Stacks
+      doc: |
+        ```yaml
+        hstack:
+          - vstack:
+            - hstack:
+              - doc: Left Top Left
+              - doc: Left Top Right
+            - doc: Left Bottom
+          - vstack:
+            - doc: Right Top
+            - hstack:
+              - doc: Right Bottom Left
+              - doc: Right Bottom Right
+        ```
+      hstack:
+        - vstack:
+          - hstack:
+            - doc: Left Top Left
+            - doc: Left Top Right
+          - doc: Left Bottom
+        - vstack:
+          - doc: Right Top
+          - hstack:
+            - doc: Right Bottom Left
+            - doc: Right Bottom Right
     - title: Fragment in Stacks
       doc: |
         ```yaml
-        vstack:
+        hstack:
           - doc: AAA
             math: f(x)
             # one action
@@ -189,7 +225,7 @@ footer:
             # one element
             fragment: [ math: fade-in ]
         ```
-      vstack:
+      hstack:
         - doc: AAA
           math: f(x)
           fragment:

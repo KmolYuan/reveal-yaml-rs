@@ -92,15 +92,12 @@ pub(crate) fn sized_block(img: &Node) -> Result<String, Error> {
 }
 
 fn img_block(img: &Node) -> Result<String, Error> {
-    let mut doc = format!(
-        "<div class=\"img-column\"><figure><img{}/>",
-        sized_block(img)?
-    );
+    let mut doc = format!("<figure><img{}/>", sized_block(img)?);
     let label = img.get_default(&["label"], "", Node::as_str)?;
     if !label.is_empty() {
         doc += &format!("<figcaption>{}</figcaption>", label);
     }
-    doc += "</figure></div>";
+    doc += "</figure>";
     Ok(doc)
 }
 
@@ -120,11 +117,15 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
             );
         }
     }
+    t = slide.get_default(&["math"], "", Node::as_str)?;
+    if !t.is_empty() {
+        doc += &frag.fragment("math", &format!("\\[{}\\]", t));
+    }
     if let Ok(img) = slide.get(&["img"]) {
         match &img.yaml {
             Yaml::Array(imgs) => {
                 if !imgs.is_empty() {
-                    doc += "<div class=\"img-row\">";
+                    doc += "<div style=\"display:flex;flex-direction:row;justify-content:center;align-items:center\">";
                     for img in imgs {
                         doc += &frag.fragment("img", &img_block(img)?);
                     }
@@ -137,21 +138,25 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
             _ => return Err(Error("invalid image", img.pos)),
         }
     }
-    t = slide.get_default(&["math"], "", Node::as_str)?;
-    if !t.is_empty() {
-        doc += &frag.fragment("math", &format!("\\[{}\\]", t));
-    }
     let empty = vec![];
+    let hstack = slide.get_default(&["hstack"], &empty, Node::as_array)?;
+    if !hstack.is_empty() {
+        doc += "<div style=\"display:flex\">";
+        let width = 100. / hstack.len() as f32;
+        for slide in hstack {
+            doc += &format!("<div style=\"width:{}%;text-align:center\">", width);
+            doc += &content_block(slide, frag_count)?;
+            doc += "</div>";
+        }
+        doc += "</div>";
+    }
     let vstack = slide.get_default(&["vstack"], &empty, Node::as_array)?;
     if !vstack.is_empty() {
-        doc += "<div style=\"display: flex\">";
-        let width = 100. / vstack.len() as f32;
+        doc += "<div class=\"vstack\">";
         for slide in vstack {
-            doc += &format!(
-                "<div style=\"width: {}%;text-align: center\">\n{}</div>",
-                width,
-                content_block(slide, frag_count)?
-            );
+            doc += "<div>";
+            doc += &content_block(slide, frag_count)?;
+            doc += "</div>";
         }
         doc += "</div>";
     }

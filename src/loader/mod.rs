@@ -86,21 +86,21 @@ fn slide_block(slide: &Node, bg: &Background, first_column: bool) -> Result<Stri
         let local_bg = Background::new(slide)?;
         doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
-    let mut t = String::new();
     for (i, title) in ["title", "none-title"].iter().enumerate() {
-        t = slide.get_default(&[*title], "", Node::as_str)?.to_owned();
+        t = slide.get_default(&[*title], "", Node::as_str)?;
         if !t.is_empty() {
             if i == 1 || first_column {
                 doc += " data-visibility=\"uncounted\"";
             }
-            t = format!("<h2>{}</h2><hr/>", t);
+            doc += &format!("><h2>{}</h2><hr/>", t);
             break;
         }
+        if i == 1 {
+            doc += ">";
+        }
     }
-    doc += ">";
-    doc += &t;
     doc += &content_block(slide, &mut 0)?;
-    let t = slide.get_default(&["note"], "", Node::as_str)?;
+    t = slide.get_default(&["note"], "", Node::as_str)?;
     if !t.is_empty() {
         doc += &format!("<aside class=\"notes\">{}</aside>", md2html(&t));
     }
