@@ -30,6 +30,9 @@ footer:
 
     + [KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
 
+    The image examples use [Ubuntu](https://commons.wikimedia.org/wiki/File:Logo-ubuntu_cof-orange-hex.svg)
+    and [Tux](https://commons.wikimedia.org/wiki/File:Tux.svg) logo in WikiMedia.
+
     Scroll down ↓ to see the examples.
   sub:
     - title: Markdown
@@ -88,8 +91,9 @@ footer:
           - label: Ubuntu Logo
             src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
             width: 50%
-          - label: Google Logo
-            src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+          - label: Linux Logo
+            src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+            width: 50%
         fragment:
           - img: fade-in-then-out
         ```
@@ -97,8 +101,9 @@ footer:
         - label: Ubuntu Logo
           src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
           width: 50%
-        - label: Google Logo
-          src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+        - label: Linux Logo
+          src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+          width: 50%
       fragment:
         - img: fade-in-then-out
     - title: Maths
@@ -167,8 +172,8 @@ footer:
               + union
           - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
           - img:
-              label: Google Logo
-              src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+              src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+              width: 50%
         ```
       hstack:
         - doc: |
@@ -180,8 +185,8 @@ footer:
             + union
         - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
         - img:
-            label: Google Logo
-            src: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+            src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+            width: 50%
     - title: Nested Stacks
       doc: |
         ```yaml
@@ -214,16 +219,13 @@ footer:
         hstack:
           - doc: AAA
             math: f(x)
-            # one action
-            fragment: [ { doc: fade-in, math: fade-in } ]
+            fragment: [ { doc: fade-in, math: fade-in } ]  # one action
           - doc: BBB
-            math: f(y)
-            # two action
-            fragment: [ doc: fade-in, math: fade-in ]
+            math: g(y)
+            fragment: [ doc: fade-in, math: fade-in ]  # two action
           - doc: CCC
-            math: f(z)
-            # one element
-            fragment: [ math: fade-in ]
+            math: h(z)
+            fragment: [ math: fade-in ]  # one element
         ```
       hstack:
         - doc: AAA
@@ -232,12 +234,12 @@ footer:
             - doc: fade-in
               math: fade-in
         - doc: BBB
-          math: f(y)
+          math: g(y)
           fragment:
             - doc: fade-in
             - math: fade-in
         - doc: CCC
-          math: f(z)
+          math: h(z)
           fragment:
             - math: fade-in
     - title: Note
