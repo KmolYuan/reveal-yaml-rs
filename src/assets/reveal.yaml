@@ -114,7 +114,7 @@ footer:
           \small\begin{aligned}
           \min_{x_1, x_2}&f(x)
           \\
-          \text{s.t. } &b(x) \le 0
+          \text{s.t.}\,&b(x) \le 0
           \\
           &c(x) = 0
           \end{aligned}
@@ -126,7 +126,7 @@ footer:
         \small\begin{aligned}
         \min_{x_1, x_2}&f(x)
         \\
-        \text{s.t. } &b(x) \le 0
+        \text{s.t.}\,&b(x) \le 0
         \\
         &c(x) = 0
         \end{aligned}
