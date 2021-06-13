@@ -1,38 +1,31 @@
 use crate::*;
 use actix_files::Files;
-use actix_web::{get, App, HttpResponse, HttpServer};
-use once_cell::sync::Lazy;
+use actix_web::{get, web::Data, App, HttpResponse, HttpServer};
 use std::{
     env::set_current_dir,
     fs::{canonicalize, read_to_string},
     io::{Error, ErrorKind, Result},
     path::Path,
-    sync::Mutex,
 };
 use temp_dir::TempDir;
 
-static ROOT: Lazy<Mutex<String>> = Lazy::new(|| Mutex::new("".to_owned()));
-static CACHE: Lazy<Mutex<String>> = Lazy::new(|| Mutex::new("".to_owned()));
 const WATERMARK: &[u8] = include_bytes!("assets/help/watermark.png");
 const ICON: &[u8] = include_bytes!("assets/help/icon.png");
 const HELP_DOC: &str = include_str!("assets/reveal.yaml");
 
-macro_rules! read_yaml {
-    () => {
-        loader(&read_to_string(ROOT.lock().unwrap().as_str())?, "/static/")?
-    };
+#[derive(Clone)]
+struct Cache {
+    project: String,
+    doc: String,
+    help_doc: String,
 }
 
 /// Launch function.
-pub async fn serve<P>(port: u16, path: P, project: &str, cache: bool) -> Result<()>
+pub async fn serve<P>(port: u16, path: P, project: &str, use_cache: bool) -> Result<()>
 where
     P: AsRef<Path>,
 {
     set_current_dir(path.as_ref())?;
-    ROOT.lock().unwrap().push_str(project);
-    if cache {
-        CACHE.lock().unwrap().push_str(&read_yaml!());
-    }
     let temp = match TempDir::new() {
         Ok(v) => v,
         Err(s) => return Err(Error::new(ErrorKind::InvalidData, s)),
@@ -46,8 +39,18 @@ where
     println!("Local assets at: {}", canonicalize(".")?.to_str().unwrap());
     println!("Press Ctrl+C to close the server ...");
     let assets = listdir(".")?;
+    let cache = Cache {
+        project: project.to_owned(),
+        doc: if use_cache {
+            loader(&read_to_string(project)?, "/static/")?
+        } else {
+            "".to_owned()
+        },
+        help_doc: loader(HELP_DOC, "/static/")?,
+    };
     HttpServer::new(move || {
         let mut app = App::new()
+            .data(cache.clone())
             .service(site::index)
             .service(site::help_page)
             .service(site::icon)
@@ -68,21 +71,21 @@ mod site {
     use super::*;
 
     #[get("/")]
-    pub(super) async fn index() -> Result<HttpResponse> {
+    pub(super) async fn index(data: Data<Cache>) -> Result<HttpResponse> {
         Ok(HttpResponse::Ok()
             .content_type("text/html;charset=utf-8")
-            .body(if CACHE.lock().unwrap().is_empty() {
-                read_yaml!()
+            .body(if data.doc.is_empty() {
+                loader(&read_to_string(&data.project)?, "/static/")?
             } else {
-                CACHE.lock().unwrap().clone()
+                data.doc.clone()
             }))
     }
 
     #[get("/help/")]
-    pub(super) async fn help_page() -> Result<HttpResponse> {
+    pub(super) async fn help_page(data: Data<Cache>) -> Result<HttpResponse> {
         Ok(HttpResponse::Ok()
             .content_type("text/html;charset=utf-8")
-            .body(loader(HELP_DOC, "/static/")?))
+            .body(data.help_doc.clone()))
     }
 
     #[get("/help/icon.png")]

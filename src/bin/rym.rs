@@ -22,7 +22,7 @@ async fn main() -> std::io::Result<()> {
             (@arg DIR: "Project dir")
             (@arg PORT: --port +takes_value "Set port")
             (@arg PROJECT: -n --name +takes_value "Set project name")
-            (@arg cache: --cache "Parse once and cached project")
+            (@arg use_cache: --cache "Parse once and cached project")
         )
         (@subcommand fmt =>
             (about: "Format the current project")
@@ -47,8 +47,8 @@ async fn main() -> std::io::Result<()> {
         let port = cmd.value_of("PORT").unwrap_or("8080");
         let path = cmd.value_of("DIR").unwrap_or(".");
         let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
-        let cache = cmd.is_present("cache");
-        serve(port.parse().unwrap(), path, project, cache).await?;
+        let use_cache = cmd.is_present("use_cache");
+        serve(port.parse().unwrap(), path, project, use_cache).await?;
     } else if let Some(cmd) = args.subcommand_matches("fmt") {
         let path = cmd.value_of("DIR").unwrap_or(".");
         let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
