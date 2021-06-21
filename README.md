@@ -49,14 +49,13 @@ The vertical slides work under the `sub` node of first slide, the attributes are
     - title: Vertical slide 2
 - title: Horizontal slide 2
 ```
-This work supports YAML 1.2, but the anchors are not supported for reformat function.
+This work supports YAML 1.2 without anchor function.
 
 ### Sized Attribute
 
 The images and resizeable items are support "sized" attribute, which contains three options: `src`, `width` and `height`. The `src` option is required, otherwise the feature will be disabled or invalid.
 
 The `width` and `height` options are the same as the attributes on the `<img>` tag, they are optional.
-
 ```yaml
 img:
   src: img/icon.png
