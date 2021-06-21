@@ -10,6 +10,37 @@ const MARKED: Options = Options::from_bits_truncate(
         | Options::ENABLE_STRIKETHROUGH.bits(),
 );
 
+fn marked(e: Event) -> Event {
+    match e {
+        // Support line number for code block
+        Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(info))) => {
+            let info = info.replace(' ', "");
+            let mut head = String::new();
+            if info.is_empty() {
+                head += "<pre><code>"
+            } else {
+                let lang = info.split('[').next().unwrap();
+                let line = info
+                    .replace(lang, "")
+                    .replace(|s| (s == '[') | (s == ']'), "");
+                head += &format!("<pre><code class=\"language-{}\"", lang);
+                if !line.is_empty() {
+                    head += &format!(" data-line-numbers=\"{}\"", line);
+                }
+                head += ">";
+            }
+            Event::Html(head.into())
+        }
+        _ => e,
+    }
+}
+
+pub(crate) fn md2html(text: &str) -> String {
+    let mut out = String::new();
+    push_html(&mut out, Parser::new_ext(text, MARKED).map(marked));
+    out
+}
+
 struct FragMap(HashMap<String, HashMap<usize, String>>);
 
 impl FragMap {
@@ -44,36 +75,6 @@ impl FragMap {
         }
         head + inner + &end
     }
-}
-
-fn marked(e: Event) -> Event {
-    match e {
-        Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(info))) => {
-            let info = info.replace(' ', "");
-            let mut head = String::new();
-            if info.is_empty() {
-                head += "<pre><code>"
-            } else {
-                let lang = info.split('[').next().unwrap();
-                let line = info
-                    .replace(lang, "")
-                    .replace(|s| (s == '[') | (s == ']'), "");
-                head += &format!("<pre><code class=\"language-{}\"", lang);
-                if !line.is_empty() {
-                    head += &format!(" data-line-numbers=\"{}\"", line);
-                }
-                head += ">";
-            }
-            Event::Html(head.into())
-        }
-        _ => e,
-    }
-}
-
-pub(crate) fn md2html(text: &str) -> String {
-    let mut out = String::new();
-    push_html(&mut out, Parser::new_ext(text, MARKED).map(marked));
-    out
 }
 
 pub(crate) fn sized_block(img: &Node) -> Result<String, Error> {
