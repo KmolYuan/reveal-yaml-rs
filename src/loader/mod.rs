@@ -92,7 +92,9 @@ fn slide_block(slide: &Node, bg: &Background, first_column: bool) -> Result<Stri
             if i == 1 || first_column {
                 doc += " data-visibility=\"uncounted\"";
             }
-            doc += &format!("><h2>{}</h2><hr/>", t);
+            doc += ">";
+            doc += &md2html(&format!("# {}", t));
+            doc += "<hr/>";
             break;
         }
         if i == 1 {

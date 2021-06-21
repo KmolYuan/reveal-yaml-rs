@@ -111,10 +111,8 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
     if let Ok(n) = slide.get(&["include"]) {
         t = n.as_str()?;
         if !t.is_empty() {
-            doc += &frag.fragment(
-                "include",
-                &md2html(&read_to_string(t).map_err(|_| ("read file error", n.pos))?),
-            );
+            let include = read_to_string(t).map_err(|_| ("read file error", n.pos))?;
+            doc += &frag.fragment("include", &md2html(&include));
         }
     }
     t = slide.get_default(&["math"], "", Node::as_str)?;

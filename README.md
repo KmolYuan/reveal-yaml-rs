@@ -118,7 +118,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 
 ### Slides
 
-+ [x] title: HTML `<h2>` title.
++ [x] title: Markdown level 1 title without `#` notation.
 + [x] none-title: Same as `title` but will be excluded in TOC, this page will uncounted.
   + If `title` is enabled, `none-title` will not work.
 + [x] Content: (they are placed in the following order)
