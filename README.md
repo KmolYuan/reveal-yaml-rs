@@ -95,7 +95,7 @@ rym fmt
 rym pack
 ```
 
-## Features
+## Functions
 
 Here are the implemented features, or the functions are designed in progress. Generally, the parser will not check extra key values. In addition, almost all values support the `null` placeholder to present the default value (blank, `~`, `null`).
 
@@ -117,7 +117,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
   + position: Background position.
   + repeat: Background repeat. (repeat / no-repeat)
   + opacity: Background opacity from zero to one. (**float**)
-+ [x] outline: Auto generated table of the contents (TOC). Default to true. (**boolean**)
++ [x] outline: Auto generated table of the contents (TOC), boolean `true` by default.
 + [x] theme: Reveal.js theme, "serif" by default.
 + [x] code-theme: Highlight theme, "zenburn" by default.
 + [x] style: Extra CSS style path.
@@ -132,19 +132,21 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 + [x] title: Markdown level 1 title without `#` notation.
 + [x] $title: Invisible title, same as `title` but will be excluded in TOC, this page will uncounted.
   + If `title` is enabled, `$title` will not work.
-+ [x] **Content**: (they are placed in the following order)
++ **Content**: (they are placed in the following order)
   + [x] doc: Multiline Markdown text, accept HTML.
   + [x] include: Include a Markdown file from path, append after `doc`.
-    + [x] math: Latex math without `$$` / `\[\]` brackets.
+  + [x] math: Latex math without `$$` / `\[\]` brackets.
   + [x] img: A list of image source.
     + **Array**, can be map if there is only one image.
     + Each block are **sized**.
     + label: Image `<caption>`.
-  + [x] **Stack**:
+  + [ ] video: Same as `img`, but embed videos.
+    + control: Allow control videos, boolean `true` by default.
+  + **Stack**:
+    + This function allows nesting.
     + [x] hstack: Columns view of contents. (**Array**)
     + [x] vstack: Row view of contents.
     + [x] $hstack / $vstack: Make a border between each element.
-    + This function allows nesting.
 + [x] note: Note in Speaker's view, Markdown syntax.
 + [x] bg-color: [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
 + [x] background: Background setting, as same as global.
