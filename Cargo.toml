@@ -10,6 +10,10 @@ readme = "README.md"
 keywords = ["yaml", "revealjs", "reveal", "slide", "slideshow"]
 categories = ["command-line-interface"]
 
+[[bin]]
+name = "rym"
+path = "src/main.rs"
+
 [dependencies]
 clap = "2.33"
 temp-dir = "0.1"
