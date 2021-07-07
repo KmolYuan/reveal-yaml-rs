@@ -10,7 +10,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - run: cargo run --all-features pack src/assets
+      - run: cargo run pack src/assets
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
