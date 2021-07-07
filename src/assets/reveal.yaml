@@ -35,6 +35,13 @@ footer:
 
     Scroll down ↓ to see the examples.
   sub:
+    - $title: Hidden Title
+      doc: |
+        This title is invisible in the table of content.
+
+        ```yaml
+        $title: Hidden Title
+        ```
     - title: Markdown
       doc: |
         ```yaml

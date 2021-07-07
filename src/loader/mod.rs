@@ -86,7 +86,7 @@ fn slide_block(slide: &Node, bg: &Background, first_column: bool) -> Result<Stri
         let local_bg = Background::new(slide)?;
         doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
-    for (i, title) in ["title", "none-title"].iter().enumerate() {
+    for (i, title) in ["title", "$title"].iter().enumerate() {
         t = slide.get_default(&[*title], "", Node::as_str)?;
         if !t.is_empty() {
             if i == 1 || first_column {
@@ -196,7 +196,7 @@ fn load_main(yaml: Array, mount: &str) -> Result<String, Error> {
                 }
                 doc += "<ul>";
                 for (j, slide) in sub.iter().enumerate() {
-                    let t = slide.get(&["title"])?.as_str()?;
+                    let t = slide.get_default(&["title"], "", Node::as_str)?;
                     if t.is_empty() {
                         continue;
                     }
