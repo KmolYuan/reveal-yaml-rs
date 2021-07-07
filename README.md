@@ -9,13 +9,24 @@ This manager downloads the latest Reveal.js archive to provide serving and packi
 
 Static demo on gh-pages: <https://kmolyuan.github.io/reveal-yaml-rs/>
 
-Download CLI executable from GitHub release: <https://github.com/KmolYuan/reveal-yaml-rs/releases/>
-
 ### Why should use this?
 
 Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides, an auto-generated outline, and a live demo when editing.
 
 Difference to the before work, the Markdown to HTML translation is done by this parser instead of using markdown.js, so **there is no more HTML escaping since they will be handled enough**. (except using Markdown in your code block recursively, this needs to use `<code>` tag by yourself)
+
+## Installation
+
+Download CLI executable from GitHub release: <https://github.com/KmolYuan/reveal-yaml-rs/releases/>
+
+Wherever the binary placed, it should be visible for the environment variable `PATH`.
+
+If you are a Rust user, install it with cargo:
+```
+cargo install reveal-yaml
+```
+
+The executable can be checked with `rym --help`.
 
 ## Tutorial
 
@@ -70,10 +81,6 @@ The plugins excluding `markdown` are enabled by default.
 ## Command Line Interface
 
 The command `rym` stands for "Reveal-Yaml Manager".
-
-Download it directly and check the help by `rym --help`.
-
-The CLI can be found via setting environment variable `PATH` in your OS.
 ```bash
 # Download the latest Reveal.js archive
 rym update
