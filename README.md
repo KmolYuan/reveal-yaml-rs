@@ -70,10 +70,15 @@ The plugins excluding `markdown` are enabled by default.
 ## Command Line Interface
 
 The command `rym` stands for "Reveal-Yaml Manager".
+
+Download it directly and check the help by `rym --help`.
+
+The CLI can be found via setting environment variable `PATH` in your OS.
 ```bash
 # Download the latest Reveal.js archive
 rym update
 # Create a project to current directory
+# Only "reveal.yaml" will be create, the rest is up to you!
 rym new .
 # Serve the slides
 rym serve
