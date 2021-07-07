@@ -46,7 +46,7 @@ impl<'a> Background<'a> {
 
     fn attr(&self) -> String {
         let mut doc = String::new();
-        for (attr, member) in &[
+        for (attr, member) in [
             ("", self.src),
             ("-size", self.size),
             ("-position", self.position),
@@ -86,8 +86,8 @@ fn slide_block(slide: &Node, bg: &Background, first_column: bool) -> Result<Stri
         let local_bg = Background::new(slide)?;
         doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
-    for (i, title) in ["title", "$title"].iter().enumerate() {
-        t = slide.get_default(&[*title], "", Node::as_str)?;
+    for (i, &title) in ["title", "$title"].iter().enumerate() {
+        t = slide.get_default(&[title], "", Node::as_str)?;
         if !t.is_empty() {
             if i == 1 || first_column {
                 doc += " data-visibility=\"uncounted\"";
@@ -209,7 +209,7 @@ fn load_main(yaml: Array, mount: &str) -> Result<String, Error> {
         doc += "</section>";
     }
     let mut reveal = TEMPLATE.to_owned().replace("{%mount}", mount);
-    for (key, default) in &[
+    for (key, default) in [
         ("icon", "help/icon.png"),
         ("lang", "en"),
         ("title", &title),
@@ -220,7 +220,7 @@ fn load_main(yaml: Array, mount: &str) -> Result<String, Error> {
     ] {
         reveal = reveal.replace(
             &format!("{{%{}}}", key),
-            meta.get_default(&[*key], *default, Node::as_str)?,
+            meta.get_default(&[key], default, Node::as_str)?,
         );
     }
     reveal = reveal.replace("/* {%option} */", &options(meta)?);

@@ -37,7 +37,7 @@ footer:
   sub:
     - $title: Hidden Title
       doc: |
-        This title is invisible in the table of content.
+        This title is invisible in the [table of content](#/0/1).
 
         ```yaml
         $title: Hidden Title
@@ -203,9 +203,9 @@ footer:
               - doc: Left Top Left
               - doc: Left Top Right
             - doc: Left Bottom
-          - vstack:
+          - $vstack:
             - doc: Right Top
-            - hstack:
+            - $hstack:
               - doc: Right Bottom Left
               - doc: Right Bottom Right
         ```
@@ -215,9 +215,9 @@ footer:
             - doc: Left Top Left
             - doc: Left Top Right
           - doc: Left Bottom
-        - vstack:
+        - $vstack:
           - doc: Right Top
-          - hstack:
+          - $hstack:
             - doc: Right Bottom Left
             - doc: Right Bottom Right
     - title: Fragment in Stacks

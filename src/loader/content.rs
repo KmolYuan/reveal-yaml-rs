@@ -83,8 +83,8 @@ pub(crate) fn sized_block(img: &Node) -> Result<String, Error> {
         return Err(Error("empty source", img.pos));
     }
     let mut doc = format!(" src=\"{}\"", src);
-    for attr in &["width", "height"] {
-        let value = img.get_default(&[*attr], "", Node::as_value)?;
+    for attr in ["width", "height"] {
+        let value = img.get_default(&[attr], "", Node::as_value)?;
         if !value.is_empty() {
             doc += &format!(" {}=\"{}\"", attr, value);
         }
@@ -138,22 +138,33 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
         }
     }
     let empty = vec![];
-    let hstack = slide.get_default(&["hstack"], &empty, Node::as_array)?;
-    if !hstack.is_empty() {
-        doc += "<div style=\"display:flex\">";
-        let width = 100. / hstack.len() as f32;
-        for slide in hstack {
-            doc += &format!("<div style=\"width:{}%;text-align:center\">", width);
-            doc += &content_block(slide, frag_count)?;
-            doc += "</div>";
+    for (i, &title) in ["hstack", "$hstack", "vstack", "$vstack"]
+        .iter()
+        .enumerate()
+    {
+        let stack = slide.get_default(&[title], &empty, Node::as_array)?;
+        if stack.is_empty() {
+            continue;
         }
-        doc += "</div>";
-    }
-    let vstack = slide.get_default(&["vstack"], &empty, Node::as_array)?;
-    if !vstack.is_empty() {
-        doc += "<div class=\"vstack\">";
-        for slide in vstack {
-            doc += "<div>";
+        let head = if i < 2 {
+            doc += "<div class=\"hstack\">";
+            let width = 100. / stack.len() as f32;
+            format!(" style=\"width:{}%\"", width)
+        } else {
+            doc += "<div class=\"vstack\">";
+            "".to_owned()
+        };
+        for (j, slide) in stack.iter().enumerate() {
+            let border = if j > 0 && title.starts_with('$') {
+                if i < 2 {
+                    " class=\"hstack-border\""
+                } else {
+                    " class=\"vstack-border\""
+                }
+            } else {
+                ""
+            };
+            doc += &format!("<div{}{}>", border, head);
             doc += &content_block(slide, frag_count)?;
             doc += "</div>";
         }

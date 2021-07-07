@@ -120,7 +120,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 + [x] title: Markdown level 1 title without `#` notation.
 + [x] $title: Invisible title, same as `title` but will be excluded in TOC, this page will uncounted.
   + If `title` is enabled, `$title` will not work.
-+ [x] Content: (they are placed in the following order)
++ [x] **Content**: (they are placed in the following order)
   + [x] doc: Multiline Markdown text, accept HTML.
   + [x] include: Include a Markdown file from path, append after `doc`.
     + [x] math: Latex math without `$$` / `\[\]` brackets.
@@ -128,10 +128,10 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + **Array**, can be map if there is only one image.
     + Each block are **sized**.
     + label: Image `<caption>`.
-  + [ ] stack:
+  + [x] **Stack**:
     + [x] hstack: Columns view of contents. (**Array**)
     + [x] vstack: Row view of contents.
-    + [ ] border: Make a border between each element.
+    + [x] $hstack / $vstack: Make a border between each element.
     + This function allows nesting.
 + [x] note: Speak view note.
 + [x] bg-color: [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
