@@ -250,10 +250,16 @@ footer:
           fragment:
             - math: fade-in
     - title: Note
-      note: Note text here!
+      note: |
+        Note text here!
+
+        There are also have **markdown** *syntax*!
       doc: |
+        Press "s" key to open speaker's view.
+
         ```yaml
-        note: Note text here!
-        doc: Press "s" key to popup speaker view.
+        note: |
+          Note text here!
+
+          There are also have **markdown** *syntax*!
         ```
-        Press "s" key to popup speaker view.

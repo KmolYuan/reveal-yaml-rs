@@ -133,7 +133,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + [x] vstack: Row view of contents.
     + [x] $hstack / $vstack: Make a border between each element.
     + This function allows nesting.
-+ [x] note: Speak view note.
++ [x] note: Note in Speaker's view, Markdown syntax.
 + [x] bg-color: [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
 + [x] background: Background setting, as same as global.
   + Local background option can be boolean `false` to disable global background.
