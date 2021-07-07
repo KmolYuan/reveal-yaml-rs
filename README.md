@@ -97,7 +97,9 @@ rym pack
 
 ## Functions
 
-Here are the implemented features, or the functions are designed in progress. Generally, the parser will not check extra key values. In addition, almost all values support the `null` placeholder to present the default value (blank, `~`, `null`).
+Here are the implemented features, or the functions are designed in progress.
+
+Generally, the parser will not check extra key values. In addition, almost all values support the `null` placeholder to present the default value (blank, `~`, `null`).
 
 Some functions are planed to be demonstrated in the help page. Open the help page by adding `/help/` after URL, like `http://localhost:8080/help/`.
 
@@ -106,55 +108,55 @@ Some functions are planed to be demonstrated in the help page. Open the help pag
 Metadata contains HTML settings and global slide settings.
 The definition contains in the first YAML doc, split by horizontal line `---`.
 
-+ [x] icon: Icon path, "img/icon.png" by default.
-+ [x] lang: Set the "lang" attribute for the page, "en" by default.
-+ [x] title: The webpage title, defaults to the first page.
-+ [x] description: Webpage description.
-+ [x] author: Webpage author.
-+ [x] background: Global [background setting](https://revealjs.com/backgrounds/#image-backgrounds).
-  + src: Background source.
-  + size: Background size.
-  + position: Background position.
-  + repeat: Background repeat. (repeat / no-repeat)
-  + opacity: Background opacity from zero to one. (**float**)
-+ [x] outline: Auto generated table of the contents (TOC), boolean `true` by default.
-+ [x] theme: Reveal.js theme, "serif" by default.
-+ [x] code-theme: Highlight theme, "zenburn" by default.
-+ [x] style: Extra CSS style path.
-+ [x] footer: Global footer option. You can add your logo here. (**sized**)
-  + label: Footer text.
-  + link: Footer link, works on image and text.
-+ [x] option: Other Reveal.js [config](https://revealjs.com/config/) options.
++ `icon` Icon path, "img/icon.png" by default.
++ `lang` Set the "lang" attribute for the page, "en" by default.
++ `title` The webpage title, defaults to the first page.
++ `description` Webpage description.
++ `author` Webpage author.
++ `background` Global [background setting](https://revealjs.com/backgrounds/#image-backgrounds).
+  + `src` Background source.
+  + `size` Background size.
+  + `position` Background position.
+  + `repeat` Background repeat. (repeat / no-repeat)
+  + `opacity` Background opacity from zero to one. (**float**)
++ `outline` Auto generated table of the contents (TOC), boolean `true` by default.
++ `theme` Reveal.js theme, "serif" by default.
++ `code-theme` Highlight theme, "zenburn" by default.
++ `style` Extra CSS style path.
++ `footer` Global footer option. You can add your logo here. (**sized**)
+  + `label` Footer text.
+  + `link` Footer link, works on image and text.
++ `option` Other Reveal.js [config](https://revealjs.com/config/) options.
   + Use any case string to indicate the option, this function will translate into lower camelcase, for example, YAML `slide number: c/t` will be JavaScript `slideNumber: "c/t"`.
 
 ### Slides
 
-+ [x] title: Markdown level 1 title without `#` notation.
-+ [x] $title: Invisible title, same as `title` but will be excluded in TOC, this page will uncounted.
++ `title` Markdown level 1 title without `#` notation.
++ `$title` Invisible title, same as `title` but will be excluded in TOC, this page will uncounted.
   + If `title` is enabled, `$title` will not work.
-+ **Content**: (they are placed in the following order)
-  + [x] doc: Multiline Markdown text, accept HTML.
-  + [x] include: Include a Markdown file from path, append after `doc`.
-  + [x] math: Latex math without `$$` / `\[\]` brackets.
-  + [x] img: A list of image source.
++ **Content** (they are placed in the following order)
+  + `doc` Multiline Markdown text, accept HTML.
+  + `include` Include a Markdown file from path, append after `doc`.
+  + `math` Latex math without `$$` / `\[\]` brackets.
+  + `img` A list of image source.
     + **Array**, can be map if there is only one image.
     + Each block are **sized**.
-    + label: Image `<caption>`.
-  + [ ] video: Same as `img`, but embed videos.
-    + control: Allow control videos, boolean `true` by default.
-  + **Stack**:
+    + `label` Image `<caption>`.
+  + `video` Same as `img`, but embed videos. (**TODO**)
+    + `control` Allow control videos, boolean `true` by default.
+  + **Stack**
     + This function allows nesting.
-    + [x] hstack: Columns view of contents. (**Array**)
-    + [x] vstack: Row view of contents.
-    + [x] $hstack / $vstack: Make a border between each element.
-+ [x] note: Note in Speaker's view, Markdown syntax.
-+ [x] bg-color: [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
-+ [x] background: Background setting, as same as global.
+    + `hstack` Columns view of contents. (**Array**)
+    + `vstack` Row view of contents.
+    + `$hstack` / `$vstack` Make a border between each element.
++ `note` Note in Speaker's view, Markdown syntax.
++ `bg-color` [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
++ `background` Background setting, as same as global.
   + Local background option can be boolean `false` to disable global background.
-+ [x] trans: [Transition](https://revealjs.com/transitions/) option.
-+ [x] bg-trans: [Background transition](https://revealjs.com/transitions/#background-transitions) option.
-+ [x] fragment: [Fragment](https://revealjs.com/fragments/) option.
++ `trans` [Transition](https://revealjs.com/transitions/) option.
++ `bg-trans` [Background transition](https://revealjs.com/transitions/#background-transitions) option.
++ `fragment` [Fragment](https://revealjs.com/fragments/) option.
   + **Array**, the index are the `data-fragment-index`.
   + Each block are **content**, but exclude stacks.
   + Stacks can have local fragment option, but still ordered.
-+ [x] sub: Vertical slides, for horizontal slides only.
++ `sub` Vertical slides, for horizontal slides only.
