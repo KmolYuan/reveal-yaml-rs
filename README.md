@@ -1,5 +1,7 @@
 # Reveal.yaml
 
+[![dependency status](https://deps.rs/repo/github/KmolYuan/reveal-yaml-rs/status.svg)](https://deps.rs/crate/reveal-yaml/)
+
 Rust implementation of Reveal.js YAML server.
 
 This project is transferred from Python language and now operates in a way that is easier to maintain and release, and it is Rust.
