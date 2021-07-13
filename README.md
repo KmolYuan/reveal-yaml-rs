@@ -157,14 +157,15 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + `label` Image `<caption>`.
   + `video` Embed videos.
     + **Array**, can be map if there is only one video.
-    + This block are **sized**.
+    + Each block are **sized**.
     + `controls` Allow controls, boolean `true` by default.
     + `autoplay` Allow autoplay, boolean `false` by default.
     + `type` Video type, default to "video/mp4".
   + **Stack**
+    + **Array** format.
     + This function allows nesting.
-    + `hstack` Columns view of contents. (**Array**)
-    + `vstack` Row view of contents.
+    + `hstack` Horizontal (columns) view of contents.
+    + `vstack` Vertical (rows) view of contents.
     + `$hstack` / `$vstack` Make a border between each element.
 + `note` Note in Speaker's view, Markdown syntax.
 + `bg-color` [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
