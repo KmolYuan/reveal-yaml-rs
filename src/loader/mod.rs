@@ -1,5 +1,4 @@
 use self::content::*;
-use heck::MixedCase;
 use std::io::{Error as IoError, ErrorKind};
 use yaml_peg::{indicated_msg, parse, Array, Node};
 
@@ -110,6 +109,24 @@ fn slide_block(slide: &Node, bg: &Background, first_column: bool) -> Result<Stri
     Ok(doc)
 }
 
+fn lower_camelcase(doc: &str) -> String {
+    let mut s = String::new();
+    let mut is_word = false;
+    for c in doc.chars() {
+        if " -_".contains(c) {
+            is_word = true;
+            continue;
+        }
+        s.push(if is_word {
+            is_word = false;
+            c.to_ascii_uppercase()
+        } else {
+            c
+        });
+    }
+    s
+}
+
 fn options(meta: &Node) -> Result<String, Error> {
     let meta = match meta.get(&["option"]) {
         Ok(n) => n,
@@ -117,7 +134,7 @@ fn options(meta: &Node) -> Result<String, Error> {
     };
     let mut doc = String::new();
     for (k, v) in meta.as_map()? {
-        doc += &k.as_str()?.to_mixed_case();
+        doc += &lower_camelcase(k.as_str()?);
         doc += ": ";
         if let Ok(s) = v.as_str() {
             doc += &format!("\"{}\"", s);
