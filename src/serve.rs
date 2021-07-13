@@ -44,7 +44,7 @@ where
         doc: if use_cache {
             loader(&read_to_string(project)?, "/static/")?
         } else {
-            "".to_owned()
+            String::new()
         },
         help_doc: loader(HELP_DOC, "/static/")?,
     };

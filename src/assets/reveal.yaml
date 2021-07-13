@@ -113,6 +113,20 @@ footer:
           width: 50%
       fragment:
         - img: fade-in-then-out
+    - title: Video
+      doc: |
+        ```yaml
+        video:
+          - width: 320
+            height: 240
+            src: https://www.w3schools.com/html/movie.mp4
+          - src: https://www.w3schools.com/html/movie.mp4
+        ```
+      video:
+        - width: 320
+          height: 240
+          src: https://www.w3schools.com/html/movie.mp4
+        - src: https://www.w3schools.com/html/movie.mp4
     - title: Maths
       doc: |
         ```yaml

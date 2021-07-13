@@ -77,28 +77,43 @@ impl FragMap {
     }
 }
 
-pub(crate) fn sized_block(img: &Node) -> Result<String, Error> {
+pub(crate) fn sized_block(img: &Node) -> Result<(String, String), Error> {
     let src = img.get_default(&["src"], "", Node::as_str)?;
     if src.is_empty() {
         return Err(Error("empty source", img.pos));
     }
-    let mut doc = format!(" src=\"{}\"", src);
+    let mut doc = String::new();
     for attr in ["width", "height"] {
         let value = img.get_default(&[attr], "", Node::as_value)?;
         if !value.is_empty() {
             doc += &format!(" {}=\"{}\"", attr, value);
         }
     }
-    Ok(doc)
+    Ok((format!(" src=\"{}\"", src), doc))
 }
 
 fn img_block(img: &Node) -> Result<String, Error> {
-    let mut doc = format!("<figure><img{}/>", sized_block(img)?);
+    let (src, size) = sized_block(img)?;
+    let mut doc = format!("<figure><img{}{}/>", src, size);
     let label = img.get_default(&["label"], "", Node::as_str)?;
     if !label.is_empty() {
         doc += &format!("<figcaption>{}</figcaption>", label);
     }
     doc += "</figure>";
+    Ok(doc)
+}
+
+fn video_block(video: &Node) -> Result<String, Error> {
+    let (src, size) = sized_block(video)?;
+    let mut doc = format!("<video{}", size);
+    if video.get_default(&["controls"], true, Node::as_bool)? {
+        doc += " controls";
+    }
+    if video.get_default(&["autoplay"], false, Node::as_bool)? {
+        doc += " autoplay";
+    }
+    let ty = video.get_default(&["type"], "video/mp4", Node::as_str)?;
+    doc += &format!("><source{} type=\"{}\"></video>", src, ty);
     Ok(doc)
 }
 
@@ -120,28 +135,32 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
     if !t.is_empty() {
         doc += &frag.fragment("math", &format!("\\[{}\\]", t));
     }
-    if let Ok(img) = slide.get(&["img"]) {
-        match &img.yaml {
-            Yaml::Array(imgs) => {
-                if !imgs.is_empty() {
-                    doc += "<div style=\"display:flex;flex-direction:row;justify-content:center;align-items:center\">";
-                    for img in imgs {
-                        doc += &frag.fragment("img", &img_block(img)?);
+    let media: [(_, fn(&Node) -> Result<String, Error>); 2] =
+        [("img", img_block), ("video", video_block)];
+    for (tag, f) in media {
+        if let Ok(img) = slide.get(&[tag]) {
+            match &img.yaml {
+                Yaml::Array(imgs) => {
+                    if !imgs.is_empty() {
+                        doc += "<div style=\"display:flex;flex-direction:row;justify-content:center;align-items:center\">";
+                        for img in imgs {
+                            doc += &frag.fragment(tag, &f(img)?);
+                        }
+                        doc += "</div>";
                     }
-                    doc += "</div>";
                 }
+                Yaml::Map(_) => {
+                    doc += &frag.fragment(tag, &f(img)?);
+                }
+                _ => return Err(Error("invalid blocks", img.pos)),
             }
-            Yaml::Map(_) => {
-                doc += &frag.fragment("img", &img_block(img)?);
-            }
-            _ => return Err(Error("invalid image", img.pos)),
         }
     }
-    let empty = vec![];
     for (i, &title) in ["hstack", "$hstack", "vstack", "$vstack"]
         .iter()
         .enumerate()
     {
+        let empty = vec![];
         let stack = slide.get_default(&[title], &empty, Node::as_array)?;
         if stack.is_empty() {
             continue;
@@ -152,7 +171,7 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
             format!(" style=\"width:{}%\"", width)
         } else {
             doc += "<div class=\"vstack\">";
-            "".to_owned()
+            String::new()
         };
         for (j, slide) in stack.iter().enumerate() {
             let border = if j > 0 && title.starts_with('$') {

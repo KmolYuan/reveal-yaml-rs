@@ -123,7 +123,8 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 + `theme` Reveal.js theme, "serif" by default.
 + `code-theme` Highlight theme, "zenburn" by default.
 + `style` Extra CSS style path.
-+ `footer` Global footer option. You can add your logo here. (**sized**)
++ `footer` Global footer option. You can add your logo here.
+  + This block are **sized**.
   + `label` Footer text.
   + `link` Footer link, works on image and text.
 + `option` Other Reveal.js [config](https://revealjs.com/config/) options.
@@ -142,8 +143,12 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + **Array**, can be map if there is only one image.
     + Each block are **sized**.
     + `label` Image `<caption>`.
-  + `video` Same as `img`, but embed videos. (**TODO**)
-    + `control` Allow control videos, boolean `true` by default.
+  + `video` Embed videos.
+    + **Array**, can be map if there is only one video.
+    + This block are **sized**.
+    + `controls` Allow controls, boolean `true` by default.
+    + `autoplay` Allow autoplay, boolean `false` by default.
+    + `type` Video type, default to "video/mp4".
   + **Stack**
     + This function allows nesting.
     + `hstack` Columns view of contents. (**Array**)

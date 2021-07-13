@@ -146,7 +146,8 @@ fn footer_block(meta: &Node) -> Result<String, Error> {
     if !link.is_empty() {
         doc += &format!("<a href=\"{}\">", link);
     }
-    doc += &format!("<img{}/>", sized_block(footer)?);
+    let (src, size) = sized_block(footer)?;
+    doc += &format!("<img{}{}/>", src, size);
     let label = footer.get_default(&["label"], "", Node::as_str)?;
     if !label.is_empty() {
         doc += &format!("<span>&nbsp;{}</span>", label);
