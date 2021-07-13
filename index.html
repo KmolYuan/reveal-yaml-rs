@@ -120,7 +120,7 @@
 </ul>
 <p>Scroll right → to see the examples.</p>
 <p>Scroll down ↓ to see an auto-generated outline.</p>
-</section><section data-visibility="uncounted" data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h2>Outline</h2><hr/><ul><li><a href="#/1">Examples</a></li><ul><li><a href="#/1/2">Markdown</a></li><li><a href="#/1/3">Code block</a></li><li><a href="#/1/4">Single Image</a></li><li><a href="#/1/5">Multiple Images</a></li><li><a href="#/1/6">Maths</a></li><li><a href="#/1/7">Background Color & Transition</a></li><li><a href="#/1/8">Image Background & Background Transition</a></li><li><a href="#/1/9">Columns View</a></li><li><a href="#/1/10">Nested Stacks</a></li><li><a href="#/1/11">Fragment in Stacks</a></li><li><a href="#/1/12">Note</a></li></ul></ul></section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Examples</h1>
+</section><section data-visibility="uncounted" data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h2>Outline</h2><hr/><ul><li><a href="#/1">Examples</a></li><ul><li><a href="#/1/2">Markdown</a></li><li><a href="#/1/3">Code block</a></li><li><a href="#/1/4">Single Image</a></li><li><a href="#/1/5">Multiple Images</a></li><li><a href="#/1/6">Video</a></li><li><a href="#/1/7">Maths</a></li><li><a href="#/1/8">Background Color & Transition</a></li><li><a href="#/1/9">Image Background & Background Transition</a></li><li><a href="#/1/10">Columns View</a></li><li><a href="#/1/11">Nested Stacks</a></li><li><a href="#/1/12">Fragment in Stacks</a></li><li><a href="#/1/13">Note</a></li></ul></ul></section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Examples</h1>
 <hr/><p>You can see the source of this doc to see those example:</p>
 <ul>
 <li><a href="https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml">KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml</a></li>
@@ -181,7 +181,14 @@ for i in range(10):
 fragment:
   - img: fade-in-then-out
 </code></pre>
-<div style="display:flex;flex-direction:row;justify-content:center;align-items:center"><span class="fragment fade-in-then-out" data-fragment-index="0"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" width="50%"/><figcaption>Ubuntu Logo</figcaption></figure></span><span class="fragment fade-in-then-out" data-fragment-index="0"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="50%"/><figcaption>Linux Logo</figcaption></figure></span></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Maths</h1>
+<div style="display:flex;flex-direction:row;justify-content:center;align-items:center"><span class="fragment fade-in-then-out" data-fragment-index="0"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" width="50%"/><figcaption>Ubuntu Logo</figcaption></figure></span><span class="fragment fade-in-then-out" data-fragment-index="0"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="50%"/><figcaption>Linux Logo</figcaption></figure></span></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Video</h1>
+<hr/><pre><code class="language-yaml">video:
+  - width: 320
+    height: 240
+    src: https://www.w3schools.com/html/movie.mp4
+  - src: https://www.w3schools.com/html/movie.mp4
+</code></pre>
+<div style="display:flex;flex-direction:row;justify-content:center;align-items:center"><video width="320" height="240" controls><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video><video controls><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Maths</h1>
 <hr/><pre><code class="language-yaml">doc: Inline math text $x^2$.
 math: |
   \small\begin{aligned}
