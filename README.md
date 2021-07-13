@@ -27,7 +27,6 @@ If you are a Rust user, install it with cargo:
 ```
 cargo install reveal-yaml
 ```
-
 The executable can be checked with `rym --help`.
 
 ## Tutorial
@@ -63,6 +62,25 @@ The vertical slides work under the `sub` node of first slide, the attributes are
 - title: Horizontal slide 2
 ```
 This work supports YAML 1.2 without anchor function.
+
+### Layout
+
+There are two layout types, called "horizontal stack" (`hstack`) and "vertical stack" (`vstack`). The vertical layout is default, as same as HTML.
+
+The stack blocks list in the `hstack` / `vstack` tag, and the stack tags can be nested.
+```yaml
+hstack:
+  - doc: Left
+  - vstack:
+    - doc: Right Top
+    - doc: Right Bottom
+```
+The stack tag can add a dollar sign `$` to add a borderline between the elements.
+```yaml
+$hstack:
+  - doc: Splitted left
+  - doc: Splitted right
+```
 
 ### Sized Attribute
 
