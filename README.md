@@ -70,10 +70,20 @@ The images and resizeable items are support "sized" attribute, which contains th
 
 The `width` and `height` options are the same as the attributes on the `<img>` tag, they are optional.
 ```yaml
+footer:  # Footer is a metadata option
+  src: help/icon.png
+  width: 50pt
+  label: Reveal.yaml
+  link: https://github.com/KmolYuan/reveal-yaml/
 img:
-  src: img/icon.png
-  width: 50%  # same as width="50%"
-  height: 70  # same as height="70"
+  - src: img/icon.png
+    width: 50%  # same as width="50%"
+    height: 70  # same as height="70"
+video:
+  width: 320
+  height: 240
+  src: https://www.w3schools.com/html/movie.mp4
+  autoplay: true
 ```
 
 ### Reveal Plugins
