@@ -9,13 +9,15 @@ Some old functions might be deprecated, and some functions are improved.
 
 This manager downloads the latest Reveal.js archive to provide serving and packing function, and had same licensed as Reveal.js.
 
-Static demo on gh-pages: <https://kmolyuan.github.io/reveal-yaml-rs/>
+Static demo on gh-pages: <https://kmolyuan.github.io/reveal-yaml-rs>
+
+YAML backend: <https://github.com/KmolYuan/yaml-peg-rs> (hosted by myself)
 
 ### Why should use this?
 
-Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides, an auto-generated outline, and a live demo when editing.
+Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides, an auto-generated outline, a simple layout function, and a live presentation when editing.
 
-Difference to the before work, the Markdown to HTML translation is done by this parser instead of using markdown.js, so **there is no more HTML escaping since they will be handled enough**. (except using Markdown in your code block recursively, this needs to use `<code>` tag by yourself)
+Difference to the before work, the Markdown to HTML translation works by this parser instead of using markdown.js, so **there is no more HTML escaping since they will be handled enough**. Except for using Markdown recursively in your code block, this needs to use the `<code>` tags by yourself.
 
 ## Installation
 
