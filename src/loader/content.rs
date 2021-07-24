@@ -80,7 +80,7 @@ impl FragMap {
 pub(crate) fn sized_block(img: &Node) -> Result<(String, String), Error> {
     let src = img.get_default(&["src"], "", Node::as_str)?;
     if src.is_empty() {
-        return Err(Error("empty source", img.pos));
+        return Err(Error("empty source", img.pos()));
     }
     let mut doc = String::new();
     for attr in ["width", "height"] {
@@ -127,7 +127,7 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
     if let Ok(n) = slide.get(&["include"]) {
         t = n.as_str()?;
         if !t.is_empty() {
-            let include = read_to_string(t).map_err(|_| ("read file error", n.pos))?;
+            let include = read_to_string(t).map_err(|_| ("read file error", n.pos()))?;
             doc += &frag.fragment("include", &md2html(&include));
         }
     }
@@ -139,7 +139,7 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
         [("img", img_block), ("video", video_block)];
     for (tag, f) in media {
         if let Ok(img) = slide.get(&[tag]) {
-            match &img.yaml {
+            match img.yaml() {
                 Yaml::Array(imgs) => {
                     if !imgs.is_empty() {
                         doc += "<div style=\"display:flex;flex-direction:row;justify-content:center;align-items:center\">";
@@ -150,9 +150,9 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
                     }
                 }
                 Yaml::Map(_) => {
-                    doc += &frag.fragment(tag, &f(img)?);
+                    doc += &frag.fragment(tag, &f(&img)?);
                 }
-                _ => return Err(Error("invalid blocks", img.pos)),
+                _ => return Err(Error("invalid blocks", img.pos())),
             }
         }
     }

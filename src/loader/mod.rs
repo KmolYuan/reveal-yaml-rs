@@ -1,6 +1,6 @@
 use self::content::*;
 use std::io::{Error as IoError, ErrorKind};
-use yaml_peg::{indicated_msg, parse, Array, Node};
+use yaml_peg::{indicated_msg, parse, repr::RcRepr, Array, Node};
 
 mod content;
 
@@ -62,7 +62,7 @@ impl<'a> Background<'a> {
 
 fn slide_block(slide: &Node, bg: &Background, first_column: bool) -> Result<String, Error> {
     if slide.as_map()?.is_empty() {
-        return Err(Error("empty slide", slide.pos));
+        return Err(Error("empty slide", slide.pos()));
     }
     let mut doc = "<section".to_owned();
     let mut t = slide.get_default(&["bg-color"], "", Node::as_str)?;
@@ -163,7 +163,7 @@ fn footer_block(meta: &Node) -> Result<String, Error> {
     if !link.is_empty() {
         doc += &format!("<a href=\"{}\">", link);
     }
-    let (src, size) = sized_block(footer)?;
+    let (src, size) = sized_block(&footer)?;
     doc += &format!("<img{}{}/>", src, size);
     let label = footer.get_default(&["label"], "", Node::as_str)?;
     if !label.is_empty() {
@@ -176,7 +176,7 @@ fn footer_block(meta: &Node) -> Result<String, Error> {
     Ok(doc)
 }
 
-fn load_main(yaml: Array, mount: &str) -> Result<String, Error> {
+fn load_main(yaml: Array<RcRepr>, mount: &str) -> Result<String, Error> {
     let mut title = String::new();
     let meta = &yaml[0];
     let slides = yaml[1].as_array()?;
@@ -253,7 +253,8 @@ fn load_main(yaml: Array, mount: &str) -> Result<String, Error> {
 
 /// Load YAML string as HTML.
 pub fn loader(yaml_str: &str, mount: &str) -> Result<String, IoError> {
-    let yaml = parse(yaml_str).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
+    // TODO: anchors
+    let (yaml, _anchor) = parse(yaml_str).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
     if yaml.len() < 2 {
         return Err(IoError::new(
             ErrorKind::InvalidData,
