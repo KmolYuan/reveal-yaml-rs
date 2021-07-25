@@ -277,3 +277,17 @@ footer:
 
           There are also have **markdown** *syntax*!
         ```
+    - title: Anchors
+      doc: |
+        ```yaml
+        $hstack:
+          - &content
+            doc: Content A
+          - *content
+          - *content
+        ```
+      $hstack:
+        - &content
+          doc: Content A
+        - *content
+        - *content

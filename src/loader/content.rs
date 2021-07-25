@@ -1,7 +1,7 @@
 use super::*;
 use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag};
 use std::{collections::HashMap, fs::read_to_string};
-use yaml_peg::{Node, Yaml};
+use yaml_peg::{Anchors, Node, Yaml};
 
 const MARKED: Options = Options::from_bits_truncate(
     Options::ENABLE_TABLES.bits()
@@ -36,9 +36,21 @@ fn marked(e: Event) -> Event {
 }
 
 pub(crate) fn md2html(text: &str) -> String {
-    let mut out = String::new();
-    push_html(&mut out, Parser::new_ext(text, MARKED).map(marked));
-    out
+    if text.is_empty() {
+        "".to_string()
+    } else {
+        let mut out = String::new();
+        push_html(&mut out, Parser::new_ext(text, MARKED).map(marked));
+        out
+    }
+}
+
+fn math(text: &str) -> String {
+    if text.is_empty() {
+        "".to_string()
+    } else {
+        format!("\\[{}\\]", text)
+    }
 }
 
 struct FragMap(HashMap<String, HashMap<usize, String>>);
@@ -61,6 +73,9 @@ impl FragMap {
     }
 
     fn fragment(&mut self, tag: &str, inner: &str) -> String {
+        if inner.is_empty() {
+            return "".to_string();
+        }
         let tag = tag.to_string();
         let mut head = String::new();
         let mut end = String::new();
@@ -117,23 +132,25 @@ fn video_block(video: &Node) -> Result<String, Error> {
     Ok(doc)
 }
 
-pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<String, Error> {
+pub(crate) fn content_block(
+    slide: &Node,
+    v: &Anchors,
+    frag_count: &mut usize,
+) -> Result<String, Error> {
     let mut doc = String::new();
     let mut frag = FragMap::new(slide, frag_count)?;
-    let mut t = slide.get_default("doc", "", Node::as_str)?;
-    if !t.is_empty() {
-        doc += &frag.fragment("doc", &md2html(t));
+    if let Ok(n) = slide.get("doc") {
+        doc += &frag.fragment("doc", &md2html(n.as_anchor(v).as_str()?));
     }
     if let Ok(n) = slide.get("include") {
-        t = n.as_str()?;
+        let t = n.as_str()?;
         if !t.is_empty() {
             let include = read_to_string(t).map_err(|_| ("read file error", n.pos()))?;
             doc += &frag.fragment("include", &md2html(&include));
         }
     }
-    t = slide.get_default("math", "", Node::as_str)?;
-    if !t.is_empty() {
-        doc += &frag.fragment("math", &format!("\\[{}\\]", t));
+    if let Ok(n) = slide.get("math") {
+        doc += &frag.fragment("math", &math(n.as_anchor(v).as_str()?));
     }
     let media: [(_, fn(&Node) -> Result<String, Error>); 2] =
         [("img", img_block), ("video", video_block)];
@@ -184,7 +201,7 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
                 ""
             };
             doc += &format!("<div{}{}>", border, head);
-            doc += &content_block(slide, frag_count)?;
+            doc += &content_block(&slide.as_anchor(v), v, frag_count)?;
             doc += "</div>";
         }
         doc += "</div>";

@@ -1,6 +1,6 @@
 use self::content::*;
 use std::io::{Error as IoError, ErrorKind};
-use yaml_peg::{indicated_msg, parse, repr::RcRepr, Array, Node};
+use yaml_peg::{indicated_msg, parse, repr::RcRepr, Anchors, Array, Node};
 
 mod content;
 
@@ -65,7 +65,20 @@ impl Background {
     }
 }
 
-fn slide_block(slide: &Node, bg: &Background, first_column: bool) -> Result<String, Error> {
+fn note(text: &str) -> String {
+    if text.is_empty() {
+        "".to_string()
+    } else {
+        format!("<aside class=\"notes\">{}</aside>", text)
+    }
+}
+
+fn slide_block(
+    slide: &Node,
+    v: &Anchors,
+    bg: &Background,
+    first_column: bool,
+) -> Result<String, Error> {
     if slide.as_map()?.is_empty() {
         return Err(Error("empty slide", slide.pos()));
     }
@@ -105,10 +118,9 @@ fn slide_block(slide: &Node, bg: &Background, first_column: bool) -> Result<Stri
             doc += ">";
         }
     }
-    doc += &content_block(slide, &mut 0)?;
-    t = slide.get_default("note", "", Node::as_str)?;
-    if !t.is_empty() {
-        doc += &format!("<aside class=\"notes\">{}</aside>", md2html(&t));
+    doc += &content_block(slide, v, &mut 0)?;
+    if let Ok(n) = slide.get("note") {
+        doc += &note(&md2html(n.as_anchor(v).as_str()?));
     }
     doc += "</section>";
     Ok(doc)
@@ -181,17 +193,18 @@ fn footer_block(meta: &Node) -> Result<String, Error> {
     Ok(doc)
 }
 
-fn load_main(yaml: Array<RcRepr>, mount: &str) -> Result<String, Error> {
+fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Error> {
     let mut title = String::new();
     let meta = &yaml[0];
     let slides = yaml[1].as_array()?;
     let bg = Background::new(meta)?;
     let mut doc = String::new();
     for (i, slide) in slides.iter().enumerate() {
+        let slide = slide.as_anchor(v);
         doc += "<section>";
-        doc += &slide_block(slide, &bg, i == 0)?;
+        doc += &slide_block(&slide, v, &bg, i == 0)?;
         for slide in slide.get_default("sub", &vec![], Node::as_array)? {
-            doc += &slide_block(slide, &bg, false)?;
+            doc += &slide_block(&slide.as_anchor(v), v, &bg, false)?;
         }
         if i == 0 {
             title += slide.get_default("title", "", Node::as_str)?;
@@ -258,15 +271,14 @@ fn load_main(yaml: Array<RcRepr>, mount: &str) -> Result<String, Error> {
 
 /// Load YAML string as HTML.
 pub fn loader(yaml_str: &str, mount: &str) -> Result<String, IoError> {
-    // TODO: anchors
-    let (yaml, _anchor) = parse(yaml_str).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
+    let (yaml, anchor) = parse(yaml_str).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
     if yaml.len() < 2 {
         return Err(IoError::new(
             ErrorKind::InvalidData,
             "Missing metadata or slides".to_string(),
         ));
     }
-    load_main(yaml, mount).map_err(|Error(name, pos)| {
+    load_main(yaml, &anchor, mount).map_err(|Error(name, pos)| {
         IoError::new(
             ErrorKind::InvalidData,
             format!("{}:\n{}", name, indicated_msg(yaml_str, pos)),
