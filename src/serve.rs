@@ -40,7 +40,7 @@ where
     println!("Press Ctrl+C to close the server ...");
     let assets = listdir(".")?;
     let cache = Cache {
-        project: project.to_owned(),
+        project: project.to_string(),
         doc: if use_cache {
             loader(&read_to_string(project)?, "/static/")?
         } else {

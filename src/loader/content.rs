@@ -46,14 +46,14 @@ struct FragMap(HashMap<String, HashMap<usize, String>>);
 impl FragMap {
     fn new(slide: &Node, count: &mut usize) -> Result<Self, Error> {
         let mut frag_map = HashMap::new();
-        for h in slide.get_default(&["fragment"], &vec![], Node::as_array)? {
+        for h in slide.get_default("fragment", &vec![], Node::as_array)? {
             for (k, v) in h.as_map()?.iter() {
                 let k = k.as_str()?;
                 let v = v.as_str()?;
                 if !frag_map.contains_key(k) {
-                    frag_map.insert(k.to_owned(), HashMap::new());
+                    frag_map.insert(k.to_string(), HashMap::new());
                 }
-                frag_map.get_mut(k).unwrap().insert(*count, v.to_owned());
+                frag_map.get_mut(k).unwrap().insert(*count, v.to_string());
             }
             *count += 1;
         }
@@ -61,7 +61,7 @@ impl FragMap {
     }
 
     fn fragment(&mut self, tag: &str, inner: &str) -> String {
-        let tag = tag.to_owned();
+        let tag = tag.to_string();
         let mut head = String::new();
         let mut end = String::new();
         if let Some(frag) = self.0.get(&tag) {
@@ -78,13 +78,13 @@ impl FragMap {
 }
 
 pub(crate) fn sized_block(img: &Node) -> Result<(String, String), Error> {
-    let src = img.get_default(&["src"], "", Node::as_str)?;
+    let src = img.get_default("src", "", Node::as_str)?;
     if src.is_empty() {
         return Err(Error("empty source", img.pos()));
     }
     let mut doc = String::new();
     for attr in ["width", "height"] {
-        let value = img.get_default(&[attr], "", Node::as_value)?;
+        let value = img.get_default(attr, "", Node::as_value)?;
         if !value.is_empty() {
             doc += &format!(" {}=\"{}\"", attr, value);
         }
@@ -95,7 +95,7 @@ pub(crate) fn sized_block(img: &Node) -> Result<(String, String), Error> {
 fn img_block(img: &Node) -> Result<String, Error> {
     let (src, size) = sized_block(img)?;
     let mut doc = format!("<figure><img{}{}/>", src, size);
-    let label = img.get_default(&["label"], "", Node::as_str)?;
+    let label = img.get_default("label", "", Node::as_str)?;
     if !label.is_empty() {
         doc += &format!("<figcaption>{}</figcaption>", label);
     }
@@ -106,13 +106,13 @@ fn img_block(img: &Node) -> Result<String, Error> {
 fn video_block(video: &Node) -> Result<String, Error> {
     let (src, size) = sized_block(video)?;
     let mut doc = format!("<video{}", size);
-    if video.get_default(&["controls"], true, Node::as_bool)? {
+    if video.get_default("controls", true, Node::as_bool)? {
         doc += " controls";
     }
-    if video.get_default(&["autoplay"], false, Node::as_bool)? {
+    if video.get_default("autoplay", false, Node::as_bool)? {
         doc += " autoplay";
     }
-    let ty = video.get_default(&["type"], "video/mp4", Node::as_str)?;
+    let ty = video.get_default("type", "video/mp4", Node::as_str)?;
     doc += &format!("><source{} type=\"{}\"></video>", src, ty);
     Ok(doc)
 }
@@ -120,25 +120,25 @@ fn video_block(video: &Node) -> Result<String, Error> {
 pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<String, Error> {
     let mut doc = String::new();
     let mut frag = FragMap::new(slide, frag_count)?;
-    let mut t = slide.get_default(&["doc"], "", Node::as_str)?;
+    let mut t = slide.get_default("doc", "", Node::as_str)?;
     if !t.is_empty() {
         doc += &frag.fragment("doc", &md2html(t));
     }
-    if let Ok(n) = slide.get(&["include"]) {
+    if let Ok(n) = slide.get("include") {
         t = n.as_str()?;
         if !t.is_empty() {
             let include = read_to_string(t).map_err(|_| ("read file error", n.pos()))?;
             doc += &frag.fragment("include", &md2html(&include));
         }
     }
-    t = slide.get_default(&["math"], "", Node::as_str)?;
+    t = slide.get_default("math", "", Node::as_str)?;
     if !t.is_empty() {
         doc += &frag.fragment("math", &format!("\\[{}\\]", t));
     }
     let media: [(_, fn(&Node) -> Result<String, Error>); 2] =
         [("img", img_block), ("video", video_block)];
     for (tag, f) in media {
-        if let Ok(img) = slide.get(&[tag]) {
+        if let Ok(img) = slide.get(tag) {
             match img.yaml() {
                 Yaml::Array(imgs) => {
                     if !imgs.is_empty() {
@@ -161,7 +161,7 @@ pub(crate) fn content_block(slide: &Node, frag_count: &mut usize) -> Result<Stri
         .enumerate()
     {
         let empty = vec![];
-        let stack = slide.get_default(&[title], &empty, Node::as_array)?;
+        let stack = slide.get_default(title, &empty, Node::as_array)?;
         if stack.is_empty() {
             continue;
         }
