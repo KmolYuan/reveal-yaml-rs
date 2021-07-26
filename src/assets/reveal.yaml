@@ -281,7 +281,7 @@ footer:
         ```
     - title: Anchors
       doc: |
-        YAML anchor can used on the content data.
+        YAML anchor can be used on the content data.
         ```yaml
         $hstack:
           - &content
