@@ -58,7 +58,7 @@ struct FragMap(HashMap<String, HashMap<usize, String>>);
 impl FragMap {
     fn new(slide: &Node, count: &mut usize) -> Result<Self, Error> {
         let mut frag_map = HashMap::new();
-        for h in slide.get_default("fragment", &vec![], Node::as_array)? {
+        for h in slide.get_default("fragment", vec![], Node::as_array)? {
             for (k, v) in h.as_map()?.iter() {
                 let k = k.as_str()?;
                 let v = v.as_str()?;
@@ -177,8 +177,7 @@ pub(crate) fn content_block(
         .iter()
         .enumerate()
     {
-        let empty = vec![];
-        let stack = slide.get_default(title, &empty, Node::as_array)?;
+        let stack = slide.get_default(title, vec![], Node::as_array)?;
         if stack.is_empty() {
             continue;
         }

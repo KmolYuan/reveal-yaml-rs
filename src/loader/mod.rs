@@ -203,7 +203,7 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
         let slide = slide.as_anchor(v);
         doc += "<section>";
         doc += &slide_block(&slide, v, &bg, i == 0)?;
-        for slide in slide.get_default("sub", &vec![], Node::as_array)? {
+        for slide in slide.get_default("sub", vec![], Node::as_array)? {
             doc += &slide_block(&slide.as_anchor(v), v, &bg, false)?;
         }
         if i == 0 {
@@ -225,8 +225,7 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
                     continue;
                 }
                 doc += &format!("<li><a href=\"#/{}\">{}</a></li>", i, t);
-                let empty = vec![];
-                let sub = slide.get_default("sub", &empty, Node::as_array)?;
+                let sub = slide.get_default("sub", vec![], Node::as_array)?;
                 if sub.is_empty() {
                     continue;
                 }
