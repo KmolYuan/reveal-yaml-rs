@@ -171,18 +171,18 @@ for i in range(10):
   src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
 </code></pre>
 <figure><img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg"/><figcaption>Ubuntu Logo</figcaption></figure></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Multiple Images</h1>
-<hr/><pre><code class="language-yaml">img:
+<hr/><p>Multiple images will be placed horizontally.</p>
+<pre><code class="language-yaml">img:
   - label: Ubuntu Logo
     src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
     width: 50%
   - label: Linux Logo
     src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
     width: 50%
-fragment:
-  - img: fade-in-then-out
 </code></pre>
-<div style="display:flex;flex-direction:row;justify-content:center;align-items:center"><span class="fragment fade-in-then-out" data-fragment-index="0"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" width="50%"/><figcaption>Ubuntu Logo</figcaption></figure></span><span class="fragment fade-in-then-out" data-fragment-index="0"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="50%"/><figcaption>Linux Logo</figcaption></figure></span></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Video</h1>
-<hr/><pre><code class="language-yaml">video:
+<div style="display:flex;flex-direction:row;justify-content:center;align-items:center"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" width="50%"/><figcaption>Ubuntu Logo</figcaption></figure><figure><img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="50%"/><figcaption>Linux Logo</figcaption></figure></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Video</h1>
+<hr/><p>…same as videos.</p>
+<pre><code class="language-yaml">video:
   - width: 320
     height: 240
     src: https://www.w3schools.com/html/movie.mp4
@@ -210,14 +210,16 @@ fragment:
 &c(x) = 0
 \end{aligned}
 \]</span></section><section data-background-color="rgb(70, 70, 255)" data-transition="convex-in convex-out"><h1>Background Color &amp; Transition</h1>
-<hr/><pre><code class="language-yaml">trans: convex-in convex-out
+<hr/><p>Override global setting, use a single color background.</p>
+<pre><code class="language-yaml">trans: convex-in convex-out
 background: false
 bg-color: rgb(70, 70, 255)
 doc: &quot;# 🐳&quot;
 </code></pre>
 <h1>🐳</h1>
 </section><section data-background-transition="fade-in fade-out" data-background="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" data-background-size="25%" data-background-opacity="0.5"><h1>Image Background &amp; Background Transition</h1>
-<hr/><pre><code class="language-yaml">bg-trans: fade-in fade-out
+<hr/><p>Override global setting, use a local background.</p>
+<pre><code class="language-yaml">bg-trans: fade-in fade-out
 background:
   src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
   size: 25%
@@ -245,7 +247,8 @@ background:
 <li>union</li>
 </ul>
 </div><div style="width:33.333332%">\[\small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}\]</div><div style="width:33.333332%"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="50%"/></figure></div></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Nested Stacks</h1>
-<hr/><pre><code class="language-yaml">hstack:
+<hr/><p>The stack can be nested, and the splitter line can be drawn by starts with <code>$</code>.</p>
+<pre><code class="language-yaml">hstack:
   - vstack:
     - hstack:
       - doc: Left Top Left
@@ -264,7 +267,8 @@ background:
 </div><div class="vstack-border"><div class="hstack"><div style="width:50%"><p>Right Bottom Left</p>
 </div><div class="hstack-border" style="width:50%"><p>Right Bottom Right</p>
 </div></div></div></div></div></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Fragment in Stacks</h1>
-<hr/><pre><code class="language-yaml">hstack:
+<hr/><p>The index of fragment is the order of the animation.</p>
+<pre><code class="language-yaml">hstack:
   - doc: AAA
     math: f(x)
     fragment: [ { doc: fade-in, math: fade-in } ]  # one action
@@ -288,11 +292,12 @@ background:
 <aside class="notes"><p>Note text here!</p>
 <p>There are also have <strong>markdown</strong> <em>syntax</em>!</p>
 </aside></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Anchors</h1>
-<hr/><pre><code class="language-yaml">$hstack:
+<hr/><p>YAML anchor can used on the content data.</p>
+<pre><code class="language-yaml">$hstack:
   - &amp;content
     doc: Content A
   - *content
-  - *content
+  - doc: *document
 </code></pre>
 <div class="hstack"><div style="width:33.333332%"><p>Content A</p>
 </div><div class="hstack-border" style="width:33.333332%"><p>Content A</p>
