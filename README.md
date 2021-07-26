@@ -63,7 +63,7 @@ The vertical slides work under the `sub` node of first slide, the attributes are
     - title: Vertical slide 2
 - title: Horizontal slide 2
 ```
-This work supports YAML 1.2, and anchor function for specific fields, such as content blocks.
+This work supports YAML 1.2, and the anchor function supports for specific fields, such as content blocks.
 
 ### Layout
 
