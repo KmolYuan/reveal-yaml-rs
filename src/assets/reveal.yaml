@@ -93,6 +93,7 @@ footer:
         src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
     - title: Multiple Images
       doc: |
+        Multiple images will be placed horizontally.
         ```yaml
         img:
           - label: Ubuntu Logo
@@ -101,8 +102,6 @@ footer:
           - label: Linux Logo
             src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
             width: 50%
-        fragment:
-          - img: fade-in-then-out
         ```
       img:
         - label: Ubuntu Logo
@@ -111,10 +110,9 @@ footer:
         - label: Linux Logo
           src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
           width: 50%
-      fragment:
-        - img: fade-in-then-out
     - title: Video
       doc: |
+        ...same as videos.
         ```yaml
         video:
           - width: 320
@@ -158,6 +156,7 @@ footer:
       background: false
       bg-color: rgb(70, 70, 255)
       doc: |
+        Override global setting, use a single color background.
         ```yaml
         trans: convex-in convex-out
         background: false
@@ -173,6 +172,7 @@ footer:
         size: 25%
         opacity: 0.5
       doc: |
+        Override global setting, use a local background.
         ```yaml
         bg-trans: fade-in fade-out
         background:
@@ -210,6 +210,7 @@ footer:
             width: 50%
     - title: Nested Stacks
       doc: |
+        The stack can be nested, and the splitter line can be drawn by starts with `$`.
         ```yaml
         hstack:
           - vstack:
@@ -236,6 +237,7 @@ footer:
             - doc: Right Bottom Right
     - title: Fragment in Stacks
       doc: |
+        The index of fragment is the order of the animation.
         ```yaml
         hstack:
           - doc: AAA
@@ -279,15 +281,17 @@ footer:
         ```
     - title: Anchors
       doc: |
+        YAML anchor can used on the content data.
         ```yaml
         $hstack:
           - &content
             doc: Content A
           - *content
-          - *content
+          - doc: *document
         ```
       $hstack:
         - &content
-          doc: Content A
+          doc: &document |
+            Content A
         - *content
-        - *content
+        - doc: *document
