@@ -1,77 +1,20 @@
+use self::background::Background;
 use self::content::*;
+use self::error::Error;
+use self::footer::footer;
+use self::js_option::js_option;
+use self::wrap_string::WrapString;
 use std::io::{Error as IoError, ErrorKind};
 use yaml_peg::{indicated_msg, parse, repr::RcRepr, Anchors, Array, Node};
 
+mod background;
 mod content;
+mod error;
+mod footer;
+mod js_option;
+mod wrap_string;
 
 const TEMPLATE: &str = include_str!("../assets/template.html");
-
-pub(crate) struct Error(&'static str, u64);
-
-impl From<u64> for Error {
-    fn from(pos: u64) -> Self {
-        Self("invalid value type", pos)
-    }
-}
-
-impl From<(&'static str, u64)> for Error {
-    fn from((v, pos): (&'static str, u64)) -> Self {
-        Self(v, pos)
-    }
-}
-
-#[derive(Default)]
-struct Background {
-    src: String,
-    size: String,
-    position: String,
-    repeat: String,
-    opacity: String,
-}
-
-impl Background {
-    fn new(meta: &Node) -> Result<Self, u64> {
-        if let Ok(n) = meta.get("background") {
-            Ok(Self {
-                src: n.get_default("src", "", Node::as_str)?.to_string(),
-                size: n.get_default("size", "", Node::as_value)?.to_string(),
-                position: n.get_default("position", "", Node::as_value)?.to_string(),
-                repeat: n.get_default("repeat", "", Node::as_value)?.to_string(),
-                opacity: n.get_default("opacity", "", Node::as_value)?.to_string(),
-            })
-        } else {
-            Ok(Self::default())
-        }
-    }
-
-    fn is_valid(&self) -> bool {
-        !self.src.is_empty()
-    }
-
-    fn attr(&self) -> String {
-        let mut doc = String::new();
-        for (attr, member) in [
-            ("", &self.src),
-            ("-size", &self.size),
-            ("-position", &self.position),
-            ("-repeat", &self.repeat),
-            ("-opacity", &self.opacity),
-        ] {
-            if !member.is_empty() {
-                doc += &format!(" data-background{}=\"{}\"", attr, member);
-            }
-        }
-        doc
-    }
-}
-
-fn note(text: &str) -> String {
-    if text.is_empty() {
-        "".to_string()
-    } else {
-        format!("<aside class=\"notes\">{}</aside>", text)
-    }
-}
 
 fn slide_block(
     slide: &Node,
@@ -83,17 +26,14 @@ fn slide_block(
         return Err(Error("empty slide", slide.pos()));
     }
     let mut doc = "<section".to_string();
-    let mut t = slide.get_default("bg-color", "", Node::as_str)?;
-    if !t.is_empty() {
-        doc += &format!(" data-background-color=\"{}\"", t);
+    if let Ok(n) = slide.get("bg-color") {
+        doc += &format!(" data-background-color=\"{}\"", n.as_str()?);
     }
-    t = slide.get_default("trans", "", Node::as_str)?;
-    if !t.is_empty() {
-        doc += &format!(" data-transition=\"{}\"", t);
+    if let Ok(n) = slide.get("trans") {
+        doc += &format!(" data-transition=\"{}\"", n.as_str()?);
     }
-    t = slide.get_default("bg-trans", "", Node::as_str)?;
-    if !t.is_empty() {
-        doc += &format!(" data-background-transition=\"{}\"", t);
+    if let Ok(n) = slide.get("bg-trans") {
+        doc += &format!(" data-background-transition=\"{}\"", n.as_str()?);
     }
     if bg.is_valid()
         && slide
@@ -104,13 +44,12 @@ fn slide_block(
         doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
     for (i, &title) in ["title", "$title"].iter().enumerate() {
-        t = slide.get_default(title, "", Node::as_str)?;
-        if !t.is_empty() {
+        if let Ok(n) = slide.as_anchor(v).get(title) {
             if i == 1 || first_column {
                 doc += " data-visibility=\"uncounted\"";
             }
             doc += ">";
-            doc += &md2html(&format!("# {}", t));
+            doc += &md2html(&format!("# {}", n.as_str()?));
             doc += "<hr/>";
             break;
         }
@@ -120,76 +59,9 @@ fn slide_block(
     }
     doc += &content_block(slide, v, &mut 0)?;
     if let Ok(n) = slide.get("note") {
-        doc += &note(&md2html(n.as_anchor(v).as_str()?));
+        doc += &md2html(n.as_anchor(v).as_str()?).wrap("<aside class=\"notes\">", "</aside>");
     }
     doc += "</section>";
-    Ok(doc)
-}
-
-fn lower_camelcase(doc: &str) -> String {
-    let mut s = String::new();
-    let mut is_word = false;
-    for c in doc.chars() {
-        if " -_".contains(c) {
-            is_word = true;
-            continue;
-        }
-        s.push(if is_word {
-            is_word = false;
-            c.to_ascii_uppercase()
-        } else {
-            c
-        });
-    }
-    s
-}
-
-fn options(meta: &Node) -> Result<String, Error> {
-    let meta = match meta.get("option") {
-        Ok(n) => n,
-        Err(_) => return Ok(String::new()),
-    };
-    let mut doc = String::new();
-    for (k, v) in meta.as_map()? {
-        doc += &lower_camelcase(k.as_str()?);
-        doc += ": ";
-        if let Ok(s) = v.as_str() {
-            doc += &format!("\"{}\"", s);
-        } else {
-            doc += v.as_value()?;
-        }
-        doc += ", ";
-    }
-    Ok(doc)
-}
-
-fn footer_block(meta: &Node) -> Result<String, Error> {
-    let footer = match meta.get("footer") {
-        Ok(n) => n,
-        Err(_) => return Ok(String::new()),
-    };
-    let src = footer.get_default("src", "", Node::as_str)?;
-    let label = footer.get_default("label", "", Node::as_str)?;
-    if src.is_empty() && label.is_empty() {
-        return Ok(String::new());
-    }
-    let mut doc =
-        "<div id=\"hidden\" style=\"display: none\"><div id=\"footer\"><div id=\"footer-left\">\n"
-            .to_string();
-    let link = footer.get_default("link", "", Node::as_str)?;
-    if !link.is_empty() {
-        doc += &format!("<a href=\"{}\">", link);
-    }
-    let (src, size) = sized_block(&footer)?;
-    doc += &format!("<img{}{}/>", src, size);
-    let label = footer.get_default("label", "", Node::as_str)?;
-    if !label.is_empty() {
-        doc += &format!("<span>&nbsp;{}</span>", label);
-    }
-    if !link.is_empty() {
-        doc += "</a>";
-    }
-    doc += "\n</div></div></div>";
     Ok(doc)
 }
 
@@ -258,12 +130,12 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
             meta.get_default(key, default, Node::as_str)?,
         );
     }
-    reveal = reveal.replace("/* {%option} */", &options(meta)?);
+    reveal = reveal.replace("/* {%option} */", &js_option(meta)?);
     reveal = reveal.replace(
         "/* {%style} */",
         meta.get_default("style", "", Node::as_str)?,
     );
-    reveal = reveal.replace("{%footer}", &footer_block(meta)?);
+    reveal = reveal.replace("{%footer}", &footer(meta)?);
     reveal = reveal.replace("{%slides}", &doc);
     Ok(reveal)
 }
