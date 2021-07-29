@@ -12,25 +12,25 @@ pub(crate) fn sized_block(img: &Node) -> Result<(String, String), Error> {
     if src.is_empty() {
         return Err(Error("empty source", img.pos()));
     }
-    let mut doc = String::new();
+    let mut size = String::new();
     for attr in ["width", "height"] {
         let value = img.get_default(attr, "", Node::as_value)?;
         if !value.is_empty() {
-            doc += &format!(" {}=\"{}\"", attr, value);
+            size += &format!(" {}=\"{}\"", attr, value);
         }
     }
-    Ok((format!(" src=\"{}\"", src), doc))
+    Ok((format!(" src=\"{}\"", src), size))
 }
 
 fn img_block(img: &Node) -> Result<String, Error> {
     let (src, size) = sized_block(img)?;
-    let mut doc = format!("<figure><img{}{}/>", src, size);
+    let src = format!("<img{}{}/>", src, size);
     let label = img.get_default("label", "", Node::as_str)?;
-    if !label.is_empty() {
-        doc += &format!("<figcaption>{}</figcaption>", label);
-    }
-    doc += "</figure>";
-    Ok(doc)
+    Ok(if label.is_empty() {
+        src
+    } else {
+        format!("<figure>{}<figcaption>{}</figcaption></figure>", src, label)
+    })
 }
 
 fn video_block(video: &Node) -> Result<String, Error> {
