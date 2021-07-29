@@ -172,6 +172,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
   + `fit` [Fit texts](https://revealjs.com/layout/#fit-text).
     + **Array** of level 2 texts.
     + Longer text will be smaller.
+    + Special symbol `---` represents horizontal line `<hr/>`.
   + `doc` Multiline Markdown text, accept HTML.
   + `include` Include a Markdown file from path, append after `doc`.
   + `math` Latex math without `$$` / `\[\]` brackets.

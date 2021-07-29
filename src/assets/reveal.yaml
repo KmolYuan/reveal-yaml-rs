@@ -40,6 +40,7 @@ footer:
         - Hello My Friends!
         - Longer title become smaller~
         - Here comes the THRID LINE!!
+        - ---
         - This is actually the "cover" page, check the table of content!
     - $title: Hidden Title
       doc: |
@@ -53,6 +54,7 @@ footer:
           - Hello My Friends!
           - Longer title become smaller~
           - Here comes the THRID LINE!!
+          - ---
           - This is actually the "cover" page, check the table of content!
         ```
     - title: Markdown
