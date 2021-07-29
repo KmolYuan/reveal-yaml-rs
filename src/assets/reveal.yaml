@@ -279,6 +279,18 @@ footer:
 
           There are also have **markdown** *syntax*!
         ```
+    - title: Lay with Image
+      doc: |
+        ```yaml
+        lay-img:
+          - src: https://placekitten.com/450/300
+          - src: https://placekitten.com/300/450
+          - src: https://placekitten.com/400/400
+        ```
+      lay-img:
+        - src: https://placekitten.com/450/300
+        - src: https://placekitten.com/300/450
+        - src: https://placekitten.com/400/400
     - title: Anchors
       doc: |
         YAML anchor can be used on the content data.

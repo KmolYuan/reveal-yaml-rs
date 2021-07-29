@@ -3,6 +3,7 @@ use self::content::*;
 use self::error::Error;
 use self::footer::footer;
 use self::js_option::js_option;
+use self::lay_img::lay_img;
 use self::wrap_string::WrapString;
 use std::io::{Error as IoError, ErrorKind};
 use yaml_peg::{indicated_msg, parse, repr::RcRepr, Anchors, Array, Node};
@@ -12,6 +13,7 @@ mod content;
 mod error;
 mod footer;
 mod js_option;
+mod lay_img;
 mod wrap_string;
 
 const TEMPLATE: &str = include_str!("../assets/template.html");
@@ -60,6 +62,9 @@ fn slide_block(
     doc += &content_block(slide, v, &mut 0)?;
     if let Ok(n) = slide.get("note") {
         doc += &md2html(n.as_anchor(v).as_str()?).wrap("<aside class=\"notes\">", "</aside>");
+    }
+    if let Ok(n) = slide.get("lay-img") {
+        doc += &lay_img(&n.as_anchor(v), v)?;
     }
     doc += "</section>";
     Ok(doc)

@@ -192,7 +192,7 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + `vstack` Vertical (rows) view of contents.
     + `$hstack` / `$vstack` Make a border between each element.
 + `note` Note in Speaker's view, Markdown syntax.
-+ `lay-img` [Layout stack](https://revealjs.com/layout/#stack) for images. (TODO)
++ `lay-img` [Layout stack](https://revealjs.com/layout/#stack) for images.
   + **Array**, can be map if there is only one image.
   + Blocks are **sized**.
   + `fragment` The animation option.

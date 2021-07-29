@@ -76,7 +76,7 @@ pub(crate) fn content_block(
                     if !ms.is_empty() {
                         doc += "<div style=\"display:flex;flex-direction:row;justify-content:center;align-items:center\">";
                         for m in ms {
-                            doc += &frag.fragment(tag, &f(m)?);
+                            doc += &frag.fragment(tag, &f(&m.as_anchor(v))?);
                         }
                         doc += "</div>";
                     }
