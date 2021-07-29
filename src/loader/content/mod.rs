@@ -54,6 +54,11 @@ pub(crate) fn content_block(
 ) -> Result<String, Error> {
     let mut doc = String::new();
     let mut frag = FragMap::new(slide, frag_count)?;
+    for n in slide.get_default("fit", vec![], Node::as_array)? {
+        doc += "\n<h2 class=\"r-fit-text\">";
+        doc += n.as_anchor(v).as_str()?;
+        doc += "</h2>";
+    }
     if let Ok(n) = slide.get("doc") {
         doc += &frag.fragment("doc", &md2html(n.as_anchor(v).as_str()?));
     }

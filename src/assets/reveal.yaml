@@ -35,12 +35,25 @@ footer:
 
     Scroll down ↓ to see the examples.
   sub:
+    - -title: Cover
+      fit:
+        - Hello My Friends!
+        - Longer title become smaller~
+        - Here comes the THRID LINE!!
+        - This is actually the "cover" page, check the table of content!
     - $title: Hidden Title
       doc: |
         This title is invisible in the [table of content](#/0/1).
-
         ```yaml
         $title: Hidden Title
+        ```
+        For the [front page](#/1/1):
+        ```yaml
+        fit:
+          - Hello My Friends!
+          - Longer title become smaller~
+          - Here comes the THRID LINE!!
+          - This is actually the "cover" page, check the table of content!
         ```
     - title: Markdown
       doc: |
@@ -52,8 +65,8 @@ footer:
           |:------:|:------:|
           | A | B |
 
-          + Item 1
-          + Item 2
+          + Item
+          + [Next page](#/1/4)
         ```
 
         *Something* **important**.
@@ -62,8 +75,8 @@ footer:
         |:------:|:------:|
         | A | B |
 
-        + Item 1
-        + Item 2
+        + Item
+        + [Next page](#/1/4)
     - title: Code block
       doc: |
         <pre><code class="language-markdown">doc: |

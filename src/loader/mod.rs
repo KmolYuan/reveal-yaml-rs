@@ -46,12 +46,12 @@ fn slide_block(
         doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
     for (i, &title) in ["title", "$title"].iter().enumerate() {
-        if let Ok(n) = slide.as_anchor(v).get(title) {
-            if i == 1 || first_column {
+        if let Ok(n) = slide.get(title) {
+            if first_column || (i == 1 && slide.get("-title").is_err()) {
                 doc += " data-visibility=\"uncounted\"";
             }
             doc += ">";
-            doc += &md2html(&format!("# {}", n.as_str()?));
+            doc += &md2html(&format!("# {}", n.as_anchor(v).as_str()?));
             doc += "<hr/>";
             break;
         }
@@ -97,22 +97,29 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
                 if i == 0 {
                     continue;
                 }
-                let t = slide.get_default("title", "", Node::as_str)?;
-                if t.is_empty() {
+                if let Ok(n) = slide.get("title") {
+                    doc += &format!("<li><a href=\"#/{}\">", i);
+                    doc += n.as_anchor(v).as_str()?;
+                    doc += "</a></li>";
+                } else {
                     continue;
                 }
-                doc += &format!("<li><a href=\"#/{}\">{}</a></li>", i, t);
                 let sub = slide.get_default("sub", vec![], Node::as_array)?;
                 if sub.is_empty() {
                     continue;
                 }
                 doc += "<ul>";
                 for (j, slide) in sub.iter().enumerate() {
-                    let t = slide.get_default("title", "", Node::as_str)?;
-                    if t.is_empty() {
+                    let n = if let Ok(n) = slide.get("title") {
+                        n
+                    } else if let Ok(n) = slide.get("-title") {
+                        n
+                    } else {
                         continue;
-                    }
-                    doc += &format!("<li><a href=\"#/{}/{}\">{}</a></li>", i, j + 1, t);
+                    };
+                    doc += &format!("<li><a href=\"#/{}/{}\">", i, j + 1);
+                    doc += n.as_anchor(v).as_str()?;
+                    doc += "</a></li>";
                 }
                 doc += "</ul>";
             }

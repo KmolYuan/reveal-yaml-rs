@@ -164,10 +164,14 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
 
 ### Slides
 
-+ `title` Markdown level 1 title without `#` notation.
-+ `$title` Invisible title, same as `title` but will be excluded in TOC, this page will uncounted.
-  + If `title` is enabled, `$title` will not work.
++ **Title** Variants:
+  + `title` Markdown level 1 title without `#` notation.
+  + `$title` Visible title but will be excluded in TOC, this page will uncounted.
+  + `-title` Invisible title, doesn't show but will be included in TOC.
 + **Content** (they are placed in the following order)
+  + `fit` [Fit texts](https://revealjs.com/layout/#fit-text).
+    + **Array** of level 2 texts.
+    + Longer text will be smaller.
   + `doc` Multiline Markdown text, accept HTML.
   + `include` Include a Markdown file from path, append after `doc`.
   + `math` Latex math without `$$` / `\[\]` brackets.
