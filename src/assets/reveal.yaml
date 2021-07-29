@@ -110,9 +110,21 @@ footer:
         - label: Linux Logo
           src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
           width: 50%
+    - title: Lay with Images
+      doc: |
+        ```yaml
+        lay-img:
+          - src: https://placekitten.com/450/300
+          - src: https://placekitten.com/300/450
+          - src: https://placekitten.com/400/400
+        ```
+      lay-img:
+        - src: https://placekitten.com/450/300
+        - src: https://placekitten.com/300/450
+        - src: https://placekitten.com/400/400
     - title: Video
       doc: |
-        ...same as videos.
+        The videos can be placed by same logic.
         ```yaml
         video:
           - width: 320
@@ -279,18 +291,6 @@ footer:
 
           There are also have **markdown** *syntax*!
         ```
-    - title: Lay with Image
-      doc: |
-        ```yaml
-        lay-img:
-          - src: https://placekitten.com/450/300
-          - src: https://placekitten.com/300/450
-          - src: https://placekitten.com/400/400
-        ```
-      lay-img:
-        - src: https://placekitten.com/450/300
-        - src: https://placekitten.com/300/450
-        - src: https://placekitten.com/400/400
     - title: Anchors
       doc: |
         YAML anchor can be used on the content data.
