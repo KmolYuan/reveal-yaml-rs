@@ -70,21 +70,21 @@ pub(crate) fn content_block(
     let media: [(_, fn(&Node) -> Result<String, Error>); 2] =
         [("img", img_block), ("video", video_block)];
     for (tag, f) in media {
-        if let Ok(img) = slide.as_anchor(v).get(tag) {
-            match img.yaml() {
-                Yaml::Array(imgs) => {
-                    if !imgs.is_empty() {
+        if let Ok(m) = slide.as_anchor(v).get(tag) {
+            match m.yaml() {
+                Yaml::Array(ms) => {
+                    if !ms.is_empty() {
                         doc += "<div style=\"display:flex;flex-direction:row;justify-content:center;align-items:center\">";
-                        for img in imgs {
-                            doc += &frag.fragment(tag, &f(img)?);
+                        for m in ms {
+                            doc += &frag.fragment(tag, &f(m)?);
                         }
                         doc += "</div>";
                     }
                 }
                 Yaml::Map(_) => {
-                    doc += &frag.fragment(tag, &f(&img)?);
+                    doc += &frag.fragment(tag, &f(&m)?);
                 }
-                _ => return Err(Error("invalid blocks", img.pos())),
+                _ => return Err(Error("invalid blocks", m.pos())),
             }
         }
     }

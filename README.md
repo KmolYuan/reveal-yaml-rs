@@ -173,14 +173,18 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
   + `math` Latex math without `$$` / `\[\]` brackets.
   + `img` A list of image source.
     + **Array**, can be map if there is only one image.
-    + Each block are **sized**.
+    + Blocks are **sized**.
     + `label` Image `<caption>`.
   + `video` Embed videos.
     + **Array**, can be map if there is only one video.
-    + Each block are **sized**.
+    + Blocks are **sized**.
     + `controls` Allow controls, boolean `true` by default.
     + `autoplay` Allow autoplay, boolean `false` by default.
     + `type` Video type, default to "video/mp4".
+  + `fragment` [Fragment](https://revealjs.com/fragments/) option.
+    + **Array**, the index are the `data-fragment-index`.
+    + Block are **content**, but exclude stacks.
+    + Stacks can have local fragment option, but still ordered.
   + **Stack**
     + **Array** format.
     + This function allows nesting.
@@ -188,13 +192,13 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + `vstack` Vertical (rows) view of contents.
     + `$hstack` / `$vstack` Make a border between each element.
 + `note` Note in Speaker's view, Markdown syntax.
++ `lay-img` [Layout stack](https://revealjs.com/layout/#stack) for images. (TODO)
+  + **Array**, can be map if there is only one image.
+  + Blocks are **sized**.
+  + `fragment` The animation option.
 + `bg-color` [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
 + `background` Background setting, as same as global.
   + Local background option can be boolean `false` to disable global background.
 + `trans` [Transition](https://revealjs.com/transitions/) option.
 + `bg-trans` [Background transition](https://revealjs.com/transitions/#background-transitions) option.
-+ `fragment` [Fragment](https://revealjs.com/fragments/) option.
-  + **Array**, the index are the `data-fragment-index`.
-  + Each block are **content**, but exclude stacks.
-  + Stacks can have local fragment option, but still ordered.
 + `sub` Vertical slides, for horizontal slides only.
