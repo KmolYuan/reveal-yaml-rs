@@ -3,6 +3,7 @@ use self::content::*;
 use self::error::Error;
 use self::footer::footer;
 use self::js_option::js_option;
+use self::visible_title::visible_title;
 use self::wrap_string::WrapString;
 use std::io::{Error as IoError, ErrorKind};
 use yaml_peg::{indicated_msg, parse, repr::RcRepr, Anchors, Array, Node};
@@ -12,6 +13,7 @@ mod content;
 mod error;
 mod footer;
 mod js_option;
+mod visible_title;
 mod wrap_string;
 
 const TEMPLATE: &str = include_str!("../assets/template.html");
@@ -43,17 +45,18 @@ fn slide_block(
         let local_bg = Background::new(slide)?;
         doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
-    for (i, &title) in ["title", "$title"].iter().enumerate() {
+    for (i, &title) in ["title", "-title", "$title"].iter().enumerate() {
         if let Ok(n) = slide.get(title) {
-            if first_column || (i == 1 && slide.get("-title").is_err()) {
+            if first_column || i == 2 {
                 doc += " data-visibility=\"uncounted\"";
             }
             doc += ">";
-            doc += &md2html(&format!("# {}", n.as_anchor(v).as_str()?));
-            doc += "<hr/>";
+            if i != 1 {
+                doc += &md2html(&format!("# {}", n.as_anchor(v).as_str()?));
+                doc += "<hr/>";
+            }
             break;
-        }
-        if i == 1 {
+        } else if i == 2 {
             doc += ">";
         }
     }
@@ -79,7 +82,9 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
             doc += &slide_block(&slide.as_anchor(v), v, &bg, false)?;
         }
         if i == 0 {
-            title += slide.get_default("title", "", Node::as_str)?;
+            if let Some(n) = visible_title(&slide, v) {
+                title += n.as_str()?;
+            }
             if !meta.get_default("outline", true, Node::as_bool)? {
                 continue;
             }
@@ -92,9 +97,9 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
                 if i == 0 {
                     continue;
                 }
-                if let Ok(n) = slide.get("title") {
+                if let Some(n) = visible_title(slide, v) {
                     doc += &format!("<li><a href=\"#/{}\">", i);
-                    doc += n.as_anchor(v).as_str()?;
+                    doc += n.as_str()?;
                     doc += "</a></li>";
                 } else {
                     continue;
@@ -105,16 +110,11 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
                 }
                 doc += "<ul>";
                 for (j, slide) in sub.iter().enumerate() {
-                    let n = if let Ok(n) = slide.get("title") {
-                        n
-                    } else if let Ok(n) = slide.get("-title") {
-                        n
-                    } else {
-                        continue;
-                    };
-                    doc += &format!("<li><a href=\"#/{}/{}\">", i, j + 1);
-                    doc += n.as_anchor(v).as_str()?;
-                    doc += "</a></li>";
+                    if let Some(n) = visible_title(slide, v) {
+                        doc += &format!("<li><a href=\"#/{}/{}\">", i, j + 1);
+                        doc += n.as_str()?;
+                        doc += "</a></li>";
+                    }
                 }
                 doc += "</ul>";
             }
