@@ -186,6 +186,10 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + `controls` Allow controls, boolean `true` by default.
     + `autoplay` Allow autoplay, boolean `false` by default.
     + `type` Video type, default to "video/mp4".
+  + `lay-img` [Layout stack](https://revealjs.com/layout/#stack) for images.
+    + **Array**, can be map if there is only one image.
+    + Blocks are **sized**.
+    + `fragment` The animation option. Independent from `fragment` option.
   + `fragment` [Fragment](https://revealjs.com/fragments/) option.
     + **Array**, the index are the `data-fragment-index`.
     + Block are **content**, but exclude stacks.
@@ -197,10 +201,6 @@ The definition contains in the first YAML doc, split by horizontal line `---`.
     + `vstack` Vertical (rows) view of contents.
     + `$hstack` / `$vstack` Make a border between each element.
 + `note` Note in Speaker's view, Markdown syntax.
-+ `lay-img` [Layout stack](https://revealjs.com/layout/#stack) for images.
-  + **Array**, can be map if there is only one image.
-  + Blocks are **sized**.
-  + `fragment` The animation option.
 + `bg-color` [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
 + `background` Background setting, as same as global.
   + Local background option can be boolean `false` to disable global background.

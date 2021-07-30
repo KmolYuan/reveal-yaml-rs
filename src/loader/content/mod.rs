@@ -1,10 +1,12 @@
 use self::frag_map::FragMap;
+use self::lay_img::lay_img;
 pub(super) use self::marked::md2html;
 use super::*;
 use std::fs::read_to_string;
 use yaml_peg::{Anchors, Node, Yaml};
 
 mod frag_map;
+mod lay_img;
 mod marked;
 
 pub(crate) fn sized_block(img: &Node) -> Result<(String, String), Error> {
@@ -98,6 +100,9 @@ pub(crate) fn content_block(
                 _ => return Err(Error("invalid blocks", m.pos())),
             }
         }
+    }
+    if let Ok(n) = slide.get("lay-img") {
+        doc += &lay_img(&n.as_anchor(v), v)?;
     }
     for (i, &title) in ["hstack", "$hstack", "vstack", "$vstack"]
         .iter()
