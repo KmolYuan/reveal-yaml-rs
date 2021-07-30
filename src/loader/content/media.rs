@@ -5,7 +5,11 @@ type F = fn(&Node) -> Result<String, Error>;
 
 pub(crate) fn media(n: &Node, v: &Anchors, frag: &mut FragMap) -> Result<String, Error> {
     let mut doc = String::new();
-    for (tag, f) in [("img", img_block as F), ("video", video_block as F)] {
+    for (tag, f) in [
+        ("img", img_block as F),
+        ("video", video_block as F),
+        ("iframe", iframe_block as F),
+    ] {
         if let Ok(m) = n.get(tag) {
             match m.yaml() {
                 Yaml::Array(ms) => {
@@ -50,4 +54,9 @@ fn video_block(video: &Node) -> Result<String, Error> {
     let ty = video.get_default("type", "video/mp4", Node::as_str)?;
     doc += &format!("><source{} type=\"{}\"></video>", src, ty);
     Ok(doc)
+}
+
+fn iframe_block(iframe: &Node) -> Result<String, Error> {
+    let (src, size) = sized_block(iframe)?;
+    Ok(format!("<iframe{}{}></iframe>", src, size))
 }
