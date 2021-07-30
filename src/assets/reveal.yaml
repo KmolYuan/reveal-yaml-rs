@@ -30,9 +30,6 @@ footer:
 
     + [KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
 
-    The image examples use [Ubuntu](https://commons.wikimedia.org/wiki/File:Logo-ubuntu_cof-orange-hex.svg)
-    and [Tux](https://commons.wikimedia.org/wiki/File:Tux.svg) logo in WikiMedia.
-
     Scroll down ↓ to see the examples.
   sub:
     - -title: Cover
@@ -101,30 +98,30 @@ footer:
       doc: |
         ```yaml
         img:
-          label: Ubuntu Logo
-          src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+          label: Kitten 🐱
+          src: https://placekitten.com/600/400
         ```
       img:
-        label: Ubuntu Logo
-        src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+        label: Kitten 🐱
+        src: https://placekitten.com/600/400
     - title: Multiple Images
       doc: |
         Multiple images will be placed horizontally.
         ```yaml
         img:
-          - label: Ubuntu Logo
-            src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+          - label: Kitten 1
+            src: https://placekitten.com/700/500
             width: 50%
-          - label: Linux Logo
-            src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+          - label: Kitten 2
+            src: https://placekitten.com/800/500
             width: 50%
         ```
       img:
-        - label: Ubuntu Logo
-          src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+        - label: Kitten 1
+          src: https://placekitten.com/700/500
           width: 50%
-        - label: Linux Logo
-          src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+        - label: Kitten 2
+          src: https://placekitten.com/800/500
           width: 50%
     - title: Lay with Images
       doc: |
@@ -180,9 +177,6 @@ footer:
       fragment:
         - math: highlight-blue
     - title: Background Color & Transition
-      trans: convex-in convex-out
-      background: false
-      bg-color: rgb(70, 70, 255)
       doc: |
         Override global setting, use a single color background.
         ```yaml
@@ -193,21 +187,24 @@ footer:
         ```
 
         # 🐳
-    - title: Image Background & Background Transition
-      bg-trans: fade-in fade-out
-      background:
-        src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
-        size: 25%
-        opacity: 0.5
+      trans: convex-in convex-out
+      background: false
+      bg-color: rgb(70, 70, 255)
+    - title: Local Background Options
       doc: |
         Override global setting, use a local background.
         ```yaml
         bg-trans: fade-in fade-out
         background:
-          src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+          src: https://placekitten.com/800/800
           size: 25%
           opacity: 0.5
         ```
+      bg-trans: fade-in fade-out
+      background:
+        src: https://placekitten.com/800/800
+        size: 25%
+        opacity: 0.5
     - title: Columns View
       doc: |
         ```yaml
@@ -221,7 +218,7 @@ footer:
               + union
           - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
           - img:
-              src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+              src: https://placekitten.com/600/600
               width: 50%
         ```
       hstack:
@@ -234,7 +231,7 @@ footer:
             + union
         - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
         - img:
-            src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+            src: https://placekitten.com/600/600
             width: 50%
     - title: Nested Stacks
       doc: |
@@ -294,10 +291,6 @@ footer:
           fragment:
             - math: fade-in
     - title: Note
-      note: |
-        Note text here!
-
-        There are also have **markdown** *syntax*!
       doc: |
         Press "s" key to open speaker's view.
 
@@ -307,9 +300,15 @@ footer:
 
           There are also have **markdown** *syntax*!
         ```
+      note: |
+        Note text here!
+
+        There are also have **markdown** *syntax*!
     - title: Anchors
       doc: |
-        YAML anchor can be used on the content data.
+        YAML anchor can be used for almost types of content data.
+
+        But anchor insertion `<<` is not supported.
         ```yaml
         $hstack:
           - &content
