@@ -50,6 +50,7 @@ footer:
         ```
         For the [front page](#/1/1):
         ```yaml
+        -title: Cover
         fit:
           - Hello My Friends!
           - Longer title become smaller~
