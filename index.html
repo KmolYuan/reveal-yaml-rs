@@ -120,13 +120,11 @@
 </ul>
 <p>Scroll right → to see the examples.</p>
 <p>Scroll down ↓ to see an auto-generated outline.</p>
-</section><section data-visibility="uncounted" data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h2>Outline</h2><hr/><ul><li><a href="#/1">Examples</a></li><ul><li><a href="#/1/1">Cover</a></li><li><a href="#/1/3">Markdown</a></li><li><a href="#/1/4">Code block</a></li><li><a href="#/1/5">Single Image</a></li><li><a href="#/1/6">Multiple Images</a></li><li><a href="#/1/7">Lay with Images</a></li><li><a href="#/1/8">Video</a></li><li><a href="#/1/9">Maths</a></li><li><a href="#/1/10">Background Color & Transition</a></li><li><a href="#/1/11">Image Background & Background Transition</a></li><li><a href="#/1/12">Columns View</a></li><li><a href="#/1/13">Nested Stacks</a></li><li><a href="#/1/14">Fragment in Stacks</a></li><li><a href="#/1/15">Note</a></li><li><a href="#/1/16">Anchors</a></li></ul></ul></section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Examples</h1>
+</section><section data-visibility="uncounted" data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h2>Outline</h2><hr/><ul><li><a href="#/1">Examples</a></li><ul><li><a href="#/1/1">Cover</a></li><li><a href="#/1/3">Markdown</a></li><li><a href="#/1/4">Code block</a></li><li><a href="#/1/5">Single Image</a></li><li><a href="#/1/6">Multiple Images</a></li><li><a href="#/1/7">Lay with Images</a></li><li><a href="#/1/8">Video</a></li><li><a href="#/1/9">Maths</a></li><li><a href="#/1/10">Background Color & Transition</a></li><li><a href="#/1/11">Local Background Options</a></li><li><a href="#/1/12">Columns View</a></li><li><a href="#/1/13">Nested Stacks</a></li><li><a href="#/1/14">Fragment in Stacks</a></li><li><a href="#/1/15">Note</a></li><li><a href="#/1/16">Anchors</a></li></ul></ul></section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Examples</h1>
 <hr/><p>You can see the source of this doc to see those example:</p>
 <ul>
 <li><a href="https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml">KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml</a></li>
 </ul>
-<p>The image examples use <a href="https://commons.wikimedia.org/wiki/File:Logo-ubuntu_cof-orange-hex.svg">Ubuntu</a>
-and <a href="https://commons.wikimedia.org/wiki/File:Tux.svg">Tux</a> logo in WikiMedia.</p>
 <p>Scroll down ↓ to see the examples.</p>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h2 class="r-fit-text">Hello My Friends!</h2>
@@ -180,20 +178,20 @@ for i in range(10):
 </code></pre>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Single Image</h1>
 <hr/><pre><code class="language-yaml">img:
-  label: Ubuntu Logo
-  src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+  label: Kitten 🐱
+  src: https://placekitten.com/600/400
 </code></pre>
-<figure><img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg"/><figcaption>Ubuntu Logo</figcaption></figure></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Multiple Images</h1>
+<figure><img src="https://placekitten.com/600/400"/><figcaption>Kitten 🐱</figcaption></figure></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Multiple Images</h1>
 <hr/><p>Multiple images will be placed horizontally.</p>
 <pre><code class="language-yaml">img:
-  - label: Ubuntu Logo
-    src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+  - label: Kitten 1
+    src: https://placekitten.com/700/500
     width: 50%
-  - label: Linux Logo
-    src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+  - label: Kitten 2
+    src: https://placekitten.com/800/500
     width: 50%
 </code></pre>
-<div style="display:flex;flex-direction:row;justify-content:center;align-items:center"><figure><img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" width="50%"/><figcaption>Ubuntu Logo</figcaption></figure><figure><img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="50%"/><figcaption>Linux Logo</figcaption></figure></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Lay with Images</h1>
+<div style="display:flex;flex-direction:row;justify-content:center;align-items:center"><figure><img src="https://placekitten.com/700/500" width="50%"/><figcaption>Kitten 1</figcaption></figure><figure><img src="https://placekitten.com/800/500" width="50%"/><figcaption>Kitten 2</figcaption></figure></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Lay with Images</h1>
 <hr/><pre><code class="language-yaml">lay-img:
   - src: https://placekitten.com/450/300
   - src: https://placekitten.com/300/450
@@ -236,11 +234,11 @@ bg-color: rgb(70, 70, 255)
 doc: &quot;# 🐳&quot;
 </code></pre>
 <h1>🐳</h1>
-</section><section data-background-transition="fade-in fade-out" data-background="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" data-background-size="25%" data-background-opacity="0.5"><h1>Image Background &amp; Background Transition</h1>
+</section><section data-background-transition="fade-in fade-out" data-background="https://placekitten.com/800/800" data-background-size="25%" data-background-opacity="0.5"><h1>Local Background Options</h1>
 <hr/><p>Override global setting, use a local background.</p>
 <pre><code class="language-yaml">bg-trans: fade-in fade-out
 background:
-  src: https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg
+  src: https://placekitten.com/800/800
   size: 25%
   opacity: 0.5
 </code></pre>
@@ -255,7 +253,7 @@ background:
       + union
   - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
   - img:
-      src: https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg
+      src: https://placekitten.com/600/600
       width: 50%
 </code></pre>
 <div class="hstack"><div style="width:33.333332%"><p><em>Data types</em></p>
@@ -265,7 +263,7 @@ background:
 <li>enum</li>
 <li>union</li>
 </ul>
-</div><div style="width:33.333332%">\[\small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}\]</div><div style="width:33.333332%"><img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="50%"/></div></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Nested Stacks</h1>
+</div><div style="width:33.333332%">\[\small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}\]</div><div style="width:33.333332%"><img src="https://placekitten.com/600/600" width="50%"/></div></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Nested Stacks</h1>
 <hr/><p>The stack can be nested, and the splitter line can be drawn by starts with <code>$</code>.</p>
 <pre><code class="language-yaml">hstack:
   - vstack:
@@ -311,7 +309,8 @@ background:
 <aside class="notes"><p>Note text here!</p>
 <p>There are also have <strong>markdown</strong> <em>syntax</em>!</p>
 </aside></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Anchors</h1>
-<hr/><p>YAML anchor can be used on the content data.</p>
+<hr/><p>YAML anchor can be used for almost types of content data.</p>
+<p>But anchor insertion <code>&lt;&lt;</code> is not supported.</p>
 <pre><code class="language-yaml">$hstack:
   - &amp;content
     doc: Content A
