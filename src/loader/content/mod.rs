@@ -1,13 +1,15 @@
 use self::frag_map::FragMap;
 use self::lay_img::lay_img;
 pub(super) use self::marked::md2html;
+use self::media::media;
 use super::*;
 use std::fs::read_to_string;
-use yaml_peg::{Anchors, Node, Yaml};
+use yaml_peg::{Anchors, Node};
 
 mod frag_map;
 mod lay_img;
 mod marked;
+mod media;
 
 pub(crate) fn sized_block(img: &Node) -> Result<(String, String), Error> {
     let src = img.get_default("src", "", Node::as_str)?;
@@ -22,31 +24,6 @@ pub(crate) fn sized_block(img: &Node) -> Result<(String, String), Error> {
         }
     }
     Ok((format!(" src=\"{}\"", src), size))
-}
-
-fn img_block(img: &Node) -> Result<String, Error> {
-    let (src, size) = sized_block(img)?;
-    let src = format!("<img{}{}/>", src, size);
-    let label = img.get_default("label", "", Node::as_str)?;
-    Ok(if label.is_empty() {
-        src
-    } else {
-        format!("<figure>{}<figcaption>{}</figcaption></figure>", src, label)
-    })
-}
-
-fn video_block(video: &Node) -> Result<String, Error> {
-    let (src, size) = sized_block(video)?;
-    let mut doc = format!("<video{}", size);
-    if video.get_default("controls", true, Node::as_bool)? {
-        doc += " controls";
-    }
-    if video.get_default("autoplay", false, Node::as_bool)? {
-        doc += " autoplay";
-    }
-    let ty = video.get_default("type", "video/mp4", Node::as_str)?;
-    doc += &format!("><source{} type=\"{}\"></video>", src, ty);
-    Ok(doc)
 }
 
 pub(crate) fn content_block(
@@ -80,27 +57,7 @@ pub(crate) fn content_block(
     if let Ok(n) = slide.get("math") {
         doc += &frag.fragment("math", &n.as_anchor(v).as_str()?.wrap("\\[", "\\]"));
     }
-    let media: [(_, fn(&Node) -> Result<String, Error>); 2] =
-        [("img", img_block), ("video", video_block)];
-    for (tag, f) in media {
-        if let Ok(m) = slide.as_anchor(v).get(tag) {
-            match m.yaml() {
-                Yaml::Array(ms) => {
-                    if !ms.is_empty() {
-                        doc += "<div style=\"display:flex;flex-direction:row;justify-content:center;align-items:center\">";
-                        for m in ms {
-                            doc += &frag.fragment(tag, &f(&m.as_anchor(v))?);
-                        }
-                        doc += "</div>";
-                    }
-                }
-                Yaml::Map(_) => {
-                    doc += &frag.fragment(tag, &f(&m)?);
-                }
-                _ => return Err(Error("invalid blocks", m.pos())),
-            }
-        }
-    }
+    doc += &media(slide, v, &mut frag)?;
     if let Ok(n) = slide.get("lay-img") {
         doc += &lay_img(&n.as_anchor(v), v)?;
     }

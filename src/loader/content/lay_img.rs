@@ -6,20 +6,17 @@ pub(crate) fn lay_img(m: &Node, v: &Anchors) -> Result<String, Error> {
         Yaml::Array(ms) => {
             let mut doc = "<div class=\"r-stack\">".to_string();
             for m in ms {
-                doc += &lay_img_inner(&m.as_anchor(v))?;
+                doc += &img_block(&m.as_anchor(v))?;
             }
             doc += "</div>";
             Ok(doc)
         }
-        Yaml::Map(_) => Ok(format!(
-            "<div class=\"r-stack\">{}</div>",
-            lay_img_inner(m)?
-        )),
+        Yaml::Map(_) => Ok(format!("<div class=\"r-stack\">{}</div>", img_block(m)?)),
         _ => return Err(Error("invalid lay blocks", m.pos())),
     }
 }
 
-fn lay_img_inner(m: &Node) -> Result<String, Error> {
+fn img_block(m: &Node) -> Result<String, Error> {
     let (src, size) = sized_block(m)?;
     let frag = m.get_default("fragment", "", Node::as_str)?;
     Ok(format!("<img class=\"fragment {}\"{}{}/>", frag, src, size))
