@@ -2,10 +2,11 @@
 
 [![dependency status](https://deps.rs/repo/github/KmolYuan/reveal-yaml-rs/status.svg)](https://deps.rs/crate/reveal-yaml/)
 
-Rust implementation of [Reveal.js](https://github.com/hakimel/reveal.js) YAML server.
+Rust implementation of [Reveal.js](https://github.com/hakimel/reveal.js) YAML server, a command line interface (CLI) tool.
 
-This project is transferred from Python language and now operates in a way that is easier to maintain and release, and it is Rust.
-Some old functions might be deprecated, and some functions are improved.
+<details><summary>Old Python version?</summary>
+This project is transferred from Python language, so you may <a href="https://pypi.org/project/reveal-yaml/">found it on PyPI</a>. Reveal.yaml is now operates in a way that is easier to maintain and release, and it is Rust. Some old functions might be deprecated, and some functions are improved.
+</details>
 
 This manager downloads the latest Reveal.js archive to provide serving and packing function, and had same licensed as Reveal.js.
 
@@ -15,7 +16,7 @@ YAML backend: <https://github.com/KmolYuan/yaml-peg-rs> (hosted by myself)
 
 ### Why should use this?
 
-Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides, an auto-generated outline, a simple layout function, and a live presentation when editing.
+Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides, an auto-generated outline, a simple layout function, a powerful support with original Reveal.js function, and a live presentation when editing.
 
 Difference to the before work, the Markdown to HTML translation works by this parser instead of using markdown.js, so **there is no more HTML escaping since they will be handled enough**. Except for using Markdown recursively in your code block, this needs to use the `<code>` tags by yourself.
 
@@ -137,77 +138,88 @@ Some functions are planed to be demonstrated in the help page. Open the help pag
 
 ### Metadata
 
-Metadata contains HTML settings and global slide settings.
-The definition contains in the first YAML doc, split by horizontal line `---`.
+Metadata contains HTML settings and global slide settings. They are totally YAML Maps. The definition contains in the first YAML doc, split by horizontal line `---`.
 
-+ `icon` Icon path, "img/icon.png" by default.
-+ `lang` Set the "lang" attribute for the page, "en" by default.
-+ `title` The webpage title, defaults to the first page.
-+ `description` Webpage description.
-+ `author` Webpage author.
-+ `background` Global [background setting](https://revealjs.com/backgrounds/#image-backgrounds).
-  + `src` Background source.
-  + `size` Background size.
-  + `position` Background position.
-  + `repeat` Background repeat. (repeat / no-repeat)
-  + `opacity` Background opacity from zero to one. (**float**)
-+ `outline` Auto generated table of the contents (TOC), boolean `true` by default.
-+ `theme` Reveal.js theme, "serif" by default.
-+ `code-theme` Highlight theme, "zenburn" by default.
-+ `style` Extra CSS style path.
-+ `footer` Global footer option. You can add your logo here.
++ `icon`: Icon path, "img/icon.png" by default.
++ `lang`: Set the "lang" attribute for the page, "en" by default.
++ `title`: The webpage title, defaults to the first page.
++ `description`: Webpage description.
++ `author`: Webpage author.
++ `background`: Global [background setting](https://revealjs.com/backgrounds/#image-backgrounds).
+  + `src`: Background source.
+  + `size`: Background size.
+  + `position`: Background position.
+  + `repeat`: Background repeat. (repeat / no-repeat)
+  + `opacity`: Background opacity from zero to one. (**float**)
++ `outline`: Auto generated table of the contents (TOC), boolean `true` by default.
++ `theme`: Reveal.js theme, "serif" by default.
++ `code-theme`: Highlight theme, "zenburn" by default.
++ `style`: Extra CSS style path.
++ `footer`: Global footer option. You can add your logo here.
   + This block are **sized**.
-  + `label` Footer text.
-  + `link` Footer link, works on image and text.
-+ `option` Other Reveal.js [config](https://revealjs.com/config/) options.
+  + `label`: Footer text.
+  + `link`: Footer link, works on image and text.
++ `option`: Other Reveal.js [config](https://revealjs.com/config/) options.
   + Use any case string to indicate the option, this function will translate into lower camelcase, for example, YAML `slide number: c/t` will be JavaScript `slideNumber: "c/t"`.
 
 ### Slides
 
+Slides are a list of multiple slide blocks, they are totally YAML Maps.
+
+```yaml
+- title: Title 1
+  doc: Document 1
+- title: Title 2
+  doc: Document 2
+  sub:
+    - title: Title 2-1
+      doc: Document 2-1
+```
+
 + **Title** Variants:
-  + `title` Markdown level 1 title without `#` notation.
-  + `$title` Visible title but will be excluded in TOC, this page will uncounted.
-  + `-title` Invisible title, doesn't show but will be included in TOC.
+  + `title`: Markdown level 1 title without `#` notation.
+  + `$title`: Visible title but will be excluded in TOC, this page will uncounted.
+  + `-title`: Invisible title, doesn't show but will be included in TOC.
 + **Content** (they are placed in the following order)
-  + `fit` [Fit texts](https://revealjs.com/layout/#fit-text).
+  + `fit`: [Fit texts](https://revealjs.com/layout/#fit-text).
     + **Array** of level 2 texts.
     + Longer text will be smaller.
     + Special symbol `---` represents horizontal line `<hr/>`.
-  + `doc` Multiline Markdown text, accept HTML.
-  + `include` Include a Markdown file from path, append after `doc`.
-  + `math` Latex math without `$$` / `\[\]` brackets.
-  + `img` A list of image source.
-    + **Array**, can be map if there is only one image.
+  + `doc`: Multiline Markdown text, accept HTML.
+  + `include`: Include a Markdown file from path, append after `doc`.
+  + `math`: Latex math without `$$` / `\[\]` brackets.
+  + `img`: Embed images.
+    + **Array**, can be **Map** if there is only one image.
     + Blocks are **sized**.
-    + `label` Image `<caption>`.
-  + `video` Embed videos.
-    + **Array**, can be map if there is only one video.
+    + `label`: Image `<caption>`.
+  + `video`: Embed videos.
+    + **Array**, can be **Map** if there is only one video.
     + Blocks are **sized**.
-    + `controls` Allow controls, boolean `true` by default.
-    + `autoplay` Allow autoplay, boolean `false` by default.
-    + `type` Video type, default to "video/mp4".
-  + `iframe` Embed `<iframe>` structures, such as YouTube videos.
-    + **Array**, can be map if there is only one frame.
+    + `controls`: Allow controls, boolean `true` by default.
+    + `autoplay`: Allow autoplay, boolean `false` by default.
+    + `type`: Video type, default to "video/mp4".
+  + `iframe`: Embed `<iframe>` structures, such as YouTube videos.
+    + **Array**, can be **Map** if there is only one frame.
     + Blocks are **sized**.
     + Please be aware that `<iframe>` maybe slow down your web browser and cause security issues!
-  + `lay-img` [Layout stack](https://revealjs.com/layout/#stack) for images.
-    + **Array**, can be map if there is only one image.
+  + `lay-img`: [Layout stack](https://revealjs.com/layout/#stack) for images.
+    + **Array**, can be **Map** if there is only one image.
     + Blocks are **sized**.
-    + `fragment` The animation option. Independent from `fragment` option.
-  + `fragment` [Fragment](https://revealjs.com/fragments/) option.
+    + `fragment`: The animation option. Independent from `fragment` option.
+  + `fragment`: [Fragment](https://revealjs.com/fragments/) option.
     + **Array**, the index are the `data-fragment-index`.
     + Block are **content**, but exclude stacks.
     + Stacks can have local fragment option, but still ordered.
   + **Stack**
     + **Array** format.
     + This function allows nesting.
-    + `hstack` Horizontal (columns) view of contents.
-    + `vstack` Vertical (rows) view of contents.
-    + `$hstack` / `$vstack` Make a border between each element.
-+ `note` Note in Speaker's view, Markdown syntax.
-+ `bg-color` [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
-+ `background` Background setting, as same as global.
+    + `hstack`: Horizontal (columns) view of contents.
+    + `vstack`: Vertical (rows) view of contents.
+    + `$hstack` / `$vstack`: Make a border between each element.
++ `note`: Note in Speaker's view, Markdown syntax.
++ `bg-color`: [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
++ `background`: Background setting, as same as global.
   + Local background option can be boolean `false` to disable global background.
-+ `trans` [Transition](https://revealjs.com/transitions/) option.
-+ `bg-trans` [Background transition](https://revealjs.com/transitions/#background-transitions) option.
-+ `sub` Vertical slides, for horizontal slides only.
++ `trans`: [Transition](https://revealjs.com/transitions/) option.
++ `bg-trans`: [Background transition](https://revealjs.com/transitions/#background-transitions) option.
++ `sub`: Vertical slides, for horizontal slides only.
