@@ -37,10 +37,10 @@ pub(crate) fn content_block(
         let n = n.as_anchor(v);
         let t = n.as_str()?;
         if t == "---" {
-            doc += "<hr/>";
+            doc += &frag.fragment("fit", "<hr/>");
         } else {
             doc += "\n<h2 class=\"r-fit-text\">";
-            doc += n.as_anchor(v).as_str()?;
+            doc += &frag.fragment("fit", t);
             doc += "</h2>";
         }
     }
@@ -69,7 +69,7 @@ pub(crate) fn content_block(
         if stack.is_empty() {
             continue;
         }
-        let head = if i < 2 {
+        let head = if title.ends_with("hstack") {
             doc += "<div class=\"hstack\">";
             let width = 100. / stack.len() as f32;
             format!(" style=\"width:{}%\"", width)
