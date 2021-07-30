@@ -30,7 +30,7 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
     let title = meta.get_default("title", title.as_ref(), Node::as_str)?;
     let description = meta.get_default("description", title.as_ref(), Node::as_str)?;
     let theme = meta.get_default("theme", "serif", Node::as_str)?;
-    let code_theme = meta.get_default("code-theme", "serif", Node::as_str)?;
+    let code_theme = meta.get_default("code-theme", "zenburn", Node::as_str)?;
     Ok(TEMPLATE
         .to_string()
         .replace("{%mount}", mount)
