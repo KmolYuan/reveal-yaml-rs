@@ -24,28 +24,22 @@ footer:
     Scroll right → to see the examples.
 
     Scroll down ↓ to see an auto-generated outline.
-- title: Examples
+- $title: Examples
   doc: |
     You can see the source of this doc to see those example:
 
     + [KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
 
-    Scroll down ↓ to see the examples.
+    Scroll right → to see the examples, and scroll down ↓ to see their YAML format.
+- -title: Cover
+  fit:
+    - Hello My Friends!
+    - Longer title become smaller~
+    - Here comes the THRID LINE!!
+    - ---
+    - This is actually the "cover" page, check the table of content!
   sub:
-    - -title: Cover
-      fit:
-        - Hello My Friends!
-        - Longer title become smaller~
-        - Here comes the THRID LINE!!
-        - ---
-        - This is actually the "cover" page, check the table of content!
-    - $title: Hidden Title
-      doc: |
-        This title is invisible in the [table of content](#/0/1).
-        ```yaml
-        $title: Hidden Title
-        ```
-        For the [front page](#/1/1):
+    - doc: |
         ```yaml
         -title: Cover
         fit:
@@ -55,88 +49,94 @@ footer:
           - ---
           - This is actually the "cover" page, check the table of content!
         ```
-    - title: Markdown
-      doc: |
-        ```yaml
-        doc: |
+- $title: Hidden Title
+  doc: |
+    This title is invisible in the [table of content](#/0/1). Same as its section.
+    ```yaml
+    $title: Hidden Title
+    ```
+- title: Markdown
+  doc: |
+    *Something* **important**.
+
+    | item 1 | item 2 |
+    |:------:|:------:|
+    | A | B |
+
+    ```python[1-2]
+    import sys
+    print(sys.path)
+    for i in range(10):
+        print("Hello World!")
+    ```
+
+    + Item
+    + [Next page](#/5)
+  sub:
+    - doc: |
+        <pre><code class="language-yaml">doc: |
           *Something* **important**.
 
           | item 1 | item 2 |
           |:------:|:------:|
           | A | B |
 
-          + Item
-          + [Next page](#/1/4)
-        ```
-
-        *Something* **important**.
-
-        | item 1 | item 2 |
-        |:------:|:------:|
-        | A | B |
-
-        + Item
-        + [Next page](#/1/4)
-    - title: Code block
-      doc: |
-        <pre><code class="language-markdown">doc: |
           ```python[1-2]
           import sys
           print(sys.path)
           for i in range(10):
               print("Hello World!")
           ```
-        </code></pre>
 
-        ```python[1-2]
-        import sys
-        print(sys.path)
-        for i in range(10):
-            print("Hello World!")
-        ```
-    - title: Single Image
-      doc: |
+          + Item
+          + [Next page](#/5)
+        </code></pre>
+- title: Image
+  img:
+    label: Kitten 🐱
+    src: https://placekitten.com/600/400
+  sub:
+    - $title: Multiple Images
+      img:
+        - label: Kitten 1
+          src: https://placekitten.com/700/500
+        - label: Kitten 2
+          src: https://placekitten.com/800/500
+    - $title: Lay with Images
+      lay-img:
+        - src: https://placekitten.com/450/300
+        - src: https://placekitten.com/300/450
+        - src: https://placekitten.com/400/400
+    - doc: |
         ```yaml
         img:
           label: Kitten 🐱
           src: https://placekitten.com/600/400
         ```
-      img:
-        label: Kitten 🐱
-        src: https://placekitten.com/600/400
-    - title: Multiple Images
-      doc: |
         Multiple images will be placed horizontally.
         ```yaml
         img:
           - label: Kitten 1
             src: https://placekitten.com/700/500
-            width: 50%
           - label: Kitten 2
             src: https://placekitten.com/800/500
-            width: 50%
         ```
-      img:
-        - label: Kitten 1
-          src: https://placekitten.com/700/500
-          width: 50%
-        - label: Kitten 2
-          src: https://placekitten.com/800/500
-          width: 50%
-    - title: Lay with Images
-      doc: |
+        Laid images will be placed at the same center.
         ```yaml
         lay-img:
           - src: https://placekitten.com/450/300
           - src: https://placekitten.com/300/450
           - src: https://placekitten.com/400/400
         ```
-      lay-img:
-        - src: https://placekitten.com/450/300
-        - src: https://placekitten.com/300/450
-        - src: https://placekitten.com/400/400
-    - title: Video
-      doc: |
+- title: Video
+  video:
+    - width: 320
+      height: 240
+      src: https://www.w3schools.com/html/movie.mp4
+    - src: https://www.w3schools.com/html/movie.mp4
+      controls: false
+  sub:
+    - doc: |
         The videos can be placed by same logic.
         ```yaml
         video:
@@ -144,14 +144,20 @@ footer:
             height: 240
             src: https://www.w3schools.com/html/movie.mp4
           - src: https://www.w3schools.com/html/movie.mp4
+            controls: false
         ```
-      video:
-        - width: 320
-          height: 240
-          src: https://www.w3schools.com/html/movie.mp4
-        - src: https://www.w3schools.com/html/movie.mp4
-    - title: Maths
-      doc: |
+- title: Maths
+  doc: Inline math text $x^2$.
+  math: |
+    \small\begin{aligned}
+    \min_{x_1, x_2}&f(x)
+    \\
+    \text{s.t.}\,&b(x) \le 0
+    \\
+    &c(x) = 0
+    \end{aligned}
+  sub:
+    - doc: |
         ```yaml
         doc: Inline math text $x^2$.
         math: |
@@ -162,34 +168,22 @@ footer:
           \\
           &c(x) = 0
           \end{aligned}
-        fragment:
-          - math: highlight-blue
         ```
-        Inline math text $x^2$.
-      math: |
-        \small\begin{aligned}
-        \min_{x_1, x_2}&f(x)
-        \\
-        \text{s.t.}\,&b(x) \le 0
-        \\
-        &c(x) = 0
-        \end{aligned}
-      fragment:
-        - math: highlight-blue
-    - title: Background Color & Transition
-      doc: |
-        Override global setting, use a single color background.
-        ```yaml
-        trans: convex-in convex-out
-        background: false
-        bg-color: rgb(70, 70, 255)
-        doc: "# 🐳"
-        ```
+- title: Background Color & Transition
+  doc: |
+    Override global setting, use a single color background.
+    ```yaml
+    trans: convex-in convex-out
+    background: false
+    bg-color: rgb(70, 70, 255)
+    doc: "# 🐳"
+    ```
 
-        # 🐳
-      trans: convex-in convex-out
-      background: false
-      bg-color: rgb(70, 70, 255)
+    # 🐳
+  trans: convex-in convex-out
+  background: false
+  bg-color: rgb(70, 70, 255)
+  sub:
     - title: Local Background Options
       doc: |
         Override global setting, use a local background.
@@ -205,8 +199,32 @@ footer:
         src: https://placekitten.com/800/800
         size: 25%
         opacity: 0.5
-    - title: Columns View
-      doc: |
+- title: Layout
+  hstack:
+    - doc: |
+        *Data types*
+
+        + primitive types
+        + sturct
+        + enum
+        + union
+    - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
+    - img:
+        src: https://placekitten.com/600/600
+  sub:
+    - title: Nested Layout
+      hstack:
+        - vstack:
+          - hstack:
+            - doc: Left Top Left
+            - doc: Left Top Right
+          - doc: Left Bottom
+        - $vstack:
+          - doc: Right Top
+          - $hstack:
+            - doc: Right Bottom Left
+            - doc: Right Bottom Right
+    - doc: |
         ```yaml
         hstack:
           - doc: |
@@ -219,22 +237,7 @@ footer:
           - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
           - img:
               src: https://placekitten.com/600/600
-              width: 50%
         ```
-      hstack:
-        - doc: |
-            *Data types*
-
-            + primitive types
-            + sturct
-            + enum
-            + union
-        - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
-        - img:
-            src: https://placekitten.com/600/600
-            width: 50%
-    - title: Nested Stacks
-      doc: |
         The stack can be nested, and the splitter line can be drawn by starts with `$`.
         ```yaml
         hstack:
@@ -249,32 +252,17 @@ footer:
               - doc: Right Bottom Left
               - doc: Right Bottom Right
         ```
-      hstack:
-        - vstack:
-          - hstack:
-            - doc: Left Top Left
-            - doc: Left Top Right
-          - doc: Left Bottom
-        - $vstack:
-          - doc: Right Top
-          - $hstack:
-            - doc: Right Bottom Left
-            - doc: Right Bottom Right
+- title: Fragment
+  doc: Almost content support fragment except `lay-img`.
+  lay-img:
+    - src: https://placekitten.com/450/450
+      fragment: fade-right
+    - src: https://placekitten.com/600/300
+      fragment: fade-left
+  fragment:
+    - doc: highlight-current-blue
+  sub:
     - title: Fragment in Stacks
-      doc: |
-        The index of fragment is the order of the animation.
-        ```yaml
-        hstack:
-          - doc: AAA
-            math: f(x)
-            fragment: [ { doc: fade-in, math: fade-in } ]  # one action
-          - doc: BBB
-            math: g(y)
-            fragment: [ doc: fade-in, math: fade-in ]  # two action
-          - doc: CCC
-            math: h(z)
-            fragment: [ math: fade-in ]  # one element
-        ```
       hstack:
         - doc: AAA
           math: f(x)
@@ -290,53 +278,77 @@ footer:
           math: h(z)
           fragment:
             - math: fade-in
-    - title: Note
-      doc: |
-        Press "s" key to open speaker's view.
-
+    - doc: |
         ```yaml
-        note: |
-          Note text here!
-
-          There are also have **markdown** *syntax*!
+        doc: Almost content support fragment except `lay-img`.
+        lay-img:
+          - src: https://placekitten.com/450/450
+            fragment: fade-right
+          - src: https://placekitten.com/600/300
+            fragment: fade-left
+        fragment:
+          - doc: highlight-current-blue
         ```
-      note: |
-        Note text here!
-
-        There are also have **markdown** *syntax*!
-    - title: Anchors
-      doc: |
-        YAML anchor can be used for almost types of content data.
-
-        But anchor insertion `<<` is not supported.
+        The index of fragment is the order of the animation.
         ```yaml
-        $hstack:
-          - &content
-            doc: Content A
-          - *content
-          - doc: *document
+        hstack:
+          - doc: AAA
+            math: f(x)
+            fragment: [ { doc: fade-in, math: fade-in } ]  # one action
+          - doc: BBB
+            math: g(y)
+            fragment: [ doc: fade-in, math: fade-in ]  # two action
+          - doc: CCC
+            math: h(z)
+            fragment: [ math: fade-in ]  # one element
         ```
-      $hstack:
-        - &content
-          doc: &document |
-            Content A
-        - *content
-        - doc: *document
-    - title: Plugins
-      doc: |
-        The third-party plugins can be loaded from metadata.
-        ```yaml
-        plugin:
-          RevealNotes:
-            - plugin/notes/notes.js
-        ```
-        Will be converted to:
-        ```html
-        <script src="/plugin/notes/notes.js"></script>
-        ```
-        ```js
-        Reveal.initialize({
-          plugins: [..., RevealNotes],
-          ...
-        });
-        ```
+- title: Note
+  doc: |
+    Press "s" key to open speaker's view.
+
+    ```yaml
+    note: |
+      Note text here!
+
+      There are also have **markdown** *syntax*!
+    ```
+  note: |
+    Note text here!
+
+    There are also have **markdown** *syntax*!
+- title: Anchors
+  doc: |
+    YAML anchor can be used for almost types of content data.
+
+    But the anchor insertion `<<` is not supported.
+    ```yaml
+    $hstack:
+      - &content
+        doc: Content A
+      - *content
+      - doc: *document
+    ```
+  $hstack:
+    - &content
+      doc: &document |
+        Content A
+    - *content
+    - doc: *document
+- title: Third-party Plugins
+  doc: |
+    The third-party plugins can be loaded from metadata.
+    ```yaml
+    plugin:
+      RevealNotes:
+        - plugin/notes/notes.js
+    ```
+    Will be converted to:
+    ```html
+    <script src="/plugin/notes/notes.js"></script>
+    ```
+    ```js
+    Reveal.initialize({
+      plugins: [..., RevealNotes],
+      ...
+    });
+    ```
