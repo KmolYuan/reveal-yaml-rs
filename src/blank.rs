@@ -14,6 +14,6 @@ where
 {
     let path = path.as_ref().join(ROOT);
     File::create(&path)?.write(BLANK_DOC)?;
-    println!("Create {}", path.to_str().unwrap());
+    println!("Create {:?}", path);
     Ok(())
 }

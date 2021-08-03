@@ -35,8 +35,8 @@ where
     // Start server
     let archive = temp.path().join(ARCHIVE);
     println!("Serve at: http://localhost:{}/", port);
-    println!("Global archive at: {}", archive.to_str().unwrap());
-    println!("Local assets at: {}", canonicalize(".")?.to_str().unwrap());
+    println!("Global archive at: {:?}", archive);
+    println!("Local assets at: {:?}", canonicalize(".")?);
     println!("Press Ctrl+C to close the server ...");
     let assets = listdir(".")?;
     let cache = Cache {

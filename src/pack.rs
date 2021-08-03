@@ -16,12 +16,15 @@ where
     let dist = dist.as_ref();
     for entry in read_dir(path)? {
         let path = entry?.path();
+        if !dist.is_dir() {
+            create_dir(dist)?;
+        }
         let file_name = path.file_name().unwrap();
+        let dist = dist.join(file_name);
+        println!("{:?} > {:?}", &path, &dist);
         if path.is_dir() {
-            copy_dir(&path, dist.join(file_name))?;
+            copy_dir(&path, dist)?;
         } else if path.is_file() {
-            let dist = dist.join(file_name);
-            println!("{} > {}", path.to_str().unwrap(), dist.to_str().unwrap());
             copy(path, dist)?;
         }
     }
@@ -63,7 +66,7 @@ where
     set_current_dir(path.as_ref())?;
     let dist = dist.as_ref();
     if dist.is_dir() {
-        println!("Remove {}", dist.to_str().unwrap());
+        println!("Remove {:?}", dist);
         remove_dir_all(dist)?;
     }
     let contents = loader(&read_to_string(project)?, "")?;
@@ -71,12 +74,16 @@ where
     extract(".")?;
     write(archive.join("index.html"), contents)?;
     for assets in listdir(".")? {
-        if assets.file_name().unwrap() == archive {
+        let name = assets.file_name().unwrap().to_str().unwrap();
+        if name == ARCHIVE || name.starts_with('.') {
             continue;
         }
         if assets.is_dir() {
-            let dist = archive.join(assets.file_name().unwrap().to_os_string());
-            create_dir(&dist)?;
+            let dist = archive.join(name);
+            if !dist.is_dir() {
+                create_dir(&dist)?;
+            }
+            println!("{:?} > {:?}", &assets, &dist);
             copy_dir(assets, dist)?;
         }
     }
