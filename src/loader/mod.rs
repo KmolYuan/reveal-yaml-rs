@@ -39,7 +39,7 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
         .replace("{%icon}", meta.get_default("icon", ICON, Node::as_str)?)
         .replace("{%lang}", meta.get_default("lang", "en", Node::as_str)?)
         .replace("{%title}", title)
-        .replace("{%description}", description)
+        .replace("{%description}", &description.replace('"', "\\\""))
         .replace("{%author}", meta.get_default("author", "", Node::as_str)?)
         .replace("{%theme}", theme)
         .replace("{%code-theme}", code_theme)
