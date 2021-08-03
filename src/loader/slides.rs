@@ -20,7 +20,7 @@ pub(crate) fn slides(
             if let Some(n) = visible_title(&slide, v) {
                 title += n.as_str()?;
             }
-            if !outline {
+            if !outline || slides.len() < 2 {
                 continue;
             }
             doc += "<section data-visibility=\"uncounted\"";

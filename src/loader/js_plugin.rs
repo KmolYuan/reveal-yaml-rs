@@ -9,7 +9,7 @@ pub(crate) fn js_plugin(meta: &Node) -> Result<(String, String), Error> {
             names += name.as_str()?;
             names += ", ";
             for f in file.as_array()? {
-                files += &format!("<script src=\"{{%mount}}{}\"></script>\n", f.as_str()?);
+                files += &format!("<script src=\"{}\"></script>\n", f.as_str()?);
             }
         }
         Ok((names, files))
