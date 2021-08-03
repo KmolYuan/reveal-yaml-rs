@@ -156,11 +156,12 @@ Metadata contains HTML settings and global slide settings. They are totally YAML
 + `code-theme`: Highlight theme, "zenburn" by default.
 + `style`: Extra CSS style path.
 + `footer`: Global footer option. You can add your logo here.
-  + This block are **sized**.
+  + The block is **sized**.
   + `label`: Footer text.
   + `link`: Footer link, works on image and text.
 + `option`: Other Reveal.js [config](https://revealjs.com/config/) options.
   + Use any case string to indicate the option, this function will translate into lower camelcase, for example, YAML `slide number: c/t` will be JavaScript `slideNumber: "c/t"`.
++ `plugin`: Third-party Reveal plugins, a map with keys and arrays. The key is the plugin object names, such as `RevealNotes`. The array is a list of plugin file paths, such as `plugin/notes/notes.js`. The external plugin folder can be placed nearing `reveal.yaml`. [Here](https://github.com/hakimel/reveal.js/wiki/Plugins,-Tools-and-Hardware#plugins) is the plugin list recommend by official.
 
 ### Slides
 
@@ -190,21 +191,21 @@ Slides are a list of multiple slide blocks, they are totally YAML Maps.
   + `math`: Latex math without `$$` / `\[\]` brackets.
   + `img`: Embed images.
     + **Array**, can be **Map** if there is only one image.
-    + Blocks are **sized**.
+    + The blocks are **sized**.
     + `label`: Image `<caption>`.
   + `video`: Embed videos.
     + **Array**, can be **Map** if there is only one video.
-    + Blocks are **sized**.
+    + The blocks are **sized**.
     + `controls`: Allow controls, boolean `true` by default.
     + `autoplay`: Allow autoplay, boolean `false` by default.
     + `type`: Video type, default to "video/mp4".
   + `iframe`: Embed `<iframe>` structures, such as YouTube videos.
     + **Array**, can be **Map** if there is only one frame.
-    + Blocks are **sized**.
+    + The blocks are **sized**.
     + Please be aware that `<iframe>` maybe slow down your web browser and cause security issues!
   + `lay-img`: [Layout stack](https://revealjs.com/layout/#stack) for images.
     + **Array**, can be **Map** if there is only one image.
-    + Blocks are **sized**.
+    + The blocks are **sized**.
     + `fragment`: The animation option. Independent from `fragment` option.
   + `fragment`: [Fragment](https://revealjs.com/fragments/) option.
     + **Array**, the index are the `data-fragment-index`.

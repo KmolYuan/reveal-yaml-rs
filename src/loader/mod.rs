@@ -3,6 +3,7 @@ use self::content::*;
 use self::error::Error;
 use self::footer::footer;
 use self::js_option::js_option;
+use self::js_plugin::js_plugin;
 use self::slides::slides;
 use self::visible_title::visible_title;
 use self::wrap_string::WrapString;
@@ -14,6 +15,7 @@ mod content;
 mod error;
 mod footer;
 mod js_option;
+mod js_plugin;
 mod slides;
 mod visible_title;
 mod wrap_string;
@@ -31,9 +33,9 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
     let description = meta.get_default("description", title.as_ref(), Node::as_str)?;
     let theme = meta.get_default("theme", "serif", Node::as_str)?;
     let code_theme = meta.get_default("code-theme", "zenburn", Node::as_str)?;
+    let (plugin_names, plugin_files) = js_plugin(meta)?;
     Ok(TEMPLATE
         .to_string()
-        .replace("{%mount}", mount)
         .replace("{%icon}", meta.get_default("icon", ICON, Node::as_str)?)
         .replace("{%lang}", meta.get_default("lang", "en", Node::as_str)?)
         .replace("{%title}", title)
@@ -41,10 +43,13 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
         .replace("{%author}", meta.get_default("author", "", Node::as_str)?)
         .replace("{%theme}", theme)
         .replace("{%code-theme}", code_theme)
+        .replace("{%footer}", &footer(meta)?)
+        .replace("{%slides}", &doc)
         .replace("/* {%option} */", &js_option(meta)?)
         .replace("/* {%style} */", style)
-        .replace("{%footer}", &footer(meta)?)
-        .replace("{%slides}", &doc))
+        .replace("/* {%plugin} */", &plugin_names)
+        .replace("<!-- {%plugin} -->", &plugin_files)
+        .replace("{%mount}", mount))
 }
 
 /// Load YAML string as HTML.

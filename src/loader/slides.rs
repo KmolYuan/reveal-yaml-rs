@@ -1,4 +1,5 @@
-use super::*;
+use super::{content_block, md2html, visible_title, Background, Error, WrapString};
+use yaml_peg::{repr::RcRepr, Anchors, Array, Node};
 
 pub(crate) fn slides(
     slides: Array<RcRepr>,

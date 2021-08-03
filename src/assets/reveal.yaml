@@ -322,3 +322,21 @@ footer:
             Content A
         - *content
         - doc: *document
+    - title: Plugins
+      doc: |
+        The third-party plugins can be loaded from metadata.
+        ```yaml
+        plugin:
+          RevealNotes:
+            - plugin/notes/notes.js
+        ```
+        Will be converted to:
+        ```html
+        <script src="/plugin/notes/notes.js"></script>
+        ```
+        ```js
+        Reveal.initialize({
+          plugins: [..., RevealNotes],
+          ...
+        });
+        ```
