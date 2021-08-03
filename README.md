@@ -161,10 +161,11 @@ Metadata contains HTML settings and global slide settings. They are totally YAML
   + `link`: Footer link, works on image and text.
 + `option`: Other Reveal.js [config](https://revealjs.com/config/) options.
   + Use any case string to indicate the option, this function will translate into lower camelcase, for example, YAML `slide number: c/t` will be JavaScript `slideNumber: "c/t"`.
+  + This place is actually what `Reveal.initialize` input. So plugin options should be placed here.
+  + Use `!!markdown` type on the string type, let us help you convert Markdown to HTML simply!
 + `plugin`: Third-party Reveal plugins, a map with keys and arrays.
   + The key is the plugin object names, such as `RevealNotes`. The array is a list of plugin file paths, such as `plugin/notes/notes.js`.
   + The external plugin folder can be placed nearing `reveal.yaml`.
-  + Using `!!markdown` type on the string type, let us help you convert Markdown to HTML simply!
   + There is a repo demonstrate how to use [reveal.js-menu](https://github.com/denehyg/reveal.js-menu): <https://github.com/KmolYuan/reveal.yaml-menu>
   + [Here](https://github.com/hakimel/reveal.js/wiki/Plugins,-Tools-and-Hardware#plugins) is the plugin list recommend by official.
 
