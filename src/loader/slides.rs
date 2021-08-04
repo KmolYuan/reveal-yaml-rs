@@ -27,33 +27,29 @@ pub(crate) fn slides(
             if bg.is_valid() {
                 doc += &bg.attr();
             }
-            doc += "><h2>Outline</h2><hr/><ul>";
+            doc += "><h2>Outline</h2><hr/>";
+            let mut outline = String::new();
             for (i, slide) in slides.iter().enumerate() {
                 if i == 0 {
                     continue;
                 }
                 if let Some(n) = visible_title(slide, v) {
-                    doc += &format!("<li><a href=\"#/{}\">", i);
-                    doc += n.as_str()?;
-                    doc += "</a></li>";
+                    outline += &format!("+ [{}](#/{})\n", n.as_str()?, i);
                 } else {
                     continue;
                 }
-                let sub = slide.get_default("sub", vec![], Node::as_array)?;
-                if sub.is_empty() {
-                    continue;
-                }
-                doc += "<ul>";
-                for (j, slide) in sub.iter().enumerate() {
+                for (j, slide) in slide
+                    .get_default("sub", vec![], Node::as_array)?
+                    .iter()
+                    .enumerate()
+                {
                     if let Some(n) = visible_title(slide, v) {
-                        doc += &format!("<li><a href=\"#/{}/{}\">", i, j + 1);
-                        doc += n.as_str()?;
-                        doc += "</a></li>";
+                        outline += &format!("  + [{}](#/{}/{})\n", n.as_str()?, i, j + 1);
                     }
                 }
-                doc += "</ul>";
             }
-            doc += "</ul></section>";
+            doc += &md2html(&outline);
+            doc += "</section>";
         }
         doc += "</section>";
     }

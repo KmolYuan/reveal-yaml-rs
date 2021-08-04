@@ -267,17 +267,17 @@ footer:
         - doc: AAA
           math: f(x)
           fragment:
-            - doc: fade-in
-              math: fade-in
+            - doc: ~
+              math: ~
         - doc: BBB
           math: g(y)
           fragment:
-            - doc: fade-in
-            - math: fade-in
+            - doc: ~
+            - math: ~
         - doc: CCC
           math: h(z)
           fragment:
-            - math: fade-in
+            - math: ~
     - doc: |
         ```yaml
         doc: Almost content support fragment except `lay-img`.
@@ -290,18 +290,38 @@ footer:
           - doc: highlight-current-blue
         ```
         The index of fragment is the order of the animation.
+
+        The blank / `~` / `null` represents normal `class="framgment"` effect.
         ```yaml
         hstack:
           - doc: AAA
             math: f(x)
-            fragment: [ { doc: fade-in, math: fade-in } ]  # one action
+            fragment: [ { doc: ~, math: ~ } ]  # one action
           - doc: BBB
             math: g(y)
-            fragment: [ doc: fade-in, math: fade-in ]  # two action
+            fragment: [ doc: ~, math: ~ ]  # two action
           - doc: CCC
             math: h(z)
-            fragment: [ math: fade-in ]  # one element
+            fragment: [ math: ~ ]  # one element
         ```
+    - title: Fragment with Multiple `doc`s
+      doc: |
+        ```yaml
+        vstack:
+          - doc: Since there is only one `doc`,
+            fragment: &doc-frag [ { doc: ~ } ]
+          - doc: so it may splitted by `vstack`.
+            fragment: *doc-frag
+          - doc: The anchors can be used on `fragment` array.
+            fragment: *doc-frag
+        ```
+      vstack:
+        - doc: Since there is only one `doc`,
+          fragment: &doc-frag [ { doc: ~ } ]
+        - doc: so it may splited by `vstack`.
+          fragment: *doc-frag
+        - doc: The anchors can be used on `fragment` array.
+          fragment: *doc-frag
 - title: Note
   doc: |
     Press "s" key to open speaker's view.

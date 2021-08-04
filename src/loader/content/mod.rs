@@ -32,7 +32,7 @@ pub(crate) fn content_block(
     frag_count: &mut usize,
 ) -> Result<String, Error> {
     let mut doc = String::new();
-    let mut frag = FragMap::new(slide, frag_count)?;
+    let mut frag = FragMap::new(slide, v, frag_count)?;
     for n in slide.get_default("fit", vec![], Node::as_array)? {
         let n = n.as_anchor(v);
         let t = n.as_str()?;
