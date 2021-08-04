@@ -51,7 +51,14 @@ pub(crate) fn content_block(
         let t = n.as_str()?;
         if !t.is_empty() {
             let include = read_to_string(t).map_err(|_| ("read file error", n.pos()))?;
-            doc += &frag.fragment("include", &md2html(&include));
+            doc += &frag.fragment(
+                "include",
+                &if n.ty() == "html" {
+                    include
+                } else {
+                    md2html(&include)
+                },
+            );
         }
     }
     if let Ok(n) = slide.get("math") {
