@@ -185,7 +185,7 @@ Slides are a list of multiple slide blocks, they are totally YAML Maps.
 
 + **Title** Variants:
   + `title`: Markdown level 1 title without `#` notation.
-  + `$title`: Visible title but will be excluded in TOC, this page will uncounted.
+  + `$title`: Visible title but will be excluded in TOC.
   + `-title`: Invisible title, doesn't show but will be included in TOC.
 + **Content** (they are placed in the following order)
   + `fit`: [Fit texts](https://revealjs.com/layout/#fit-text).

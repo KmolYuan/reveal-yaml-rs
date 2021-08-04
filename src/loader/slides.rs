@@ -12,9 +12,9 @@ pub(crate) fn slides(
     for (i, slide) in slides.iter().enumerate() {
         let slide = slide.as_anchor(v);
         doc += "<section>";
-        doc += &slide_block(&slide, v, &bg, i == 0)?;
+        doc += &slide_block(&slide, v, &bg)?;
         for slide in slide.get_default("sub", vec![], Node::as_array)? {
-            doc += &slide_block(&slide.as_anchor(v), v, &bg, false)?;
+            doc += &slide_block(&slide.as_anchor(v), v, &bg)?;
         }
         if i == 0 {
             if let Some(n) = visible_title(&slide, v) {
@@ -23,7 +23,7 @@ pub(crate) fn slides(
             if !outline || slides.len() < 2 {
                 continue;
             }
-            doc += "<section data-visibility=\"uncounted\"";
+            doc += "<section";
             if bg.is_valid() {
                 doc += &bg.attr();
             }
@@ -56,12 +56,7 @@ pub(crate) fn slides(
     Ok((doc, title))
 }
 
-fn slide_block(
-    slide: &Node,
-    v: &Anchors,
-    bg: &Background,
-    first_column: bool,
-) -> Result<String, Error> {
+fn slide_block(slide: &Node, v: &Anchors, bg: &Background) -> Result<String, Error> {
     if slide.as_map()?.is_empty() {
         return Err(Error("empty slide", slide.pos()));
     }
@@ -83,19 +78,14 @@ fn slide_block(
         let local_bg = Background::new(slide)?;
         doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
+    doc += ">";
     for (i, &title) in ["title", "-title", "$title"].iter().enumerate() {
         if let Ok(n) = slide.get(title) {
-            if first_column || i == 2 {
-                doc += " data-visibility=\"uncounted\"";
-            }
-            doc += ">";
             if i != 1 {
                 doc += &md2html(&format!("# {}", n.as_anchor(v).as_str()?));
                 doc += "<hr/>";
             }
             break;
-        } else if i == 2 {
-            doc += ">";
         }
     }
     doc += &content_block(slide, v, &mut 0)?;
