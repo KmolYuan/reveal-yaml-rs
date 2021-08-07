@@ -16,7 +16,7 @@ pub(crate) fn media(n: &Node, v: &Anchors, frag: &mut FragMap) -> Result<String,
                     if !ms.is_empty() {
                         doc += "<div style=\"display:flex;flex-direction:row;justify-content:center;align-items:center\">";
                         for m in ms {
-                            doc += &frag.fragment(tag, &f(&m.as_anchor(v))?);
+                            doc += &frag.fragment(tag, &f(m.as_anchor(v))?);
                         }
                         doc += "</div>";
                     }

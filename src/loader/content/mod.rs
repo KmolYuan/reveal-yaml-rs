@@ -34,8 +34,7 @@ pub(crate) fn content_block(
     let mut doc = String::new();
     let mut frag = FragMap::new(slide, v, frag_count)?;
     for n in slide.get_default("fit", vec![], Node::as_array)? {
-        let n = n.as_anchor(v);
-        let t = n.as_str()?;
+        let t = n.as_anchor(v).as_str()?;
         if t == "---" {
             doc += &frag.fragment("fit", "<hr/>");
         } else {
@@ -44,9 +43,7 @@ pub(crate) fn content_block(
             doc += "</h2>";
         }
     }
-    if let Ok(n) = slide.get("doc") {
-        doc += &frag.fragment("doc", &md2html(n.as_anchor(v).as_str()?));
-    }
+    doc += &frag.fragment("doc", &md2html(slide.with(v, "doc", "", Node::as_str)?));
     if let Ok(n) = slide.get("include") {
         let t = n.as_str()?;
         if !t.is_empty() {
@@ -61,12 +58,13 @@ pub(crate) fn content_block(
             );
         }
     }
-    if let Ok(n) = slide.get("math") {
-        doc += &frag.fragment("math", &n.as_anchor(v).as_str()?.wrap("\\[", "\\]"));
-    }
+    doc += &frag.fragment(
+        "math",
+        &slide.with(v, "math", "", Node::as_str)?.wrap("\\[", "\\]"),
+    );
     doc += &media(slide, v, &mut frag)?;
     if let Ok(n) = slide.get("lay-img") {
-        doc += &lay_img(&n.as_anchor(v), v)?;
+        doc += &lay_img(n.as_anchor(v), v)?;
     }
     for (i, &title) in ["hstack", "$hstack", "vstack", "$vstack"]
         .iter()
@@ -95,7 +93,7 @@ pub(crate) fn content_block(
                 ""
             };
             doc += &format!("<div{}{}>", border, head);
-            doc += &content_block(&slide.as_anchor(v), v, frag_count)?;
+            doc += &content_block(slide.as_anchor(v), v, frag_count)?;
             doc += "</div>";
         }
         doc += "</div>";

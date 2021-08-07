@@ -7,18 +7,16 @@ pub(crate) struct FragMap(HashMap<String, HashMap<usize, String>>);
 impl FragMap {
     pub(crate) fn new(slide: &Node, v: &Anchors, count: &mut usize) -> Result<Self, Error> {
         let mut frag_map = HashMap::new();
-        if let Ok(f) = slide.get("fragment") {
-            for h in f.as_anchor(v).as_array()? {
-                for (k, v) in h.as_map()?.iter() {
-                    let k = k.as_str()?;
-                    let v = v.as_str()?;
-                    if !frag_map.contains_key(k) {
-                        frag_map.insert(k.to_string(), HashMap::new());
-                    }
-                    frag_map.get_mut(k).unwrap().insert(*count, v.to_string());
+        for h in slide.with(v, "fragment", vec![], Node::as_array)? {
+            for (k, v) in h.as_map()?.iter() {
+                let k = k.as_str()?;
+                let v = v.as_str()?;
+                if !frag_map.contains_key(k) {
+                    frag_map.insert(k.to_string(), HashMap::new());
                 }
-                *count += 1;
+                frag_map.get_mut(k).unwrap().insert(*count, v.to_string());
             }
+            *count += 1;
         }
         Ok(Self(frag_map))
     }

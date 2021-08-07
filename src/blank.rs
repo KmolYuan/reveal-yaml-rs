@@ -13,7 +13,7 @@ where
     P: AsRef<Path>,
 {
     let path = path.as_ref().join(ROOT);
-    File::create(&path)?.write(BLANK_DOC)?;
+    File::create(&path)?.write_all(BLANK_DOC)?;
     println!("Create {:?}", path);
     Ok(())
 }

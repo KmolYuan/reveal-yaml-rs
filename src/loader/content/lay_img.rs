@@ -6,13 +6,13 @@ pub(crate) fn lay_img(m: &Node, v: &Anchors) -> Result<String, Error> {
         Yaml::Array(ms) => {
             let mut doc = "<div class=\"r-stack\">".to_string();
             for m in ms {
-                doc += &img_block(&m.as_anchor(v))?;
+                doc += &img_block(m.as_anchor(v))?;
             }
             doc += "</div>";
             Ok(doc)
         }
         Yaml::Map(_) => Ok(format!("<div class=\"r-stack\">{}</div>", img_block(m)?)),
-        _ => return Err(Error("invalid lay blocks", m.pos())),
+        _ => Err(Error("invalid lay blocks", m.pos())),
     }
 }
 

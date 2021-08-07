@@ -12,12 +12,12 @@ pub(crate) fn slides(
     for (i, slide) in slides.iter().enumerate() {
         let slide = slide.as_anchor(v);
         doc += "<section>";
-        doc += &slide_block(&slide, v, &bg)?;
+        doc += &slide_block(slide, v, &bg)?;
         for slide in slide.get_default("sub", vec![], Node::as_array)? {
-            doc += &slide_block(&slide.as_anchor(v), v, &bg)?;
+            doc += &slide_block(slide.as_anchor(v), v, &bg)?;
         }
         if i == 0 {
-            if let Some(n) = visible_title(&slide, v) {
+            if let Some(n) = visible_title(slide, v) {
                 title += n.as_str()?;
             }
             if !outline || slides.len() < 2 {

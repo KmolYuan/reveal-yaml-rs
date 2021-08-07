@@ -59,7 +59,7 @@ async fn main() -> std::io::Result<()> {
         )
     }
     .get_matches();
-    if let Some(_) = args.subcommand_matches("update") {
+    if args.subcommand_matches("update").is_some() {
         update()?;
     } else if let Some(cmd) = args.subcommand_matches("new") {
         let path = cmd.value_of("DIR").unwrap_or(".");
