@@ -31,6 +31,7 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
     let (doc, title) = slides(yaml[1].as_array()?, v, bg, outline)?;
     let title = meta.get_default("title", title.as_ref(), Node::as_str)?;
     let description = meta.get_default("description", title.as_ref(), Node::as_str)?;
+    let author = meta.get_default("author", "", Node::as_str)?;
     let theme = meta.get_default("theme", "serif", Node::as_str)?;
     let code_theme = meta.get_default("code-theme", "zenburn", Node::as_str)?;
     let (plugin_names, plugin_files) = js_plugin(meta)?;
@@ -38,9 +39,9 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
         .to_string()
         .replace("{%icon}", meta.get_default("icon", ICON, Node::as_str)?)
         .replace("{%lang}", meta.get_default("lang", "en", Node::as_str)?)
-        .replace("{%title}", title)
-        .replace("{%description}", &description.replace('"', "\\\""))
-        .replace("{%author}", meta.get_default("author", "", Node::as_str)?)
+        .replace("{%title}", &title.escape())
+        .replace("{%description}", &description.escape())
+        .replace("{%author}", &author.escape())
         .replace("{%theme}", theme)
         .replace("{%code-theme}", code_theme)
         .replace("{%footer}", &footer(meta)?)

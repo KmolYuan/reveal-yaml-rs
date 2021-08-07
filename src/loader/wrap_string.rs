@@ -1,5 +1,6 @@
 pub(crate) trait WrapString {
     fn wrap(self, prefix: &str, suffix: &str) -> String;
+    fn escape(self) -> String;
 }
 
 impl<S: AsRef<str>> WrapString for S {
@@ -10,5 +11,10 @@ impl<S: AsRef<str>> WrapString for S {
         } else {
             format!("{}{}{}", prefix, s, suffix)
         }
+    }
+
+    fn escape(self) -> String {
+        let s = self.as_ref();
+        s.replace('\n', "\\n").replace('"', "\\\"")
     }
 }

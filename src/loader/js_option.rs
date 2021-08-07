@@ -1,4 +1,4 @@
-use super::{md2html, Error};
+use super::{md2html, Error, WrapString};
 use yaml_peg::{Node, Yaml};
 
 fn lower_camelcase(doc: &str) -> String {
@@ -38,13 +38,10 @@ pub(crate) fn js_option(meta: &Node) -> Result<String, Error> {
 
 fn as_json(n: &Node) -> Result<String, Error> {
     match n.yaml() {
-        Yaml::Str(s) => Ok({
-            let s = if n.ty() == "markdown" {
-                md2html(s)
-            } else {
-                s.clone()
-            };
-            format!("\"{}\"", s.replace('\n', "\\n").replace('"', "\\\""))
+        Yaml::Str(s) => Ok(if n.ty() == "markdown" {
+            format!("\"{}\"", md2html(s).escape())
+        } else {
+            format!("\"{}\"", s.escape())
         }),
         Yaml::Int(s) | Yaml::Float(s) => Ok(s.clone()),
         Yaml::Bool(true) => Ok("true".to_string()),
