@@ -1,9 +1,9 @@
-description: ""
-author: ""
+description: "{%description}"
+author: "{%author}"
 option:
   hash: true
   slide number: c/t
 ---
-- title: Untitled
+- title: "{%title}"
   doc: |
     Hello!

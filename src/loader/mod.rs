@@ -18,7 +18,7 @@ mod js_option;
 mod js_plugin;
 mod slides;
 mod visible_title;
-mod wrap_string;
+pub(crate) mod wrap_string;
 
 const TEMPLATE: &str = include_str!("../assets/template.html");
 const ICON: &str = "help/icon.png";
