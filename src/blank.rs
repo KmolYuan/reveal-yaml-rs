@@ -4,11 +4,11 @@ use std::{
     path::Path,
 };
 
-pub const ROOT: &str = "reveal.yaml";
+pub(crate) const ROOT: &str = "reveal.yaml";
 const BLANK_DOC: &[u8] = include_bytes!("assets/blank.yaml");
 
 /// Create new project.
-pub fn blank<P>(path: P) -> Result<()>
+pub(crate) fn blank<P>(path: P) -> Result<()>
 where
     P: AsRef<Path>,
 {

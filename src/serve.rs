@@ -1,4 +1,8 @@
-use crate::*;
+use crate::{
+    loader::loader,
+    pack::{extract, listdir},
+    update::ARCHIVE,
+};
 use actix_files::Files;
 use actix_web::{get, web::Data, App, HttpResponse, HttpServer};
 use std::{
@@ -21,7 +25,7 @@ struct Cache {
 }
 
 /// Launch function.
-pub async fn serve<P>(port: u16, path: P, project: &str, use_cache: bool) -> Result<()>
+pub(crate) async fn serve<P>(port: u16, path: P, project: &str, use_cache: bool) -> Result<()>
 where
     P: AsRef<Path>,
 {

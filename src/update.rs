@@ -9,7 +9,7 @@ const REVEAL: &str = "https://github.com/hakimel/reveal.js/archive/master.zip";
 pub(crate) const ARCHIVE: &str = "reveal.js-master";
 
 /// Download the archive from Reveal.js repository.
-pub fn update() -> Result<()> {
+pub(crate) fn update() -> Result<()> {
     let b = get(REVEAL).unwrap().bytes().unwrap();
     println!("Download archive: {}", REVEAL);
     let archive = get_archive!();

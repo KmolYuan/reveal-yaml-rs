@@ -1,4 +1,8 @@
-use crate::*;
+use crate::{
+    get_archive,
+    loader::loader,
+    update::{update, ARCHIVE},
+};
 use std::{
     env::set_current_dir,
     fs::{copy, create_dir, read_dir, read_to_string, remove_dir_all, rename, write, File},
@@ -58,7 +62,7 @@ where
 }
 
 /// Pack project to an archive.
-pub fn pack<P, D>(path: P, dist: D, project: &str) -> Result<()>
+pub(crate) fn pack<P, D>(path: P, dist: D, project: &str) -> Result<()>
 where
     P: AsRef<Path>,
     D: AsRef<Path>,

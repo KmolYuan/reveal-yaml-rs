@@ -1,3 +1,4 @@
+#[macro_export]
 macro_rules! get_archive {
     () => {{
         use std::env::current_exe;
@@ -7,12 +8,11 @@ macro_rules! get_archive {
     }};
 }
 
-pub use crate::blank::*;
-pub use crate::fmt::*;
-pub use crate::loader::*;
-pub use crate::pack::*;
-pub use crate::serve::*;
-pub use crate::update::*;
+use crate::blank::{blank, ROOT};
+use crate::fmt::fmt;
+use crate::pack::pack;
+use crate::serve::serve;
+use crate::update::update;
 use clap::{clap_app, AppSettings};
 
 mod blank;

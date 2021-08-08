@@ -54,7 +54,7 @@ fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str) -> Result<String, Er
 }
 
 /// Load YAML string as HTML.
-pub fn loader(yaml_str: &str, mount: &str) -> Result<String, IoError> {
+pub(crate) fn loader(yaml_str: &str, mount: &str) -> Result<String, IoError> {
     let (yaml, anchor) = parse(yaml_str).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
     if yaml.len() < 2 {
         return Err(IoError::new(

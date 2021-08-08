@@ -1,4 +1,4 @@
-pub(crate) struct Error(pub &'static str, pub u64);
+pub(crate) struct Error(pub(crate) &'static str, pub(crate) u64);
 
 impl From<u64> for Error {
     fn from(pos: u64) -> Self {
