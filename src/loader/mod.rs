@@ -22,7 +22,20 @@ pub(crate) mod wrap_string;
 
 const TEMPLATE: &str = include_str!("../assets/template.html");
 const ICON: &str = "help/icon.png";
-const RELOAD: &str = "setInterval(function() { $.ajax({ url: '/changed/', contentType: 'json', success: data => { if (data['modified']) location.reload(); }}); }, 1000);";
+const RELOAD: &str = "\
+setInterval(function() {
+    window.modified
+    $.ajax({
+        url: '/changed/',
+        contentType: 'json',
+        success: data => {
+            if (window.modified === undefined)
+                window.modified = data['modified'];
+            if (data['modified'] > window.modified)
+                location.reload();
+        }
+    });
+}, 1000);";
 
 fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str, reload: bool) -> Result<String, Error> {
     let meta = &yaml[0];
