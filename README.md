@@ -20,6 +20,8 @@ Using Reveal.js with Markdown, but it is still difficult to maintain HTML slides
 
 Difference to the before work, the Markdown to HTML translation works by this parser instead of using markdown.js, so **there is no more HTML escaping since they will be handled enough**. Except for using Markdown recursively in your code block, this needs to use the `<code>` tags by yourself.
 
+If you are not decide yet, see the [tutorial](#tutorial) for more information.
+
 ## Installation
 
 Download CLI executable from GitHub release: <https://github.com/KmolYuan/reveal-yaml-rs/releases/>
@@ -31,6 +33,34 @@ If you are a Rust user, install it with cargo:
 cargo install reveal-yaml
 ```
 The executable can be checked with `rym --help`.
+
+## Command Line Interface
+
+The command `rym` stands for "Reveal-Yaml Manager".
+```bash
+# Download the latest Reveal.js archive
+rym update
+# Create a project to current directory
+# Only "reveal.yaml" will be create, the rest is up to you!
+rym new .
+# Serve the slides
+rym serve
+# Reformat the project file
+rym fmt
+# Pack the project to HTML archive
+rym pack
+```
+
+### Edit Mode (Hot Reload / Auto-reload)
+
+There is a `--edit` flag on the `serve` command. This option let the server keep watching the project file `reveal.yaml`, then reload the page from the web browser.
+
+If this option is not enabled, the server will only resolve once at startup and always use the cache.
+
+```bash
+rym serve --edit
+```
+
 
 ## Tutorial
 
@@ -110,33 +140,6 @@ video:
 ### Reveal Plugins
 
 The plugins excluding `markdown` are enabled by default.
-
-## Command Line Interface
-
-The command `rym` stands for "Reveal-Yaml Manager".
-```bash
-# Download the latest Reveal.js archive
-rym update
-# Create a project to current directory
-# Only "reveal.yaml" will be create, the rest is up to you!
-rym new .
-# Serve the slides
-rym serve
-# Reformat the project file
-rym fmt
-# Pack the project to HTML archive
-rym pack
-```
-
-### Edit Mode (Hot Reload / Auto-reload)
-
-There is a `--edit` flag on the `serve` command. This option let the server keep watching the project file `reveal.yaml`, then reload the page from the web browser.
-
-If this option is not enabled, the server will only resolve once at startup and always use the cache.
-
-```bash
-rym serve --edit
-```
 
 ## Functions
 
