@@ -73,7 +73,7 @@ where
         println!("Remove {:?}", dist);
         remove_dir_all(dist)?;
     }
-    let contents = loader(&read_to_string(project)?, "")?;
+    let contents = loader(&read_to_string(project)?, "", false)?;
     let archive = Path::new(ARCHIVE);
     extract(".")?;
     write(archive.join("index.html"), contents)?;

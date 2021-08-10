@@ -4,12 +4,14 @@ use crate::{
     update::ARCHIVE,
 };
 use actix_files::Files;
-use actix_web::{get, web::Data, App, HttpResponse, HttpServer};
+use actix_web::{App, HttpServer};
 use std::{
     env::set_current_dir,
-    fs::{canonicalize, read_to_string},
+    fs::{canonicalize, metadata, read_to_string},
     io::{Error, ErrorKind, Result},
     path::Path,
+    sync::Mutex,
+    time::SystemTime,
 };
 use temp_dir::TempDir;
 
@@ -22,10 +24,12 @@ struct Cache {
     project: String,
     doc: String,
     help_doc: String,
+    reload: bool,
+    last_modified: SystemTime,
 }
 
 /// Launch function.
-pub(crate) async fn serve<P>(port: u16, path: P, project: &str, use_cache: bool) -> Result<()>
+pub(crate) async fn serve<P>(port: u16, path: P, project: &str, edit: bool) -> Result<()>
 where
     P: AsRef<Path>,
 {
@@ -45,20 +49,23 @@ where
     let assets = listdir(".")?;
     let cache = Cache {
         project: project.to_string(),
-        doc: if use_cache {
-            loader(&read_to_string(project)?, "/static/")?
-        } else {
+        doc: if edit {
             String::new()
+        } else {
+            loader(&read_to_string(project)?, "/static/", edit)?
         },
-        help_doc: loader(HELP_DOC, "/static/")?,
+        help_doc: loader(HELP_DOC, "/static/", false)?,
+        reload: edit,
+        last_modified: metadata(project)?.modified()?,
     };
     HttpServer::new(move || {
         let mut app = App::new()
-            .data(cache.clone())
+            .data(Mutex::new(cache.clone()))
             .service(site::index)
             .service(site::help_page)
             .service(site::icon)
             .service(site::watermark)
+            .service(site::check_project)
             .service(Files::new("/static", &archive));
         for asset in &assets {
             let name = format!("/{}", asset.file_name().unwrap().to_str().unwrap());
@@ -73,23 +80,26 @@ where
 
 mod site {
     use super::*;
+    use actix_web::{get, web::Data, HttpResponse};
+    use std::collections::BTreeMap;
 
     #[get("/")]
-    pub(super) async fn index(data: Data<Cache>) -> Result<HttpResponse> {
+    pub(super) async fn index(data: Data<Mutex<Cache>>) -> Result<HttpResponse> {
+        let data = data.lock().unwrap();
         Ok(HttpResponse::Ok()
             .content_type("text/html;charset=utf-8")
             .body(if data.doc.is_empty() {
-                loader(&read_to_string(&data.project)?, "/static/")?
+                loader(&read_to_string(&data.project)?, "/static/", data.reload)?
             } else {
                 data.doc.clone()
             }))
     }
 
     #[get("/help/")]
-    pub(super) async fn help_page(data: Data<Cache>) -> Result<HttpResponse> {
+    pub(super) async fn help_page(data: Data<Mutex<Cache>>) -> Result<HttpResponse> {
         Ok(HttpResponse::Ok()
             .content_type("text/html;charset=utf-8")
-            .body(data.help_doc.clone()))
+            .body(data.lock().unwrap().help_doc.clone()))
     }
 
     #[get("/help/icon.png")]
@@ -100,5 +110,18 @@ mod site {
     #[get("/help/watermark.png")]
     pub(super) async fn watermark() -> Result<HttpResponse> {
         Ok(HttpResponse::Ok().content_type("image/png").body(WATERMARK))
+    }
+
+    #[get("/changed/")]
+    pub(super) async fn check_project(data: Data<Mutex<Cache>>) -> Result<HttpResponse> {
+        let mut data = data.lock().unwrap();
+        let last = metadata(&data.project)?.modified()?;
+        let modified = data.last_modified != last;
+        if modified {
+            data.last_modified = last;
+        }
+        let mut data = BTreeMap::new();
+        data.insert("modified", modified);
+        Ok(HttpResponse::Ok().json(data))
     }
 }
