@@ -45,6 +45,7 @@ where
     println!("Serve at: http://localhost:{}/", port);
     println!("Global archive at: {:?}", archive);
     println!("Local assets at: {:?}", canonicalize(".")?);
+    println!("Edit mode: {}", edit);
     println!("Press Ctrl+C to close the server ...");
     let assets = listdir(".")?;
     let cache = Cache {
