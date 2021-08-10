@@ -14,7 +14,7 @@ Static demo on gh-pages: <https://kmolyuan.github.io/reveal-yaml-rs>
 
 YAML backend: <https://github.com/KmolYuan/yaml-peg-rs> (hosted by myself)
 
-### Why should use this?
+### Why should I use this?
 
 Using Reveal.js with Markdown, but it is still difficult to maintain HTML slideshows. This work provides a clean YAML file for your slides, an auto-generated outline, a simple layout function, a powerful support with original Reveal.js function, and a live presentation when editing.
 
