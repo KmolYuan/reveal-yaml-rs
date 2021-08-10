@@ -53,14 +53,13 @@ rym pack
 
 ### Edit Mode (Hot Reload / Auto-reload)
 
-There is a `--edit` flag on the `serve` command. This option let the server keep watching the project file `reveal.yaml`, then reload the page from the web browser.
+There are `-e` / `--edit` flags on the `serve` command. This option let the server keep watching the project file `reveal.yaml`, then reload the page from the web browser.
 
-If this option is not enabled, the server will only resolve once at startup and always use the cache.
+If this option is not enabled, the server will only resolve once at startup, and always use the cache.
 
 ```bash
 rym serve --edit
 ```
-
 
 ## Tutorial
 
