@@ -30,8 +30,10 @@ setInterval(function() {
         success: data => {
             if (window.modified === undefined)
                 window.modified = data['modified'];
-            if (data['modified'] > window.modified)
+            if (data['modified'] > window.modified) {
+                window.modified = data['modified'];
                 location.reload();
+            }
         }
     });
 }, 500);";
