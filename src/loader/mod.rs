@@ -24,7 +24,6 @@ const TEMPLATE: &str = include_str!("../assets/template.html");
 const ICON: &str = "help/icon.png";
 const RELOAD: &str = "\
 setInterval(function() {
-    window.modified
     $.ajax({
         url: '/changed/',
         contentType: 'json',
