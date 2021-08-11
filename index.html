@@ -48,6 +48,9 @@
 
         .hstack {
             display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
         }
 
         .hstack-border {
@@ -201,7 +204,10 @@ for i in range(10):
 </code></pre>
 </section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Image</h1>
 <hr/><figure><img src="https://placekitten.com/600/400"/><figcaption>Kitten 🐱</figcaption></figure></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Multiple Images</h1>
-<hr/><div style="display:flex;flex-direction:row;justify-content:center;align-items:center"><figure><img src="https://placekitten.com/700/500"/><figcaption>Kitten 1</figcaption></figure><figure><img src="https://placekitten.com/800/500"/><figcaption>Kitten 2</figcaption></figure></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Lay with Images</h1>
+<hr/><div class="hstack">
+<figure><img src="https://placekitten.com/700/500"/><figcaption>Kitten 1</figcaption></figure>
+<figure><img src="https://placekitten.com/800/500"/><figcaption>Kitten 2</figcaption></figure>
+</div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Lay with Images</h1>
 <hr/><div class="r-stack"><img class="fragment " src="https://placekitten.com/450/300"/><img class="fragment " src="https://placekitten.com/300/450"/><img class="fragment " src="https://placekitten.com/400/400"/></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><pre><code class="language-yaml">img:
   label: Kitten 🐱
   src: https://placekitten.com/600/400
@@ -220,7 +226,10 @@ for i in range(10):
   - src: https://placekitten.com/400/400
 </code></pre>
 </section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Video</h1>
-<hr/><div style="display:flex;flex-direction:row;justify-content:center;align-items:center"><video width="320" height="240" controls><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video><video><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><p>The videos can be placed by same logic.</p>
+<hr/><div class="hstack">
+<video width="320" height="240" controls><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
+<video><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
+</div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><p>The videos can be placed by same logic.</p>
 <pre><code class="language-yaml">video:
   - width: 320
     height: 240
@@ -397,7 +406,7 @@ fragment:
         slideNumber: "c/t",
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath, RevealZoom, ],
         math: {
-            mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+            mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.9/MathJax.js',
             config: 'TeX-AMS_HTML-full',
         }
     });
