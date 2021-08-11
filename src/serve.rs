@@ -62,7 +62,7 @@ where
             .service(site::help_page)
             .service(site::icon)
             .service(site::watermark)
-            .service(site::check_project)
+            .service(site::changed)
             .service(Files::new("/static", &archive));
         for asset in &assets {
             let name = format!("/{}", asset.file_name().unwrap().to_str().unwrap());
@@ -109,7 +109,7 @@ mod site {
     }
 
     #[get("/changed/")]
-    pub(super) async fn check_project(data: Data<Cache>) -> Result<HttpResponse> {
+    pub(super) async fn changed(data: Data<Cache>) -> Result<HttpResponse> {
         let last = metadata(&data.project)?
             .modified()?
             .duration_since(SystemTime::UNIX_EPOCH)
