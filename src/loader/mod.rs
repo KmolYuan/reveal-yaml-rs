@@ -35,7 +35,7 @@ setInterval(function() {
                 location.reload();
         }
     });
-}, 1000);";
+}, 500);";
 
 fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str, reload: bool) -> Result<String, Error> {
     let meta = &yaml[0];
