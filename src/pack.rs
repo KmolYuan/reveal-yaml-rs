@@ -1,6 +1,7 @@
 use crate::{
     get_archive,
     loader::loader,
+    serve::{ICON, WATERMARK},
     update::{update, ARCHIVE},
 };
 use std::{
@@ -73,10 +74,20 @@ where
         println!("Remove {:?}", dist);
         remove_dir_all(dist)?;
     }
-    let contents = loader(&read_to_string(project)?, "", false)?;
     let archive = Path::new(ARCHIVE);
     extract(".")?;
-    write(archive.join("index.html"), contents)?;
+    pack_inner(archive, project).map_err(|e| {
+        remove_dir_all(archive).unwrap_or_default();
+        e
+    })?;
+    rename(archive, dist)?;
+    println!("Done");
+    Ok(())
+}
+
+fn pack_inner(archive: &Path, project: &str) -> Result<()> {
+    let contents = loader(&read_to_string(project)?, "", false)?;
+    write(archive.join("index.html"), &contents)?;
     for assets in listdir(".")? {
         let name = assets.file_name().unwrap().to_str().unwrap();
         if name == ARCHIVE || name.starts_with('.') {
@@ -91,7 +102,18 @@ where
             copy_dir(assets, dist)?;
         }
     }
-    rename(archive, dist)?;
-    println!("Done");
+    // Use help resources
+    for (pat, path, data) in [
+        ("help/icon.png", "icon.png", ICON),
+        ("help/watermark.png", "watermark.png", WATERMARK),
+    ] {
+        if contents.contains(pat) {
+            let folder = archive.join("help");
+            if !folder.is_dir() {
+                create_dir("help")?;
+            }
+            write(folder.join(path), data)?;
+        }
+    }
     Ok(())
 }
