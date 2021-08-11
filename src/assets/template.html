@@ -48,6 +48,9 @@
 
         .hstack {
             display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
         }
 
         .hstack-border {
@@ -127,7 +130,7 @@
     Reveal.initialize({/* {%option} */
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath, RevealZoom, /* {%plugin} */],
         math: {
-            mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+            mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.9/MathJax.js',
             config: 'TeX-AMS_HTML-full',
         }
     });

@@ -14,9 +14,10 @@ pub(crate) fn media(n: &Node, v: &Anchors, frag: &mut FragMap) -> Result<String,
             match m.yaml() {
                 Yaml::Array(ms) => {
                     if !ms.is_empty() {
-                        doc += "<div style=\"display:flex;flex-direction:row;justify-content:center;align-items:center\">";
+                        doc += "<div class=\"hstack\">\n";
                         for m in ms {
                             doc += &frag.fragment(tag, &f(m.as_anchor(v))?);
+                            doc += "\n";
                         }
                         doc += "</div>";
                     }

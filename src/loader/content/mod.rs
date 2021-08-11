@@ -11,19 +11,22 @@ mod lay_img;
 mod marked;
 mod media;
 
-pub(crate) fn sized_block(img: &Node) -> Result<(String, String), Error> {
-    let src = img.get_default("src", "", Node::as_str)?;
+pub(crate) fn sized_block(node: &Node) -> Result<(String, String), Error> {
+    let src = node.get_default("src", "", Node::as_str)?;
     if src.is_empty() {
-        return Err(Error("empty source", img.pos()));
+        return Err(Error("empty source", node.pos()));
     }
-    let mut size = String::new();
-    for attr in ["width", "height"] {
-        let value = img.get_default(attr, "", Node::as_value)?;
-        if !value.is_empty() {
-            size += &format!(" {}=\"{}\"", attr, value);
-        }
-    }
+    let size = sized("width", node)? + &sized("height", node)?;
     Ok((format!(" src=\"{}\"", src), size))
+}
+
+fn sized(attr: &'static str, node: &Node) -> Result<String, Error> {
+    let value = node.get_default(attr, "", Node::as_value)?;
+    if value.is_empty() {
+        Ok("".to_owned())
+    } else {
+        Ok(format!(" {}=\"{}\"", attr, value))
+    }
 }
 
 pub(crate) fn content_block(
