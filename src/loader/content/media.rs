@@ -23,7 +23,7 @@ pub(crate) fn media(n: &Node, v: &Anchors, frag: &mut FragMap) -> Result<String,
                     }
                 }
                 Yaml::Map(_) => {
-                    doc += &frag.fragment(tag, &f(&m)?);
+                    doc += &frag.fragment(tag, &f(m)?);
                 }
                 _ => return Err(Error("invalid blocks", m.pos())),
             }
