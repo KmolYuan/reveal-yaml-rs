@@ -28,15 +28,27 @@ Download CLI executable from GitHub release: <https://github.com/KmolYuan/reveal
 
 Wherever the binary placed, it should be visible for the environment variable `PATH`.
 
-If you are a Rust user, install it with cargo:
+If you are a Rust user, install it with cargo is possible. Unfortunately, the binary is build with the cargo toolchain, and you will get a large size than the CI/CD result.
+
 ```
 cargo install reveal-yaml
 ```
+
+It recommends download GitHub distribution directly for saving your time. For example, a CI/CD script can write as:
+
+```bash
+wget -O reveal-yaml.zip https://github.com/KmolYuan/reveal-yaml-rs/releases/latest/download/reveal-yaml-linux-amd64.zip
+unzip reveal-yaml.zip
+chmod +x rym
+./rym pack
+```
+
 The executable can be checked with `rym --help`.
 
 ## Command Line Interface
 
 The command `rym` stands for "Reveal-Yaml Manager".
+
 ```bash
 # Download the latest Reveal.js archive
 rym update
@@ -64,6 +76,7 @@ rym serve --edit
 ## Tutorial
 
 **Slides in HTML**: In Reveal.js, the HTML structure shown as following. The typesetting is done by original HTML and CSS.
+
 ```html
 <section> <!-- Horizontal slide 1 -->
   <section>...</section> <!-- Vertical slide 1 -->
@@ -74,7 +87,9 @@ rym serve --edit
   ...
 </section>
 ```
+
 **Slides in YAML**: The horizontal slides are as listed in the second block, which is an array. A slide can work with at least one attribute structure.
+
 ```yaml
 # metadata block
 description: ...
@@ -85,7 +100,9 @@ author: ...
 - doc: ...  # Works!
 - img: ...  # Works!
 ```
+
 The vertical slides work under the `sub` node of first slide, the attributes are same as horizontal slides.
+
 ```yaml
 - title: Horizontal slide 1
   sub:
@@ -93,6 +110,7 @@ The vertical slides work under the `sub` node of first slide, the attributes are
     - title: Vertical slide 2
 - title: Horizontal slide 2
 ```
+
 This work supports YAML 1.2, and the anchor function supports for specific fields, such as content blocks.
 
 ### Layout
@@ -100,6 +118,7 @@ This work supports YAML 1.2, and the anchor function supports for specific field
 There are two layout types, called "horizontal stack" (`hstack`) and "vertical stack" (`vstack`). The vertical layout is default, as same as HTML.
 
 The stack blocks list in the `hstack` / `vstack` tag, and the stack tags can be nested.
+
 ```yaml
 hstack:
   - doc: Left
@@ -107,7 +126,9 @@ hstack:
     - doc: Right Top
     - doc: Right Bottom
 ```
+
 The stack tag can add a dollar sign `$` to add a borderline between the elements.
+
 ```yaml
 $hstack:
   - doc: Splitted left
@@ -119,6 +140,7 @@ $hstack:
 The images and resizeable items are support "sized" attribute, which contains three options: `src`, `width` and `height`. The `src` option is required, otherwise the feature will be disabled or invalid.
 
 The `width` and `height` options are the same as the attributes on the `<img>` tag, they are optional.
+
 ```yaml
 footer:  # Footer is a metadata option
   src: help/icon.png
