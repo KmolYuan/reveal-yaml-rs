@@ -109,10 +109,12 @@ fn pack_inner(archive: &Path, project: &str) -> Result<()> {
     ] {
         if contents.contains(pat) {
             let folder = archive.join("help");
+            let dist = folder.join(path);
             if !folder.is_dir() {
-                create_dir("help")?;
+                create_dir(folder)?;
             }
-            write(folder.join(path), data)?;
+            println!("{} > {:?}", pat, &dist);
+            write(dist, data)?;
         }
     }
     Ok(())
