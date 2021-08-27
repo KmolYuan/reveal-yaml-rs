@@ -53,7 +53,7 @@ pub(crate) fn content_block(
             let include = read_to_string(t).map_err(|_| ("read file error", n.pos()))?;
             doc += &frag.fragment(
                 "include",
-                &if n.ty() == "html" {
+                &if n.tag() == "html" {
                     include
                 } else {
                     md2html(&include)

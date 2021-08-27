@@ -38,7 +38,7 @@ pub(crate) fn js_option(meta: &Node) -> Result<String, Error> {
 
 fn as_json(n: &Node) -> Result<String, Error> {
     match n.yaml() {
-        Yaml::Str(s) => Ok(if n.ty() == "markdown" {
+        Yaml::Str(s) => Ok(if n.tag() == "markdown" {
             format!("\"{}\"", md2html(s).escape())
         } else {
             format!("\"{}\"", s.escape())
