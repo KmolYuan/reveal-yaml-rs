@@ -1,5 +1,4 @@
 use crate::{
-    get_archive,
     loader::loader,
     serve::{ICON, WATERMARK},
     update::{update, ARCHIVE},
@@ -40,7 +39,12 @@ pub(crate) fn extract<D>(d: D) -> Result<()>
 where
     D: AsRef<Path>,
 {
-    let path = get_archive!();
+    let path = {
+        use std::env::current_exe;
+        let mut path = current_exe()?.with_file_name(ARCHIVE);
+        path.set_extension("zip");
+        path
+    };
     if !path.exists() {
         update()?;
     }
@@ -63,7 +67,7 @@ where
 }
 
 /// Pack project to an archive.
-pub(crate) fn pack<P, D>(path: P, dist: D, project: &str) -> Result<()>
+pub fn pack<P, D>(path: P, dist: D, project: &str) -> Result<()>
 where
     P: AsRef<Path>,
     D: AsRef<Path>,

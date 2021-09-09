@@ -24,7 +24,7 @@ jobs:
           toolchain: stable
       - shell: bash
         run: |
-          cargo build --release
+          cargo build --bin rym --release
       - name: Pack binaries
         uses: papeloto/action-zip@v1
         with:

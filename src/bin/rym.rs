@@ -1,26 +1,5 @@
-#[macro_export]
-macro_rules! get_archive {
-    () => {{
-        use std::env::current_exe;
-        let mut path = current_exe()?.with_file_name(ARCHIVE);
-        path.set_extension("zip");
-        path
-    }};
-}
-
-use crate::blank::{blank, ROOT};
-use crate::fmt::fmt;
-use crate::pack::pack;
-use crate::serve::serve;
-use crate::update::update;
 use clap::{clap_app, AppSettings};
-
-mod blank;
-mod fmt;
-mod loader;
-mod pack;
-mod serve;
-mod update;
+use reveal_yaml::*;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

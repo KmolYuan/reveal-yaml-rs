@@ -26,7 +26,7 @@ struct Cache {
 }
 
 /// Launch function.
-pub(crate) async fn serve<P>(port: u16, path: P, project: &str, edit: bool) -> Result<()>
+pub async fn serve<P>(port: u16, path: P, project: &str, edit: bool) -> Result<()>
 where
     P: AsRef<Path>,
 {

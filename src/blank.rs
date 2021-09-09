@@ -5,11 +5,12 @@ use std::{
     path::Path,
 };
 
-pub(crate) const ROOT: &str = "reveal.yaml";
+/// The default root name.
+pub const ROOT: &str = "reveal.yaml";
 const BLANK_DOC: &str = include_str!("assets/blank.yaml");
 
 /// Create new project.
-pub(crate) fn blank<P>(path: P) -> Result<()>
+pub fn blank<P>(path: P) -> Result<()>
 where
     P: AsRef<Path>,
 {

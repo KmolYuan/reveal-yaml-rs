@@ -9,10 +9,15 @@ const REVEAL: &str = "https://github.com/hakimel/reveal.js/archive/master.zip";
 pub(crate) const ARCHIVE: &str = "reveal.js-master";
 
 /// Download the archive from Reveal.js repository.
-pub(crate) fn update() -> Result<()> {
+pub fn update() -> Result<()> {
     let b = get(REVEAL).unwrap().bytes().unwrap();
     println!("Download archive: {}", REVEAL);
-    let archive = get_archive!();
+    let archive = {
+        use std::env::current_exe;
+        let mut path = current_exe()?.with_file_name(ARCHIVE);
+        path.set_extension("zip");
+        path
+    };
     let mut r = ZipArchive::new(Cursor::new(b))?;
     let mut w = ZipWriter::new(File::create(archive)?);
     let dist = format!("{}/dist/", ARCHIVE);
