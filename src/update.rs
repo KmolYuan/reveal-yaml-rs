@@ -1,5 +1,6 @@
 use reqwest::blocking::get;
 use std::{
+    env::current_exe,
     fs::File,
     io::{Cursor, Result},
 };
@@ -12,12 +13,7 @@ pub(crate) const ARCHIVE: &str = "reveal.js-master";
 pub fn update() -> Result<()> {
     let b = get(REVEAL).unwrap().bytes().unwrap();
     println!("Download archive: {}", REVEAL);
-    let archive = {
-        use std::env::current_exe;
-        let mut path = current_exe()?.with_file_name(ARCHIVE);
-        path.set_extension("zip");
-        path
-    };
+    let archive = current_exe()?.with_file_name(format!("{}.zip", ARCHIVE));
     let mut r = ZipArchive::new(Cursor::new(b))?;
     let mut w = ZipWriter::new(File::create(archive)?);
     let dist = format!("{}/dist/", ARCHIVE);

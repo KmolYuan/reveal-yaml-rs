@@ -4,7 +4,7 @@ use crate::{
     update::{update, ARCHIVE},
 };
 use std::{
-    env::set_current_dir,
+    env::{current_exe, set_current_dir},
     fs::{copy, create_dir, read_dir, read_to_string, remove_dir_all, rename, write, File},
     io::Result,
     path::{Path, PathBuf},
@@ -39,12 +39,7 @@ pub(crate) fn extract<D>(d: D) -> Result<()>
 where
     D: AsRef<Path>,
 {
-    let path = {
-        use std::env::current_exe;
-        let mut path = current_exe()?.with_file_name(ARCHIVE);
-        path.set_extension("zip");
-        path
-    };
+    let path = current_exe()?.with_file_name(format!("{}.zip", ARCHIVE));
     if !path.exists() {
         update()?;
     }
