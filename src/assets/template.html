@@ -248,14 +248,12 @@
         /* {%auto-reload} */
     });
 
-    // Modal
     function show_modal(a) {
         $("#modal").css("display", "block");
         $("#img-demo").attr("src", a.src);
-        $("#caption").attr("innerHTML", a.alt);
+        $("#caption").html(a.alt);
     }
 
-    // When the user clicks on <span> (x), close the modal
     document.getElementById("close").onclick = function () {
         $("#modal").css("display", "none");
     };
