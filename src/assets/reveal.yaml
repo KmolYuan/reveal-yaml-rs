@@ -100,8 +100,10 @@ footer:
       img:
         - label: Kitten 1
           src: https://placekitten.com/700/500
+          pop: true
         - label: Kitten 2
           src: https://placekitten.com/800/500
+          pop: true
     - $title: Lay with Images
       lay-img:
         - src: https://placekitten.com/450/300
@@ -118,8 +120,10 @@ footer:
         img:
           - label: Kitten 1
             src: https://placekitten.com/700/500
+            pop: true
           - label: Kitten 2
             src: https://placekitten.com/800/500
+            pop: true
         ```
         Laid images will be placed at the same center.
         ```yaml

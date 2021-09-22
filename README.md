@@ -233,6 +233,7 @@ Slides are a list of multiple slide blocks, they are totally YAML Maps.
     + **Array**, can be **Map** if there is only one image.
     + The blocks are **sized**.
     + `label`: Image `<caption>`.
+    + `pop`: Pop-up modal image, boolean `false` by default.
   + `video`: Embed videos.
     + **Array**, can be **Map** if there is only one video.
     + The blocks are **sized**.

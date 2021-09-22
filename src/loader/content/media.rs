@@ -34,8 +34,13 @@ pub(crate) fn media(n: &Node, v: &Anchors, frag: &mut FragMap) -> Result<String,
 
 fn img_block(img: &Node) -> Result<String, Error> {
     let (src, size) = sized_block(img)?;
-    let src = format!("<img{}{}/>", src, size);
     let label = img.get_default("label", "", Node::as_str)?;
+    let open = if img.get_default("pop", false, Node::as_bool)? {
+        " class=\"img-pop\" onclick=\"show_modal(this)\" title=\"click to pop-up the image\""
+    } else {
+        ""
+    };
+    let src = format!("<img alt=\"{}\"{}{}{}/>", label, open, src, size);
     Ok(if label.is_empty() {
         src
     } else {
