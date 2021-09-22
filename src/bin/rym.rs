@@ -1,8 +1,9 @@
 use clap::{clap_app, AppSettings};
 use reveal_yaml::*;
+use std::io::{Error, ErrorKind};
 
 #[actix_web::main]
-async fn main() -> std::io::Result<()> {
+async fn main() -> Result<(), Error> {
     let args = clap_app! {
         ("Reveal.yaml Manager") =>
         (version: env!("CARGO_PKG_VERSION"))
@@ -13,8 +14,11 @@ async fn main() -> std::io::Result<()> {
             (about: "Download the Reveal.js resources")
         )
         (@subcommand new =>
-            (alias: "init")
-            (about: "Create a new project")
+            (about: "Create a new project and its directory")
+            (@arg DIR: "Project dir")
+        )
+        (@subcommand init =>
+            (about: "Create a new project from exist directory")
             (@arg DIR: "Project dir")
         )
         (@subcommand serve =>
@@ -41,8 +45,13 @@ async fn main() -> std::io::Result<()> {
     if args.subcommand_matches("update").is_some() {
         update()
     } else if let Some(cmd) = args.subcommand_matches("new") {
+        let path = cmd
+            .value_of("DIR")
+            .ok_or_else(|| Error::new(ErrorKind::InvalidInput, "project path is required"))?;
+        blank(path, true)
+    } else if let Some(cmd) = args.subcommand_matches("init") {
         let path = cmd.value_of("DIR").unwrap_or(".");
-        blank(path)
+        blank(path, false)
     } else if let Some(cmd) = args.subcommand_matches("serve") {
         let port = cmd.value_of("PORT").unwrap_or("8080");
         let path = cmd.value_of("DIR").unwrap_or(".");

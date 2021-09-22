@@ -1,6 +1,6 @@
 use crate::loader::wrap_string::WrapString;
 use std::{
-    fs::File,
+    fs::{create_dir, File},
     io::{stdin, stdout, Result, Write},
     path::Path,
 };
@@ -10,24 +10,27 @@ pub const ROOT: &str = "reveal.yaml";
 const BLANK_DOC: &str = include_str!("assets/blank.yaml");
 
 /// Create new project.
-pub fn blank<P>(path: P) -> Result<()>
+pub fn blank<P>(path: P, new_dir: bool) -> Result<()>
 where
     P: AsRef<Path>,
 {
-    let path = path.as_ref().join(ROOT);
-    File::create(&path)?.write_all(
+    let path = path.as_ref();
+    if new_dir && !path.is_dir() {
+        create_dir(path)?;
+    }
+    File::create(&path.join(ROOT))?.write_all(
         BLANK_DOC
-            .replace("{%title}", &question("Title")?)
-            .replace("{%author}", &question("Author")?)
-            .replace("{%description}", &question("Description")?)
+            .replace("{%title}", &ask("Title")?)
+            .replace("{%author}", &ask("Author")?)
+            .replace("{%description}", &ask("Description")?)
             .replace("{%hash}", &question_bool("Option - hash [y/N]")?)
             .as_bytes(),
     )?;
-    println!("Create {:?}", path);
+    println!("Create project {:?}", path);
     Ok(())
 }
 
-fn question(q: &'static str) -> Result<String> {
+fn ask(q: &'static str) -> Result<String> {
     print!("{}: ", q);
     let mut buf = String::new();
     stdout().flush()?;
@@ -35,6 +38,7 @@ fn question(q: &'static str) -> Result<String> {
     Ok(buf.trim_end().escape())
 }
 
+#[inline(always)]
 fn question_bool(q: &'static str) -> Result<String> {
-    Ok((question(q)? == "y").to_string())
+    Ok((ask(q)? == "y").to_string())
 }
