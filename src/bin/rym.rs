@@ -39,26 +39,27 @@ async fn main() -> std::io::Result<()> {
     }
     .get_matches();
     if args.subcommand_matches("update").is_some() {
-        update()?;
+        update()
     } else if let Some(cmd) = args.subcommand_matches("new") {
         let path = cmd.value_of("DIR").unwrap_or(".");
-        blank(path)?;
+        blank(path)
     } else if let Some(cmd) = args.subcommand_matches("serve") {
         let port = cmd.value_of("PORT").unwrap_or("8080");
         let path = cmd.value_of("DIR").unwrap_or(".");
         let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
         let edit = cmd.is_present("edit");
-        serve(port.parse().unwrap(), path, project, edit).await?;
+        serve(port.parse().unwrap(), path, project, edit).await
     } else if let Some(cmd) = args.subcommand_matches("fmt") {
         let path = cmd.value_of("DIR").unwrap_or(".");
         let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
         let dry = cmd.is_present("dry");
-        fmt(path, dry, project)?;
+        fmt(path, dry, project)
     } else if let Some(cmd) = args.subcommand_matches("pack") {
         let path = cmd.value_of("DIR").unwrap_or(".");
         let dist = cmd.value_of("DIST").unwrap_or("./package");
         let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
-        pack(path, dist, project)?;
+        pack(path, dist, project)
+    } else {
+        panic!("invalid input")
     }
-    Ok(())
 }
