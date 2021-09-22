@@ -106,6 +106,99 @@
             background-color: transparent;
         }
 
+        .img-pop {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .img-pop:hover {
+            opacity: 0.7;
+        }
+
+        /* The Modal (background) */
+        #modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+        }
+
+        /* Modal Content (image) */
+        #img-demo {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        /* Caption of Modal Image */
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            height: 150px;
+        }
+
+        /* Animation */
+        #img-demo, #caption {
+            -webkit-animation-name: zoom;
+            -webkit-animation-duration: 0.6s;
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+
+        @-webkit-keyframes zoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes zoom {
+            from {
+                transform: scale(0)
+            }
+            to {
+                transform: scale(1)
+            }
+        }
+
+        /* The Close Button */
+        #close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        #close:hover, #close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 100% Image Width on Smaller Screens */
+        @media only screen and (max-width: 700px) {
+            #img-demo {
+                width: 100%;
+            }
+        }
+
         
     </style>
 </head>
@@ -203,10 +296,10 @@ for i in range(10):
   + [Next page](#/5)
 </code></pre>
 </section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Image</h1>
-<hr/><figure><img src="https://placekitten.com/600/400"/><figcaption>Kitten 🐱</figcaption></figure></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Multiple Images</h1>
+<hr/><figure><img alt="Kitten 🐱" src="https://placekitten.com/600/400"/><figcaption>Kitten 🐱</figcaption></figure></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Multiple Images</h1>
 <hr/><div class="hstack">
-<figure><img src="https://placekitten.com/700/500"/><figcaption>Kitten 1</figcaption></figure>
-<figure><img src="https://placekitten.com/800/500"/><figcaption>Kitten 2</figcaption></figure>
+<figure><img alt="Kitten 1" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/700/500"/><figcaption>Kitten 1</figcaption></figure>
+<figure><img alt="Kitten 2" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/800/500"/><figcaption>Kitten 2</figcaption></figure>
 </div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Lay with Images</h1>
 <hr/><div class="r-stack"><img class="fragment " src="https://placekitten.com/450/300"/><img class="fragment " src="https://placekitten.com/300/450"/><img class="fragment " src="https://placekitten.com/400/400"/></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><pre><code class="language-yaml">img:
   label: Kitten 🐱
@@ -216,8 +309,10 @@ for i in range(10):
 <pre><code class="language-yaml">img:
   - label: Kitten 1
     src: https://placekitten.com/700/500
+    pop: true
   - label: Kitten 2
     src: https://placekitten.com/800/500
+    pop: true
 </code></pre>
 <p>Laid images will be placed at the same center.</p>
 <pre><code class="language-yaml">lay-img:
@@ -280,7 +375,7 @@ background:
 <li>enum</li>
 <li>union</li>
 </ul>
-</div><div style="width:33.333332%">\[\small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}\]</div><div style="width:33.333332%"><img src="https://placekitten.com/600/600"/></div></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Nested Layout</h1>
+</div><div style="width:33.333332%">\[\small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}\]</div><div style="width:33.333332%"><img alt="" src="https://placekitten.com/600/600"/></div></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Nested Layout</h1>
 <hr/><div class="hstack"><div style="width:50%"><div class="vstack"><div><div class="hstack"><div style="width:50%"><p>Left Top Left</p>
 </div><div style="width:50%"><p>Left Top Right</p>
 </div></div></div><div><p>Left Bottom</p>
@@ -395,6 +490,11 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 </section></section>
     </div>
 </div>
+<div id="modal">
+    <span id="close">&times;</span>
+    <img src="" alt="demo image" id="img-demo">
+    <div id="caption"></div>
+</div>
 <script src="dist/reveal.js"></script>
 <script src="plugin/notes/notes.js"></script>
 <script src="plugin/search/search.js"></script>
@@ -430,6 +530,18 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
             .attr('target', '_blank');
         
     });
+
+    // Modal
+    function show_modal(a) {
+        $("#modal").css("display", "block");
+        $("#img-demo").attr("src", a.src);
+        $("#caption").attr("innerHTML", a.alt);
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    document.getElementById("close").onclick = function () {
+        $("#modal").css("display", "none");
+    };
 </script>
 </body>
 </html>
