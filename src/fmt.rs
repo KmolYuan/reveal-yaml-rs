@@ -12,7 +12,7 @@ pub fn fmt<P: AsRef<Path>>(path: P, dry: bool, project: &str) -> Result<()> {
         Ok(v) => v,
         Err(s) => return Err(Error::new(ErrorKind::InvalidData, s)),
     };
-    let s = dump(yaml);
+    let s = dump(&yaml);
     if dry {
         println!("{}", s);
     } else {
