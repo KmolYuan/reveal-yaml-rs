@@ -252,11 +252,15 @@
         $("#modal").css("display", "block");
         $("#img-demo").attr("src", a.src);
         $("#caption").html(a.alt);
+        Reveal.configure({keyboard: {27: close_modal}});
     }
 
-    document.getElementById("close").onclick = function () {
+    function close_modal() {
         $("#modal").css("display", "none");
-    };
+        Reveal.configure({keyboard: {27: "toggleOverview"}});
+    }
+
+    document.getElementById("close").onclick = close_modal;
 </script>
 </body>
 </html>
