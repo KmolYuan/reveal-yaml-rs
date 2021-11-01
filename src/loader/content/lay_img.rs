@@ -3,7 +3,7 @@ use yaml_peg::{Anchors, Node, Yaml};
 
 pub(crate) fn lay_img(m: &Node, v: &Anchors) -> Result<String, Error> {
     match m.yaml() {
-        Yaml::Array(ms) => {
+        Yaml::Seq(ms) => {
             let mut doc = "<div class=\"r-stack\">".to_string();
             for m in ms {
                 doc += &img_block(m.as_anchor(v))?;

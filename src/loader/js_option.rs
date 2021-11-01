@@ -46,7 +46,7 @@ fn as_json(n: &Node) -> Result<String, Error> {
         Yaml::Int(s) | Yaml::Float(s) => Ok(s.clone()),
         Yaml::Bool(true) => Ok("true".to_string()),
         Yaml::Bool(false) => Ok("false".to_string()),
-        Yaml::Array(a) => {
+        Yaml::Seq(a) => {
             let mut s = "[".to_string();
             for n in a {
                 s += &as_json(n)?;

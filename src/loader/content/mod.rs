@@ -36,7 +36,7 @@ pub(crate) fn content_block(
 ) -> Result<String, Error> {
     let mut doc = String::new();
     let mut frag = FragMap::new(slide, v, frag_count)?;
-    for n in slide.get_default("fit", vec![], Node::as_array)? {
+    for n in slide.get_default("fit", vec![], Node::as_seq)? {
         let t = n.as_anchor(v).as_str()?;
         if t == "---" {
             doc += &frag.fragment("fit", "<hr/>");
@@ -73,7 +73,7 @@ pub(crate) fn content_block(
         .iter()
         .enumerate()
     {
-        let stack = slide.get_default(title, vec![], Node::as_array)?;
+        let stack = slide.get_default(title, vec![], Node::as_seq)?;
         if stack.is_empty() {
             continue;
         }

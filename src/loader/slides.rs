@@ -1,8 +1,8 @@
 use super::{content_block, md2html, visible_title, Background, Error, WrapString};
-use yaml_peg::{repr::RcRepr, Anchors, Array, Node};
+use yaml_peg::{repr::RcRepr, Anchors, Node, Seq};
 
 pub(crate) fn slides(
-    slides: Array<RcRepr>,
+    slides: Seq<RcRepr>,
     v: &Anchors,
     bg: Background,
     outline: bool,
@@ -13,7 +13,7 @@ pub(crate) fn slides(
         let slide = slide.as_anchor(v);
         doc += "<section>";
         doc += &slide_block(slide, v, &bg)?;
-        for slide in slide.get_default("sub", vec![], Node::as_array)? {
+        for slide in slide.get_default("sub", vec![], Node::as_seq)? {
             doc += &slide_block(slide.as_anchor(v), v, &bg)?;
         }
         if i == 0 {
@@ -39,7 +39,7 @@ pub(crate) fn slides(
                     continue;
                 }
                 for (j, slide) in slide
-                    .get_default("sub", vec![], Node::as_array)?
+                    .get_default("sub", vec![], Node::as_seq)?
                     .iter()
                     .enumerate()
                 {

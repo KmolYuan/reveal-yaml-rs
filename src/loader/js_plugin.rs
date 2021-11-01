@@ -8,7 +8,7 @@ pub(crate) fn js_plugin(meta: &Node) -> Result<(String, String), Error> {
         for (name, file) in plugin.as_map()? {
             names += name.as_str()?;
             names += ", ";
-            for f in file.as_array()? {
+            for f in file.as_seq()? {
                 files += &format!("<script src=\"{}\"></script>\n", f.as_str()?);
             }
         }

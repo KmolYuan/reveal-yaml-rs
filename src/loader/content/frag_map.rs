@@ -7,7 +7,7 @@ pub(crate) struct FragMap(HashMap<String, HashMap<usize, String>>);
 impl FragMap {
     pub(crate) fn new(slide: &Node, v: &Anchors, count: &mut usize) -> Result<Self, Error> {
         let mut frag_map = HashMap::new();
-        for h in slide.with(v, "fragment", vec![], Node::as_array)? {
+        for h in slide.with(v, "fragment", vec![], Node::as_seq)? {
             for (k, v) in h.as_map()?.iter() {
                 let k = k.as_str()?;
                 let v = v.as_str()?;

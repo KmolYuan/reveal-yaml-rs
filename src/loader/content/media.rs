@@ -12,7 +12,7 @@ pub(crate) fn media(n: &Node, v: &Anchors, frag: &mut FragMap) -> Result<String,
     ] {
         if let Ok(m) = n.get(tag) {
             match m.yaml() {
-                Yaml::Array(ms) => {
+                Yaml::Seq(ms) => {
                     if !ms.is_empty() {
                         doc += "<div class=\"hstack\">\n";
                         for m in ms {

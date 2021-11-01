@@ -8,7 +8,7 @@ use self::slides::slides;
 use self::visible_title::visible_title;
 use self::wrap_string::WrapString;
 use std::io::{Error as IoError, ErrorKind};
-use yaml_peg::{indicated_msg, parse, repr::RcRepr, Anchors, Array, Node};
+use yaml_peg::{indicated_msg, parse, repr::RcRepr, Anchors, Node, Seq};
 
 mod background;
 mod content;
@@ -38,12 +38,12 @@ setInterval(function() {
     });
 }, 500);";
 
-fn load_main(yaml: Array<RcRepr>, v: &Anchors, mount: &str, reload: bool) -> Result<String, Error> {
+fn load_main(yaml: Seq<RcRepr>, v: &Anchors, mount: &str, reload: bool) -> Result<String, Error> {
     let meta = &yaml[0];
     let bg = Background::new(meta)?;
     let outline = meta.get_default("outline", true, Node::as_bool)?;
     let style = meta.get_default("style", "", Node::as_str)?;
-    let (doc, title) = slides(yaml[1].as_array()?, v, bg, outline)?;
+    let (doc, title) = slides(yaml[1].as_seq()?, v, bg, outline)?;
     let title = meta.get_default("title", title.as_ref(), Node::as_str)?;
     let description = meta.get_default("description", title.as_ref(), Node::as_str)?;
     let author = meta.get_default("author", "", Node::as_str)?;
