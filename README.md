@@ -188,7 +188,7 @@ Metadata contains HTML settings and global slide settings. They are totally YAML
 + `outline`: Auto generated table of the contents (TOC), boolean `true` by default.
 + `theme`: Reveal.js theme, "serif" by default.
 + `code-theme`: Highlight theme, "zenburn" by default.
-+ `style`: Extra CSS style path.
++ `style`: Extra CSS script in `<style>` tag.
 + `footer`: Global footer option. You can add your logo here.
   + The block is **sized**.
   + `label`: Footer text.
