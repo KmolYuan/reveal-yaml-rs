@@ -24,7 +24,7 @@ const TEMPLATE: &str = include_str!("../assets/template.html");
 const ICON: &str = "help/icon.png";
 const RELOAD: &str = "\
 let ws = new WebSocket(\"ws://\" + window.location.host + \"/ws/\");
-ws.onmessage = msg => location.reload();";
+        ws.onmessage = _ => location.reload();";
 
 fn load_main(yaml: Seq<RcRepr>, v: &Anchors, mount: &str, reload: bool) -> Result<String, Error> {
     let meta = &yaml[0];
@@ -40,7 +40,6 @@ fn load_main(yaml: Seq<RcRepr>, v: &Anchors, mount: &str, reload: bool) -> Resul
     let (plugin_names, plugin_files) = js_plugin(meta)?;
     let reload_script = if reload { RELOAD } else { "" };
     Ok(TEMPLATE
-        .to_string()
         .replace("{%icon}", meta.get_default("icon", ICON, Node::as_str)?)
         .replace("{%lang}", meta.get_default("lang", "en", Node::as_str)?)
         .replace("{%title}", &title.escape())

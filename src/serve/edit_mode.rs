@@ -6,7 +6,7 @@ use std::{
     time::{Duration, SystemTime},
 };
 
-const INTERVAL: Duration = Duration::from_secs(1);
+const INTERVAL: Duration = Duration::from_millis(500);
 
 fn file_date(path: &str) -> Duration {
     metadata(path)
