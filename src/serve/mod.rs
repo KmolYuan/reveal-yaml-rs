@@ -5,7 +5,7 @@ use crate::{
     update::ARCHIVE,
 };
 use actix_files::Files;
-use actix_web::{App, HttpServer};
+use actix_web::{web::Data, App, HttpServer};
 use std::{
     env::set_current_dir,
     fs::{canonicalize, read_to_string},
@@ -41,7 +41,7 @@ where
         Err(s) => return Err(Error::new(ErrorKind::InvalidData, s)),
     };
     // Expand Reveal.js
-    extract(temp.path())?;
+    extract(temp.path()).await?;
     // Start server
     let archive = temp.path().join(ARCHIVE);
     println!("Serve at: http://localhost:{}/", port);
@@ -62,8 +62,8 @@ where
     });
     HttpServer::new(move || {
         let mut app = App::new()
-            .data(cache.clone())
-            .data(ServerMonitor::new(cache.project.clone()))
+            .app_data(Data::new(cache.clone()))
+            .app_data(Data::new(ServerMonitor::new(cache.project.clone())))
             .service(site::index)
             .service(site::help_page)
             .service(site::icon)

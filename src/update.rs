@@ -1,4 +1,4 @@
-use reqwest::blocking::get;
+use reqwest::get;
 use std::{
     env::current_exe,
     fs::File,
@@ -10,8 +10,8 @@ const REVEAL: &str = "https://github.com/hakimel/reveal.js/archive/master.zip";
 pub(crate) const ARCHIVE: &str = "reveal.js-master";
 
 /// Download the archive from Reveal.js repository.
-pub fn update() -> Result<()> {
-    let b = get(REVEAL).unwrap().bytes().unwrap();
+pub async fn update() -> Result<()> {
+    let b = get(REVEAL).await.unwrap().bytes().await.unwrap();
     println!("Download archive: {}", REVEAL);
     let archive = current_exe()?.with_file_name(format!("{}.zip", ARCHIVE));
     let mut r = ZipArchive::new(Cursor::new(b))?;

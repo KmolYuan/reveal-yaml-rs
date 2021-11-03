@@ -43,7 +43,7 @@ async fn main() -> Result<(), Error> {
     }
     .get_matches();
     if args.subcommand_matches("update").is_some() {
-        update()
+        update().await
     } else if let Some(cmd) = args.subcommand_matches("new") {
         let path = cmd
             .value_of("DIR")
@@ -67,7 +67,7 @@ async fn main() -> Result<(), Error> {
         let path = cmd.value_of("DIR").unwrap_or(".");
         let dist = cmd.value_of("DIST").unwrap_or("./package");
         let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
-        pack(path, dist, project)
+        pack(path, dist, project).await
     } else {
         panic!("invalid input")
     }

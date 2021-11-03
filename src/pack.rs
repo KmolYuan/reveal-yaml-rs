@@ -35,13 +35,13 @@ where
     Ok(())
 }
 
-pub(crate) fn extract<D>(d: D) -> Result<()>
+pub(crate) async fn extract<D>(d: D) -> Result<()>
 where
     D: AsRef<Path>,
 {
     let path = current_exe()?.with_file_name(format!("{}.zip", ARCHIVE));
     if !path.exists() {
-        update()?;
+        update().await?;
     }
     ZipArchive::new(File::open(path)?)
         .unwrap()
@@ -62,7 +62,7 @@ where
 }
 
 /// Pack project to an archive.
-pub fn pack<P, D>(path: P, dist: D, project: &str) -> Result<()>
+pub async fn pack<P, D>(path: P, dist: D, project: &str) -> Result<()>
 where
     P: AsRef<Path>,
     D: AsRef<Path>,
@@ -74,7 +74,7 @@ where
         remove_dir_all(dist)?;
     }
     let archive = Path::new(ARCHIVE);
-    extract(".")?;
+    extract(".").await?;
     pack_inner(archive, project).map_err(|e| {
         remove_dir_all(archive).unwrap_or_default();
         e
