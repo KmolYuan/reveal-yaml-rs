@@ -1,7 +1,7 @@
 use crate::{
     loader::loader,
     serve::{ICON, WATERMARK},
-    update::{update, ARCHIVE},
+    update::{archive, update},
 };
 use std::{
     env::{current_exe, set_current_dir},
@@ -39,7 +39,7 @@ pub(crate) async fn extract<D>(d: D) -> Result<()>
 where
     D: AsRef<Path>,
 {
-    let path = current_exe()?.with_file_name(format!("{}.zip", ARCHIVE));
+    let path = current_exe()?.with_file_name(concat!(archive!(), ".zip"));
     if !path.exists() {
         update().await?;
     }
@@ -73,23 +73,23 @@ where
         println!("Remove {:?}", dist);
         remove_dir_all(dist)?;
     }
-    let archive = Path::new(ARCHIVE);
     extract(".").await?;
-    pack_inner(archive, project).map_err(|e| {
-        remove_dir_all(archive).unwrap_or_default();
+    pack_inner(project).map_err(|e| {
+        remove_dir_all(archive!()).unwrap_or_default();
         e
     })?;
-    rename(archive, dist)?;
+    rename(archive!(), dist)?;
     println!("Done");
     Ok(())
 }
 
-fn pack_inner(archive: &Path, project: &str) -> Result<()> {
+fn pack_inner(project: &str) -> Result<()> {
+    let archive = Path::new(archive!());
     let contents = loader(&read_to_string(project)?, "", false)?;
     write(archive.join("index.html"), &contents)?;
     for assets in listdir(".")? {
         let name = assets.file_name().unwrap().to_str().unwrap();
-        if name == ARCHIVE || name.starts_with('.') {
+        if name == archive!() || name.starts_with('.') {
             continue;
         }
         if assets.is_dir() {

@@ -18,12 +18,11 @@ where
     if new_dir && !path.is_dir() {
         create_dir(path)?;
     }
-    File::create(&path.join(ROOT))?.write_all(
+    File::create(path.join(ROOT))?.write_all(
         BLANK_DOC
             .replace("{%title}", &ask("Title")?)
             .replace("{%author}", &ask("Author")?)
             .replace("{%description}", &ask("Description")?)
-            .replace("{%hash}", &question_bool("Option - hash [y/N]")?)
             .as_bytes(),
     )?;
     println!("Create project {:?}", path);
@@ -36,9 +35,4 @@ fn ask(q: &'static str) -> Result<String> {
     stdout().flush()?;
     stdin().read_line(&mut buf)?;
     Ok(buf.trim_end().escape())
-}
-
-#[inline(always)]
-fn question_bool(q: &'static str) -> Result<String> {
-    Ok((ask(q)? == "y").to_string())
 }

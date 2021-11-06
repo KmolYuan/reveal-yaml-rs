@@ -6,7 +6,10 @@ use std::{
 use yaml_peg::{dump, parse, repr::RcRepr};
 
 /// Reformat the project.
-pub fn fmt<P: AsRef<Path>>(path: P, dry: bool, project: &str) -> Result<()> {
+pub fn fmt<P>(path: P, dry: bool, project: &str) -> Result<()>
+where
+    P: AsRef<Path>,
+{
     let path = path.as_ref().join(project);
     let (yaml, _) = match parse::<RcRepr>(&read_to_string(&path)?) {
         Ok(v) => v,

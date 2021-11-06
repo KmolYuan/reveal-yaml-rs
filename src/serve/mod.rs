@@ -2,7 +2,7 @@ use self::edit_mode::ServerMonitor;
 use crate::{
     loader::loader,
     pack::{extract, listdir},
-    update::ARCHIVE,
+    update::archive,
 };
 use actix_files::Files;
 use actix_web::{web::Data, App, HttpServer};
@@ -43,7 +43,7 @@ where
     // Expand Reveal.js
     extract(temp.path()).await?;
     // Start server
-    let archive = temp.path().join(ARCHIVE);
+    let archive = temp.path().join(archive!());
     println!("Serve at: http://localhost:{}/", port);
     println!("Global archive at: {:?}", archive);
     println!("Local assets at: {:?}", canonicalize(".")?);
@@ -71,7 +71,7 @@ where
             .service(edit_mode::ws_index)
             .service(Files::new("/static", &archive));
         for asset in &assets {
-            let name = format!("/{}", asset.file_name().unwrap().to_str().unwrap());
+            let name = format!("/{:?}", asset.file_name().unwrap());
             app = app.service(Files::new(&name, asset));
         }
         app
