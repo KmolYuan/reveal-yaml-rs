@@ -4,7 +4,7 @@
 
 Rust implementation of [Reveal.js](https://github.com/hakimel/reveal.js) YAML server, a command line interface (CLI) tool.
 
-<details><summary>Old Python version?</summary>
+<details><summary>The old Python version?</summary>
 This project is transferred from Python language, so you may <a href="https://pypi.org/project/reveal-yaml/">found it on PyPI</a>. Reveal.yaml is now operates in a way that is easier to maintain and release, and it is Rust. Some old functions might be deprecated, and some functions are improved.
 </details>
 
