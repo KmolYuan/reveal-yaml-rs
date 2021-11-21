@@ -1,9 +1,8 @@
 use super::*;
 use actix_web::{get, web::Data, HttpResponse};
-use std::sync::Arc;
 
 #[get("/")]
-pub(super) async fn index(data: Data<Arc<Cache>>) -> Result<HttpResponse> {
+pub(super) async fn index(data: Data<Cache>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html;charset=utf-8")
         .body(if data.doc.is_empty() {
@@ -14,7 +13,7 @@ pub(super) async fn index(data: Data<Arc<Cache>>) -> Result<HttpResponse> {
 }
 
 #[get("/help/")]
-pub(super) async fn help_page(data: Data<Arc<Cache>>) -> Result<HttpResponse> {
+pub(super) async fn help_page(data: Data<Cache>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html;charset=utf-8")
         .body(data.help_doc.clone()))

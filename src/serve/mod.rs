@@ -11,7 +11,6 @@ use std::{
     fs::{canonicalize, read_to_string},
     io::{Error, ErrorKind, Result},
     path::Path,
-    sync::Arc,
 };
 use temp_dir::TempDir;
 
@@ -50,7 +49,7 @@ where
     println!("Edit mode: {}", edit);
     println!("Press Ctrl+C to close the server ...");
     let assets = listdir(".")?;
-    let cache = Arc::new(Cache {
+    let cache = Data::new(Cache {
         project: project.to_string(),
         doc: if edit {
             String::new()
@@ -62,7 +61,7 @@ where
     });
     HttpServer::new(move || {
         let mut app = App::new()
-            .app_data(Data::new(cache.clone()))
+            .app_data(cache.clone())
             .app_data(Data::new(ServerMonitor::new(cache.project.clone())))
             .service(site::index)
             .service(site::help_page)
