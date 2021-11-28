@@ -9,7 +9,7 @@ use actix_web::{web::Data, App, HttpServer};
 use std::{
     env::set_current_dir,
     fs::{canonicalize, read_to_string},
-    io::{Error, ErrorKind, Result},
+    io::{Error, Result},
     path::Path,
 };
 use temp_dir::TempDir;
@@ -35,10 +35,7 @@ where
     P: AsRef<Path>,
 {
     set_current_dir(path.as_ref())?;
-    let temp = match TempDir::new() {
-        Ok(v) => v,
-        Err(s) => return Err(Error::new(ErrorKind::InvalidData, s)),
-    };
+    let temp = TempDir::new().map_err(|e| Error::new(e.kind(), e.to_string()))?;
     // Expand Reveal.js
     extract(temp.path()).await?;
     // Start server
@@ -47,7 +44,7 @@ where
     println!("Global archive at: {:?}", archive);
     println!("Local assets at: {:?}", canonicalize(".")?);
     println!("Edit mode: {}", edit);
-    println!("Press Ctrl+C to close the server ...");
+    println!("Press Ctrl+C to close the server...");
     let assets = listdir(".")?;
     let cache = Data::new(Cache {
         project: project.to_string(),
