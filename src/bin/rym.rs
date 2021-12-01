@@ -57,7 +57,7 @@ async fn main() -> Result<(), Error> {
         let path = cmd.value_of("DIR").unwrap_or(".");
         let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
         let edit = cmd.is_present("edit");
-        serve(port.parse().unwrap(), path, project, edit).await
+        serve(port.parse().expect("invalid port"), path, project, edit).await
     } else if let Some(cmd) = args.subcommand_matches("fmt") {
         let path = cmd.value_of("DIR").unwrap_or(".");
         let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
