@@ -69,6 +69,6 @@ async fn main() -> Result<(), Error> {
         let project = cmd.value_of("PROJECT").unwrap_or(ROOT);
         pack(path, dist, project).await
     } else {
-        panic!("invalid input")
+        unreachable!()
     }
 }
