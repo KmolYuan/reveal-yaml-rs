@@ -1,8 +1,20 @@
 name: Github Deploy
 on:
   push:
+    branches: [ main ]
     tags: [ v* ]
 jobs:
+  cargo-publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: |
+          cargo login ${{ secrets.CRATE_IO }}
+          cargo publish
   gh-release:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -11,7 +23,7 @@ jobs:
           - os: ubuntu-latest
             artifact_name: rym
             asset_name: reveal-yaml-linux-amd64
-          - os: macOS-latest
+          - os: macos-latest
             artifact_name: rym
             asset_name: reveal-yaml-macos-amd64
           - os: windows-latest
@@ -22,15 +34,35 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - shell: bash
+      - name: Cargo Build
         run: |
-          cargo build --bin rym --release
-      - name: Pack binaries
+          cargo clippy -- -D warnings
+          cargo build --release
+      - if: github.ref == 'refs/heads/main' && matrix.os == 'reveal-yaml-linux-amd64'
+        name: Pack gh-pages
+        run: cargo run --release -- pack src/assets
+      - if: github.ref == 'refs/heads/main' && matrix.os == 'reveal-yaml-linux-amd64'
+        name: Deploy gh-pages
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: src/assets/package
+          CLEAN: true
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.asset_name }}
+          path: target/release/${{ matrix.artifact_name }}
+          if-no-files-found: error
+      - if: startsWith(github.ref, 'refs/tags/v')
+        name: Pack binaries
         uses: papeloto/action-zip@v1
         with:
           files: target/release/${{ matrix.artifact_name }}
           dest: ${{ matrix.asset_name }}.zip
-      - name: Upload binaries to release
+      - if: startsWith(github.ref, 'refs/tags/v')
+        name: Upload binaries to release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}

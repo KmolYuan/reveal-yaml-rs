@@ -6,6 +6,7 @@ use crate::{
 };
 use actix_files::Files;
 use actix_web::{web::Data, App, HttpServer};
+use std::io::ErrorKind;
 use std::{
     env::set_current_dir,
     fs::{canonicalize, read_to_string},
@@ -35,7 +36,7 @@ where
     P: AsRef<Path>,
 {
     set_current_dir(path.as_ref())?;
-    let temp = TempDir::new().map_err(|e| Error::new(e.kind(), e.to_string()))?;
+    let temp = TempDir::new().map_err(|s| Error::new(ErrorKind::PermissionDenied, s))?;
     // Expand Reveal.js
     extract(temp.path()).await?;
     // Start server
