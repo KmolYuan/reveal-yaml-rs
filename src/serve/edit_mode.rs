@@ -91,7 +91,7 @@ pub(super) async fn ws_index(
     stream: web::Payload,
     data: web::Data<Addr<ServerMonitor>>,
 ) -> Result<HttpResponse, Error> {
-    let (addr, res) = ws::start_with_addr(Ws, &req, stream)?;
+    let (addr, res) = ws::WsResponseBuilder::new(Ws, &req, stream).start_with_addr()?;
     data.do_send(RegisterClient(addr));
     Ok(res)
 }
