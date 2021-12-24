@@ -4,11 +4,13 @@
 //! *This documentation is prepared for inline-API.*
 #![doc = include_str!("../README.md")]
 #![warn(missing_docs)]
-pub use crate::blank::{blank, ROOT};
-pub use crate::fmt::fmt;
-pub use crate::pack::pack;
-pub use crate::serve::serve;
-pub use crate::update::update;
+pub use crate::{
+    blank::{blank, ROOT},
+    fmt::fmt,
+    pack::pack,
+    serve::serve,
+    update::update,
+};
 
 mod blank;
 mod fmt;

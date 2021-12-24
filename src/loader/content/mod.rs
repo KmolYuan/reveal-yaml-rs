@@ -1,7 +1,5 @@
-use self::frag_map::FragMap;
-use self::lay_img::lay_img;
 pub(super) use self::marked::md2html;
-use self::media::media;
+use self::{frag_map::FragMap, lay_img::lay_img, media::media};
 use super::*;
 use std::fs::read_to_string;
 use yaml_peg::{Anchors, Node};

@@ -1,12 +1,7 @@
-use self::background::Background;
-use self::content::*;
-use self::error::Error;
-use self::footer::footer;
-use self::js_option::js_option;
-use self::js_plugin::js_plugin;
-use self::slides::slides;
-use self::visible_title::visible_title;
-use self::wrap_string::WrapString;
+use self::{
+    background::Background, content::*, error::Error, footer::footer, js_option::js_option,
+    js_plugin::js_plugin, slides::slides, visible_title::visible_title, wrap_string::WrapString,
+};
 use std::io::{Error as IoError, ErrorKind};
 use yaml_peg::{indicated_msg, parse, repr::RcRepr, Anchors, Node, Seq};
 

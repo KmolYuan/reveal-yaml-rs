@@ -6,11 +6,10 @@ use crate::{
 };
 use actix_files::Files;
 use actix_web::{web::Data, App, HttpServer};
-use std::io::ErrorKind;
 use std::{
     env::set_current_dir,
     fs::{canonicalize, read_to_string},
-    io::{Error, Result},
+    io::{Error, ErrorKind, Result},
     path::Path,
 };
 use temp_dir::TempDir;
