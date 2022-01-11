@@ -10,12 +10,12 @@ pub const ROOT: &str = "reveal.yaml";
 const BLANK_DOC: &str = include_str!("assets/blank.yaml");
 
 /// Create new project.
-pub fn blank<P>(path: P, new_dir: bool) -> Result<()>
+pub fn blank<P, const NEW_DIR: bool>(path: P) -> Result<()>
 where
     P: AsRef<Path>,
 {
     let path = path.as_ref();
-    if new_dir && !path.is_dir() {
+    if NEW_DIR && !path.is_dir() {
         create_dir(path)?;
     }
     File::create(path.join(ROOT))?.write_all(

@@ -11,7 +11,7 @@ keywords = ["yaml", "revealjs", "reveal", "slide", "slideshow"]
 categories = ["command-line-interface"]
 
 [dependencies]
-clap = "2.33"
+clap = { version = "3", features = ["derive"] }
 temp-dir = "0.1"
 zip = "0.5"
 reqwest = "0.11"
