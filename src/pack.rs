@@ -56,7 +56,10 @@ where
 {
     let mut list = Vec::new();
     for entry in read_dir(path)? {
-        list.push(entry?.path());
+        let path = entry?.path();
+        if !path.file_name().unwrap().to_str().unwrap().starts_with('.') {
+            list.push(path);
+        }
     }
     Ok(list)
 }

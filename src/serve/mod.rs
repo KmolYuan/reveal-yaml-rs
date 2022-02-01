@@ -57,7 +57,7 @@ where
         reload: edit,
     });
     HttpServer::new(move || {
-        let mut app = App::new()
+        let app = App::new()
             .app_data(cache.clone())
             .app_data(Data::new(ServerMonitor::new(cache.project.clone())))
             .service(site::index)
@@ -66,11 +66,10 @@ where
             .service(site::watermark)
             .service(edit_mode::ws_index)
             .service(Files::new("/static", &archive));
-        for asset in &assets {
-            let name = format!("/{:?}", asset.file_name().unwrap());
-            app = app.service(Files::new(&name, asset));
-        }
-        app
+        assets.iter().fold(app, |app, asset| {
+            let name = asset.strip_prefix(".").unwrap_or(asset).to_str().unwrap();
+            app.service(Files::new(name, asset))
+        })
     })
     .bind(("localhost", port))?
     .run()
