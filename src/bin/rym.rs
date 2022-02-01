@@ -27,11 +27,13 @@ enum Subcommand {
     /// Create a new project from exist directory
     Init {
         /// Project dir
+        #[clap(default_value = ".")]
         dir: String,
     },
     /// Serve the current project
     Serve {
         /// Project dir
+        #[clap(default_value = ".")]
         dir: String,
         /// Port number
         #[clap(long, default_value = "8080")]
@@ -46,6 +48,7 @@ enum Subcommand {
     /// Format the current project
     Fmt {
         /// Project dir
+        #[clap(default_value = ".")]
         dir: String,
         /// Project filename
         #[clap(short, long, default_value = "ROOT")]
