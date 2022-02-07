@@ -128,10 +128,10 @@ pub struct Content {
     pub video: InlineList<Video>,
     /// Embed `<iframe>` structures, such as YouTube videos.
     pub iframe: InlineList<IFrame>,
-    /// [Layout stack](https://revealjs.com/layout/#stack) for images.
+    /// Layout stack for images.
     #[serde(rename = "lay-img")]
     pub lay_img: InlineList<LayImg>,
-    /// [Fragment](https://revealjs.com/fragments/) option.
+    /// Fragment option.
     pub fragment: FragMap,
     /// Horizontal stack.
     #[serde(rename = "h-stack")]
