@@ -33,7 +33,7 @@ pub(crate) fn content_block(
     frag_count: &mut usize,
 ) -> Result<String, Error> {
     let mut doc = String::new();
-    let mut frag = FragMapOld::new(slide, v, frag_count)?;
+    let frag = FragMapOld::new(slide, v, frag_count)?;
     for n in slide.get_default("fit", vec![], Node::as_seq)? {
         let t = n.as_anchor(v).as_str()?;
         if t == "---" {
@@ -63,7 +63,7 @@ pub(crate) fn content_block(
         "math",
         &slide.with(v, "math", "", Node::as_str)?.wrap("\\[", "\\]"),
     );
-    doc += &media(slide, v, &mut frag)?;
+    doc += &media(slide, v, &frag)?;
     if let Ok(n) = slide.get("lay-img") {
         doc += &lay_img(n.as_anchor(v), v)?;
     }

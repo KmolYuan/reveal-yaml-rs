@@ -21,7 +21,7 @@ impl FragMapOld {
         Ok(Self(frag_map))
     }
 
-    pub(crate) fn fragment(&mut self, tag: &str, inner: &str) -> String {
+    pub(crate) fn fragment(&self, tag: &str, inner: &str) -> String {
         if inner.is_empty() {
             return "".to_string();
         }

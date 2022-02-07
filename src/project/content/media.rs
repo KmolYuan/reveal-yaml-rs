@@ -3,7 +3,7 @@ use yaml_peg::{Anchors, Node, Yaml};
 
 type F = fn(&Node) -> Result<String, Error>;
 
-pub(crate) fn media(n: &Node, v: &Anchors, frag: &mut FragMapOld) -> Result<String, Error> {
+pub(crate) fn media(n: &Node, v: &Anchors, frag: &FragMapOld) -> Result<String, Error> {
     let mut doc = String::new();
     for (tag, f) in [
         ("img", img_block as F),
