@@ -32,7 +32,7 @@ fn marked(e: Event) -> Event {
     }
 }
 
-pub(in crate::loader) fn md2html(text: &str) -> String {
+pub(in crate::project) fn md2html(text: &str) -> String {
     if text.is_empty() {
         "".to_string()
     } else {

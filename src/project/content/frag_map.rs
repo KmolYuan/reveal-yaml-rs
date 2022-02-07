@@ -2,9 +2,9 @@ use super::Error;
 use std::collections::HashMap;
 use yaml_peg::{Anchors, Node};
 
-pub(crate) struct FragMap(HashMap<String, HashMap<usize, String>>);
+pub(crate) struct FragMapOld(HashMap<String, HashMap<usize, String>>);
 
-impl FragMap {
+impl FragMapOld {
     pub(crate) fn new(slide: &Node, v: &Anchors, count: &mut usize) -> Result<Self, Error> {
         let mut frag_map = HashMap::new();
         for h in slide.with(v, "fragment", vec![], Node::as_seq)? {
@@ -39,4 +39,17 @@ impl FragMap {
         }
         head + inner + &end
     }
+}
+
+/// [Fragment](https://revealjs.com/fragments/) option.
+///
+/// + The index are the `data-fragment-index`.
+/// + Block are **content**, but exclude stacks (sub-contents).
+/// + Stacks can have local fragment option, but still ordered.
+#[derive(Default, serde::Deserialize)]
+#[serde(default)]
+pub struct FragMap {
+    /// Inner data structure. (*flatten*)
+    #[serde(flatten)]
+    pub inner: Vec<std::collections::HashMap<String, String>>,
 }

@@ -30,3 +30,16 @@ pub(crate) fn footer(meta: &Node) -> Result<String, Error> {
     doc += "\n</div></div></div>";
     Ok(doc)
 }
+
+/// Global footer option.
+#[derive(Default, serde::Deserialize)]
+#[serde(default)]
+pub struct Footer {
+    /// Footer text.
+    pub label: String,
+    /// Footer link, works on image and text.
+    pub link: String,
+    /// This item is sized. (*flatten*)
+    #[serde(flatten)]
+    pub size: super::Sized,
+}

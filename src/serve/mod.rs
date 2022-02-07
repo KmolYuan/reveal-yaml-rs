@@ -1,7 +1,7 @@
 use self::edit_mode::ServerMonitor;
 use crate::{
-    loader::loader,
     pack::{extract, listdir},
+    project::loader,
     update::archive,
 };
 use actix_files::Files;

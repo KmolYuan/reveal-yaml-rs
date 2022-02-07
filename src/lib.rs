@@ -14,7 +14,7 @@ pub use crate::{
 
 mod blank;
 mod fmt;
-mod loader;
 mod pack;
+pub mod project;
 mod serve;
 mod update;

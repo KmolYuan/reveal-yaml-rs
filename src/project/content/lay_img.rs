@@ -21,3 +21,14 @@ fn img_block(m: &Node) -> Result<String, Error> {
     let frag = m.get_default("fragment", "", Node::as_str)?;
     Ok(format!("<img class=\"fragment {}\"{}{}/>", frag, src, size))
 }
+
+/// [Layout stack](https://revealjs.com/layout/#stack) for images.
+#[derive(Default, serde::Deserialize)]
+#[serde(default)]
+pub struct LayImg {
+    /// The animation option. Independent from `fragment` option.
+    pub fragment: String,
+    /// This item is sized. (*flatten*)
+    #[serde(flatten)]
+    pub size: super::Sized,
+}

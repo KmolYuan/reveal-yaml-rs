@@ -68,3 +68,31 @@ fn as_json(n: &Node) -> Result<String, Error> {
         Yaml::Anchor(_) => Err(Error("option is not support using anchor", n.pos())),
     }
 }
+
+/// Other Reveal.js [options](https://revealjs.com/config/).
+///
+/// + Use any case string to indicate the option, this function will translate into lower camelcase, for example, YAML `slide number: c/t` will be JavaScript `slideNumber: "c/t"`.
+/// + This place is actually what `Reveal.initialize` input. So plugin options should be placed here.
+/// + Use `!!markdown` type on the string type, let us help you convert from Markdown to HTML simply!
+#[derive(Default, serde::Deserialize)]
+#[serde(default)]
+pub struct JsOption {
+    /// Inner data structure. (*flatten*)
+    #[serde(flatten)]
+    pub inner: std::collections::HashMap<String, JsType>,
+}
+
+/// The union type of the options.
+#[derive(serde::Deserialize)]
+pub enum JsType {
+    /// The string value (any kind) of the option.
+    String(String),
+    /// A subsequence of options, map-like.
+    MapLike(JsOption),
+}
+
+impl Default for JsType {
+    fn default() -> Self {
+        Self::String(String::new())
+    }
+}

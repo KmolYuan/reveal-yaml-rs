@@ -1,5 +1,5 @@
 use crate::{
-    loader::loader,
+    project::loader,
     serve::{ICON, WATERMARK},
     update::{archive, update},
 };

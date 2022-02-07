@@ -1,5 +1,5 @@
 use super::{content_block, md2html, visible_title, Background, Error, WrapString};
-use yaml_peg::{repr::RcRepr, Anchors, Node, Seq};
+use yaml_peg::{repr::RcRepr, serialize::Optional, Anchors, Node, Seq};
 
 pub(crate) fn slides(
     slides: Seq<RcRepr>,
@@ -94,4 +94,63 @@ fn slide_block(slide: &Node, v: &Anchors, bg: &Background) -> Result<String, Err
     }
     doc += "</section>";
     Ok(doc)
+}
+
+/// Slides data.
+///
+/// Slides are a list of multiple slide blocks, they are totally YAML Maps.
+///
+/// ```yaml
+/// - title: Title 1
+///   doc: Document 1
+/// - title: Title 2
+///   doc: Document 2
+///   sub:
+///     - title: Title 2-1
+///       doc: Document 2-1
+/// ```
+///
+/// Only chapter (horizontal) slides has "sub" attribute,
+/// which can append section slides vertically.
+#[derive(Default, serde::Deserialize)]
+#[serde(default)]
+pub struct ChapterSlide {
+    /// Chapter slides have all attributes of other slides. (*flatten*)
+    #[serde(flatten)]
+    pub slide: Slide,
+    /// Here is the other section slides under this chapter slide.
+    pub sub: Vec<Slide>,
+}
+
+/// All slides has following attributes.
+#[derive(Default, serde::Deserialize)]
+#[serde(default)]
+pub struct Slide {
+    /// Markdown level 1 title without `#` notation.
+    pub title: String,
+    /// Visible title but will be excluded in TOC.
+    #[serde(rename = "title-hidden")]
+    pub title_hidden: String,
+    /// Invisible title, doesn't show but will be included in TOC.
+    #[serde(rename = "title-invisible")]
+    pub title_invisible: String,
+    /// Slides have all attributes of "content"s. (*flatten*)
+    ///
+    /// `Content` type can be placed with different layouts.
+    #[serde(flatten)]
+    pub content: super::Content,
+    /// Note in Speaker's view, Markdown syntax.
+    pub note: String,
+    /// [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
+    #[serde(rename = "bg-color")]
+    pub bg_color: String,
+    /// Background setting, as same as global.
+    ///
+    /// + Local background option can be boolean `false` to disable global background.
+    pub background: Optional<super::Background>,
+    /// [Transition](https://revealjs.com/transitions/) option.
+    pub trans: String,
+    /// [Background transition](https://revealjs.com/transitions/#background-transitions) option.
+    #[serde(rename = "bg-trans")]
+    pub bg_trans: String,
 }

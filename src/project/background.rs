@@ -1,12 +1,19 @@
 use yaml_peg::Node;
 
-#[derive(Default)]
-pub(crate) struct Background {
-    src: String,
-    size: String,
-    position: String,
-    repeat: String,
-    opacity: String,
+/// Global [background setting](https://revealjs.com/backgrounds/#image-backgrounds).
+#[derive(Default, serde::Deserialize)]
+#[serde(default)]
+pub struct Background {
+    /// Background source.
+    pub src: String,
+    /// Background size.
+    pub size: String,
+    /// Background position.
+    pub position: String,
+    /// Background repeat. (repeat / no-repeat)
+    pub repeat: String,
+    /// Background opacity from zero to one.
+    pub opacity: String,
 }
 
 impl Background {
