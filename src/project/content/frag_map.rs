@@ -21,14 +21,13 @@ impl FragMapOld {
         Ok(Self(frag_map))
     }
 
-    pub(crate) fn fragment(&self, tag: &str, inner: &str) -> String {
-        if inner.is_empty() {
+    pub(crate) fn wrap(&self, tag: &str, text: &str) -> String {
+        if text.is_empty() {
             return "".to_string();
         }
-        let tag = tag.to_string();
         let mut head = String::new();
         let mut end = String::new();
-        if let Some(frag) = self.0.get(&tag) {
+        if let Some(frag) = self.0.get(tag) {
             for (index, frag) in frag {
                 head += &format!(
                     "<span class=\"fragment {}\" data-fragment-index=\"{}\">",
@@ -37,7 +36,7 @@ impl FragMapOld {
                 end += "</span>";
             }
         }
-        head + inner + &end
+        head + text + &end
     }
 }
 
@@ -52,4 +51,25 @@ pub struct FragMap {
     /// Inner data structure. (*flatten*)
     #[serde(flatten)]
     pub inner: Vec<std::collections::HashMap<String, String>>,
+}
+
+impl FragMap {
+    /// Wrap inner text with fragment options.
+    pub fn wrap(&self, tag: &str, text: &str) -> String {
+        if text.is_empty() {
+            return String::new();
+        }
+        let mut head = String::new();
+        let mut end = String::new();
+        for (i, map) in self.inner.iter().enumerate() {
+            if let Some(frag) = map.get(tag) {
+                head += &format!(
+                    "<span class=\"fragment {}\" data-fragment-index=\"{}\">",
+                    frag, i
+                );
+                end += "</span>";
+            }
+        }
+        head + text + &end
+    }
 }

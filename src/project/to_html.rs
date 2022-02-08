@@ -1,11 +1,10 @@
 use std::cell::RefCell;
-use yaml_peg::Anchors;
 
 macro_rules! with_methods {
     ($($(#[$meta:meta])* fn $field:ident.$method:ident($ty:ty))+) => {$(
         $(#[$meta])*
         pub fn $method(&self, $field: $ty) {
-            self.$field.replace(Some($field));
+            self.$field.replace($field);
         }
     )+};
 }
@@ -13,20 +12,20 @@ macro_rules! with_methods {
 /// A shared data between parent configuration and its children.
 pub struct Ctx {
     /// The anchor of the original YAML file.
-    pub anchor: Anchors,
+    pub anchor: yaml_peg::Anchors,
     /// Fragment setting.
-    pub frag: RefCell<Option<super::FragMap>>,
+    pub frag: RefCell<super::FragMap>,
     /// Background setting.
-    pub background: RefCell<Option<super::Background>>,
+    pub background: RefCell<super::Background>,
 }
 
 impl Ctx {
     /// Create a context object.
-    pub fn new(anchor: Anchors) -> Self {
+    pub fn new(anchor: yaml_peg::Anchors) -> Self {
         Self {
             anchor,
-            frag: RefCell::new(None),
-            background: RefCell::new(None),
+            frag: RefCell::new(Default::default()),
+            background: RefCell::new(Default::default()),
         }
     }
 
@@ -40,8 +39,18 @@ impl Ctx {
 
 /// Let data structure transform to HTML.
 pub trait ToHtml {
-    /// Transform option `self` into HTML string.
+    /// Consume option `self` into HTML string.
     ///
     /// Warn: The returned string might be only a partial of HTML.
-    fn to_html(&self, ctx: &Ctx) -> String;
+    fn to_html(self, ctx: &Ctx) -> String;
+}
+
+impl<T: ToHtml> ToHtml for yaml_peg::serialize::InlineList<T> {
+    fn to_html(self, ctx: &Ctx) -> String {
+        if self.is_single() {
+            self.into_iter().map(|t| t.to_html(ctx)).collect()
+        } else {
+            self.into_iter().map(|t| t.to_html(ctx) + "\n").collect()
+        }
+    }
 }

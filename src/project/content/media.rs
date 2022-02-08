@@ -16,14 +16,14 @@ pub(crate) fn media(n: &Node, v: &Anchors, frag: &FragMapOld) -> Result<String, 
                     if !ms.is_empty() {
                         doc += "<div class=\"hstack\">\n";
                         for m in ms {
-                            doc += &frag.fragment(tag, &f(m.as_anchor(v))?);
+                            doc += &frag.wrap(tag, &f(m.as_anchor(v))?);
                             doc += "\n";
                         }
                         doc += "</div>";
                     }
                 }
                 Yaml::Map(_) => {
-                    doc += &frag.fragment(tag, &f(m)?);
+                    doc += &frag.wrap(tag, &f(m)?);
                 }
                 _ => return Err(Error("invalid blocks", m.pos())),
             }
@@ -115,4 +115,46 @@ pub struct IFrame {
     /// This item is sized. (*flatten*)
     #[serde(flatten)]
     pub size: super::Sized,
+}
+
+impl super::ToHtml for Img {
+    fn to_html(self, _ctx: &Ctx) -> String {
+        let Self { label, pop, size } = self;
+        let pop = if pop {
+            " class=\"img-pop\" onclick=\"show_modal(this)\" title=\"click to pop-up the image\""
+        } else {
+            ""
+        };
+        let s = format!("<img alt=\"{}\"{}{}/>", label, pop, size);
+        if label.is_empty() {
+            s
+        } else {
+            format!("<figure>{}<figcaption>{}</figcaption></figure>", s, label)
+        }
+    }
+}
+
+impl super::ToHtml for Video {
+    fn to_html(self, _ctx: &Ctx) -> String {
+        let Self {
+            controls,
+            autoplay,
+            r#type,
+            size,
+        } = self;
+        let (src, size) = size.size();
+        let controls = if controls { " controls" } else { "" };
+        let autoplay = if autoplay { " autoplay" } else { "" };
+        format!(
+            "<video{}{}{}><source{} type=\"{}\"></video>",
+            size, controls, autoplay, src, r#type
+        )
+    }
+}
+
+impl super::ToHtml for IFrame {
+    fn to_html(self, _ctx: &Ctx) -> String {
+        let Self { size } = self;
+        format!("<iframe{}></iframe>", size)
+    }
 }
