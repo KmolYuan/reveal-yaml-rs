@@ -84,6 +84,7 @@ pub struct JsOption {
 
 /// The union type of the options.
 #[derive(serde::Deserialize)]
+#[serde(untagged)]
 pub enum JsType {
     /// The string value (any kind) of the option.
     String(String),

@@ -1,9 +1,27 @@
 use yaml_peg::Node;
 
-/// Global [background setting](https://revealjs.com/backgrounds/#image-backgrounds).
+/// The background setting.
+#[derive(serde::Deserialize)]
+#[serde(untagged)]
+pub enum Background {
+    /// No background.
+    None,
+    /// [Color Backgrounds](https://revealjs.com/backgrounds/#color-backgrounds).
+    Color(String),
+    /// [Image Backgrounds](https://revealjs.com/backgrounds/#image-backgrounds).
+    Img(ImgBackground),
+}
+
+impl Default for Background {
+    fn default() -> Self {
+        Self::None
+    }
+}
+
+/// Image backgrounds setting.
 #[derive(Default, serde::Deserialize)]
 #[serde(default)]
-pub struct Background {
+pub struct ImgBackground {
     /// Background source.
     pub src: String,
     /// Background size.
@@ -16,7 +34,7 @@ pub struct Background {
     pub opacity: String,
 }
 
-impl Background {
+impl ImgBackground {
     pub(crate) fn new(meta: &Node) -> Result<Self, u64> {
         if let Ok(n) = meta.get("background") {
             Ok(Self {

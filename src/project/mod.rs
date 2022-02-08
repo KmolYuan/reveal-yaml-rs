@@ -100,6 +100,7 @@
 //! Some functions are planed to be demonstrated in the help page. Open the help page by adding `/help/` after URL, like `http://localhost:8080/help/`.
 pub use self::{
     background::*, content::*, footer::*, js_option::*, js_plugin::*, metadata::*, slides::*,
+    to_html::*,
 };
 use self::{error::*, visible_title::*, wrap_string::*};
 use std::io::{Error as IoError, ErrorKind};
@@ -113,6 +114,7 @@ mod js_option;
 mod js_plugin;
 mod metadata;
 mod slides;
+mod to_html;
 mod visible_title;
 pub(crate) mod wrap_string;
 
@@ -129,7 +131,7 @@ fn load_main(
     mount: &str,
     reload: bool,
 ) -> Result<String, Error> {
-    let bg = Background::new(meta)?;
+    let bg = ImgBackground::new(meta)?;
     let outline = meta.get_default("outline", true, Node::as_bool)?;
     let style = meta.get_default("style", "", Node::as_str)?;
     let (doc, title) = slides(slide.as_seq()?, v, bg, outline)?;

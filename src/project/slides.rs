@@ -1,10 +1,10 @@
-use super::{content_block, md2html, visible_title, Background, Error, WrapString};
+use super::{content_block, md2html, visible_title, Error, ImgBackground, WrapString};
 use yaml_peg::{repr::RcRepr, serialize::Optional, Anchors, Node, Seq};
 
 pub(crate) fn slides(
     slides: Seq<RcRepr>,
     v: &Anchors,
-    bg: Background,
+    bg: ImgBackground,
     outline: bool,
 ) -> Result<(String, String), Error> {
     let mut doc = String::new();
@@ -56,7 +56,7 @@ pub(crate) fn slides(
     Ok((doc, title))
 }
 
-fn slide_block(slide: &Node, v: &Anchors, bg: &Background) -> Result<String, Error> {
+fn slide_block(slide: &Node, v: &Anchors, bg: &ImgBackground) -> Result<String, Error> {
     if slide.as_map()?.is_empty() {
         return Err(Error("empty slide", slide.pos()));
     }
@@ -75,7 +75,7 @@ fn slide_block(slide: &Node, v: &Anchors, bg: &Background) -> Result<String, Err
             .get_default("background", true, Node::as_bool)
             .unwrap_or(true)
     {
-        let local_bg = Background::new(slide)?;
+        let local_bg = ImgBackground::new(slide)?;
         doc += &if local_bg.is_valid() { &local_bg } else { bg }.attr();
     }
     doc += ">";
