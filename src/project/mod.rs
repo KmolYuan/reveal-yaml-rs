@@ -103,7 +103,7 @@ pub use self::{
 };
 use self::{error::*, visible_title::*, wrap_string::*};
 use std::io::{Error as IoError, ErrorKind};
-use yaml_peg::{indicated_msg, parse, repr::RcRepr, Anchors, Node, Seq};
+use yaml_peg::{indicated_msg, parse, Anchors, Node};
 
 mod background;
 mod content;
@@ -122,12 +122,17 @@ const RELOAD: &str = "\
 let ws = new WebSocket(\"ws://\" + window.location.host + \"/ws/\");
         ws.onmessage = _ => location.reload();";
 
-fn load_main(yaml: Seq<RcRepr>, v: &Anchors, mount: &str, reload: bool) -> Result<String, Error> {
-    let meta = &yaml[0];
+fn load_main(
+    meta: &Node,
+    slide: &Node,
+    v: &Anchors,
+    mount: &str,
+    reload: bool,
+) -> Result<String, Error> {
     let bg = Background::new(meta)?;
     let outline = meta.get_default("outline", true, Node::as_bool)?;
     let style = meta.get_default("style", "", Node::as_str)?;
-    let (doc, title) = slides(yaml[1].as_seq()?, v, bg, outline)?;
+    let (doc, title) = slides(slide.as_seq()?, v, bg, outline)?;
     let title = meta.get_default("title", title.as_ref(), Node::as_str)?;
     let description = meta.get_default("description", title.as_ref(), Node::as_str)?;
     let author = meta.get_default("author", "", Node::as_str)?;
@@ -156,16 +161,13 @@ fn load_main(yaml: Seq<RcRepr>, v: &Anchors, mount: &str, reload: bool) -> Resul
 /// Load YAML string as HTML.
 pub(crate) fn loader(yaml_str: &str, mount: &str, reload: bool) -> Result<String, IoError> {
     let (yaml, anchor) = parse(yaml_str).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
-    if yaml.len() < 2 {
-        return Err(IoError::new(
-            ErrorKind::InvalidData,
-            "Missing metadata or slides".to_string(),
-        ));
+    if let [meta, slide] = yaml.as_slice() {
+        load_main(meta, slide, &anchor, mount, reload).map_err(|Error(name, pos)| {
+            let msg = format!("{}:\n{}", name, indicated_msg(yaml_str, pos));
+            IoError::new(ErrorKind::InvalidData, msg)
+        })
+    } else {
+        let err = IoError::new(ErrorKind::InvalidData, "Missing metadata or slides");
+        Err(err)
     }
-    load_main(yaml, &anchor, mount, reload).map_err(|Error(name, pos)| {
-        IoError::new(
-            ErrorKind::InvalidData,
-            format!("{}:\n{}", name, indicated_msg(yaml_str, pos)),
-        )
-    })
 }
