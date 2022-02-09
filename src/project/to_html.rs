@@ -1,20 +1,12 @@
-use std::cell::RefCell;
-
-macro_rules! with_methods {
-    ($($(#[$meta:meta])* fn $field:ident.$method:ident($ty:ty))+) => {$(
-        $(#[$meta])*
-        pub fn $method(&self, $field: $ty) {
-            self.$field.replace($field);
-        }
-    )+};
-}
+use std::cell::{Cell, RefCell};
+use std::rc::Rc;
 
 /// A shared data between parent configuration and its children.
 pub struct Ctx {
     /// The anchor of the original YAML file.
     pub anchor: yaml_peg::Anchors,
-    /// Fragment setting.
-    pub frag: RefCell<super::FragMap>,
+    /// Fragment counter.
+    pub frag: Rc<Cell<u8>>,
     /// Background setting.
     pub background: RefCell<super::Background>,
 }
@@ -24,16 +16,14 @@ impl Ctx {
     pub fn new(anchor: yaml_peg::Anchors) -> Self {
         Self {
             anchor,
-            frag: RefCell::new(Default::default()),
-            background: RefCell::new(Default::default()),
+            frag: Default::default(),
+            background: Default::default(),
         }
     }
 
-    with_methods! {
-        /// Replace fragment setting.
-        fn frag.with_frag(super::FragMap)
-        /// Replace background setting.
-        fn background.with_background(super::Background)
+    /// Replace background setting.
+    pub fn with_background(&self, bg: super::Background) {
+        self.background.replace(bg);
     }
 }
 

@@ -1,5 +1,7 @@
 use super::Error;
+use std::cell::Cell;
 use std::collections::HashMap;
+use std::rc::Rc;
 use yaml_peg::{Anchors, Node};
 
 pub(crate) struct FragMapOld(HashMap<String, HashMap<usize, String>>);
@@ -48,12 +50,19 @@ impl FragMapOld {
 #[derive(Default, serde::Deserialize)]
 #[serde(default)]
 pub struct FragMap {
+    #[serde(skip)]
+    counter: Rc<Cell<u8>>,
     /// Inner data structure. (*flatten*)
     #[serde(flatten)]
     pub inner: Vec<std::collections::HashMap<String, String>>,
 }
 
 impl FragMap {
+    /// Set the counter.
+    pub fn with_counter(&mut self, counter: Rc<Cell<u8>>) {
+        self.counter = counter;
+    }
+
     /// Wrap inner text with fragment options.
     pub fn wrap(&self, tag: &str, text: &str) -> String {
         if text.is_empty() {
@@ -61,13 +70,15 @@ impl FragMap {
         }
         let mut head = String::new();
         let mut end = String::new();
-        for (i, map) in self.inner.iter().enumerate() {
+        for map in &self.inner {
             if let Some(frag) = map.get(tag) {
                 head += &format!(
                     "<span class=\"fragment {}\" data-fragment-index=\"{}\">",
-                    frag, i
+                    frag,
+                    self.counter.get()
                 );
                 end += "</span>";
+                self.counter.set(self.counter.get() + 1);
             }
         }
         head + text + &end

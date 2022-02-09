@@ -161,7 +161,7 @@ pub struct Content {
     #[serde(rename = "lay-img")]
     pub lay_img: InlineList<LayImg>,
     /// Fragment option.
-    pub fragment: FragMap,
+    pub frag: FragMap,
     /// Horizontal stack.
     #[serde(rename = "h-stack")]
     pub h_stack: Vec<Self>,
@@ -188,14 +188,13 @@ impl super::ToHtml for Content {
             video,
             iframe,
             lay_img,
-            fragment,
+            mut frag,
             h_stack,
             v_stack,
             h_stack_border,
             v_stack_border,
         } = self;
-        ctx.with_frag(fragment);
-        let frag = ctx.frag.borrow();
+        frag.with_counter(ctx.frag.clone());
         let mut s = String::new();
         for t in fit {
             let t = if t == "---" { "<hr/>" } else { &t };
