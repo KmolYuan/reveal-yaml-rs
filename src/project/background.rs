@@ -1,3 +1,5 @@
+use crate::project::wrap_string::WrapString;
+use crate::project::Ctx;
 use yaml_peg::Node;
 
 /// The background setting.
@@ -6,7 +8,8 @@ use yaml_peg::Node;
 pub enum Background {
     /// No background.
     None,
-    /// [Color Backgrounds](https://revealjs.com/backgrounds/#color-backgrounds).
+    /// [Color Backgrounds](https://revealjs.com/backgrounds/#color-backgrounds),
+    /// a color string.
     Color(String),
     /// [Image Backgrounds](https://revealjs.com/backgrounds/#image-backgrounds).
     Img(ImgBackground),
@@ -15,6 +18,16 @@ pub enum Background {
 impl Default for Background {
     fn default() -> Self {
         Self::None
+    }
+}
+
+impl super::ToHtml for Background {
+    fn to_html(self, ctx: &Ctx) -> String {
+        match self {
+            Background::None => String::new(),
+            Background::Color(color) => color.wrap(" data-background-color=\"", "\""),
+            Background::Img(img) => img.to_html(ctx),
+        }
     }
 }
 
@@ -32,6 +45,27 @@ pub struct ImgBackground {
     pub repeat: String,
     /// Background opacity from zero to one.
     pub opacity: String,
+}
+
+impl super::ToHtml for ImgBackground {
+    fn to_html(self, _ctx: &Ctx) -> String {
+        let Self {
+            src,
+            size,
+            position,
+            repeat,
+            opacity,
+        } = self;
+        if src.is_empty() {
+            String::new()
+        } else {
+            format!(" src={}", src)
+                + &size.wrap(" data-background-size=\"", "\"")
+                + &position.wrap(" data-background-position=\"", "\"")
+                + &repeat.wrap(" data-background-repeat=\"", "\"")
+                + &opacity.wrap(" data-background-opacity=\"", "\"")
+        }
+    }
 }
 
 impl ImgBackground {

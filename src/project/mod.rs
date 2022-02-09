@@ -1,6 +1,6 @@
 //! Reveal.yaml definition.
 //!
-//! For metadata, please see [`Metadata`]. For slides, please see [`ChapterSlide`].
+//! For metadata, please see [`Metadata`]. For slides, please see [`Slides`].
 //!
 //! ## Tutorial
 //!

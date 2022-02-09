@@ -1,5 +1,13 @@
-use super::{content_block, md2html, visible_title, Error, ImgBackground, WrapString};
+use super::{content_block, md2html, visible_title, Ctx, Error, ImgBackground, WrapString};
 use yaml_peg::{repr::RcRepr, serialize::Optional, Anchors, Node, Seq};
+
+fn slide_title(slide: &Slide) -> &str {
+    if !slide.title.is_empty() {
+        &slide.title
+    } else {
+        &slide.title_hidden
+    }
+}
 
 pub(crate) fn slides(
     slides: Seq<RcRepr>,
@@ -114,6 +122,52 @@ fn slide_block(slide: &Node, v: &Anchors, bg: &ImgBackground) -> Result<String, 
 /// which can append section slides vertically.
 #[derive(Default, serde::Deserialize)]
 #[serde(default)]
+pub struct Slides {
+    /// The slides.
+    #[serde(flatten)]
+    pub slides: Vec<ChapterSlide>,
+}
+
+impl super::ToHtml for Slides {
+    fn to_html(self, ctx: &Ctx) -> String {
+        let Self { mut slides } = self;
+        if !ctx.outline.is_empty() {
+            let doc = slides
+                .iter()
+                .enumerate()
+                .map(|(i, chapter)| {
+                    format!("+ [{}](#/{})\n", slide_title(&chapter.slide), i)
+                        + &chapter
+                            .sub
+                            .iter()
+                            .enumerate()
+                            .map(|(j, slide)| {
+                                format!("  + [{}](#/{}/{})\n", slide_title(slide), i, j + 1)
+                            })
+                            .collect::<String>()
+                })
+                .collect::<String>();
+            if let Some(cover) = slides.first_mut() {
+                cover.sub.push(Slide {
+                    title: ctx.outline.clone(),
+                    content: super::Content {
+                        doc,
+                        ..Default::default()
+                    },
+                    background: Optional::Bool(true),
+                    ..Default::default()
+                });
+            }
+        }
+        slides.to_html(ctx)
+    }
+}
+
+/// The chapter slide.
+///
+/// Please see [`Slides`] for more information.
+#[derive(Default, serde::Deserialize)]
+#[serde(default)]
 pub struct ChapterSlide {
     /// Chapter slides have all attributes of other slides. (*flatten*)
     #[serde(flatten)]
@@ -122,7 +176,17 @@ pub struct ChapterSlide {
     pub sub: Vec<Slide>,
 }
 
+impl super::ToHtml for ChapterSlide {
+    fn to_html(self, ctx: &Ctx) -> String {
+        let Self { slide, sub } = self;
+        let slide = slide.to_html(ctx) + &sub.to_html(ctx);
+        format!("<section>\n{}</section>", slide)
+    }
+}
+
 /// All slides has following attributes.
+///
+/// Please see [`Slides`] for more information.
 #[derive(Default, serde::Deserialize)]
 #[serde(default)]
 pub struct Slide {
@@ -132,8 +196,8 @@ pub struct Slide {
     #[serde(rename = "title-hidden")]
     pub title_hidden: String,
     /// Invisible title, doesn't show but will be included in TOC.
-    #[serde(rename = "title-invisible")]
-    pub title_invisible: String,
+    #[serde(rename = "title-only")]
+    pub title_only: String,
     /// Slides have all attributes of "content"s. (*flatten*)
     ///
     /// `Content` type can be placed with different layouts.
@@ -141,9 +205,6 @@ pub struct Slide {
     pub content: super::Content,
     /// Note in Speaker's view, Markdown syntax.
     pub note: String,
-    /// [Background color](https://revealjs.com/backgrounds/#color-backgrounds).
-    #[serde(rename = "bg-color")]
-    pub bg_color: String,
     /// Background setting, as same as global.
     ///
     /// + Local background option can be boolean `false` to disable global background.
@@ -153,4 +214,33 @@ pub struct Slide {
     /// [Background transition](https://revealjs.com/transitions/#background-transitions) option.
     #[serde(rename = "bg-trans")]
     pub bg_trans: String,
+}
+
+impl super::ToHtml for Slide {
+    fn to_html(self, ctx: &Ctx) -> String {
+        let Self {
+            title,
+            title_only,
+            content,
+            note,
+            background,
+            trans,
+            bg_trans,
+            ..
+        } = self;
+        let background = match background {
+            Optional::Bool(false) => String::new(),
+            Optional::Bool(true) => ctx.background.clone(),
+            Optional::Some(bg) => bg.to_html(ctx),
+        };
+        let data = background
+            + &trans.wrap(" data-transition=\"", "\"")
+            + &bg_trans.wrap(" data-background-transition=\"", "\"");
+        let content = md2html(&title.wrap("# ", ""))
+            + &md2html(&title_only.wrap("# ", ""))
+            + &content.to_html(ctx)
+            + &md2html(&note).wrap("<aside class=\"notes\">", "</aside>\n");
+        ctx.frag.set(0);
+        format!("<section{}>\n{}</section>", data, content)
+    }
 }

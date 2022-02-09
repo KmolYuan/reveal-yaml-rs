@@ -1,3 +1,8 @@
+use crate::project::wrap_string::WrapString;
+use yaml_peg::serialize::Optional;
+
+const TEMPLATE: &str = include_str!("../assets/template.html");
+
 /// Metadata contains HTML settings and global slide settings, they are totally YAML Maps.
 ///
 /// The definition contains in the first YAML doc, split by horizontal line `---`.
@@ -17,7 +22,7 @@ pub struct Metadata {
     /// Global background setting.
     pub background: super::Background,
     /// Auto generated table of the contents (TOC), `true` by default.
-    pub outline: bool,
+    pub outline: Optional<String>,
     /// Reveal.js theme, "serif" by default.
     pub theme: String,
     /// Highlight theme, "zenburn" by default.
@@ -46,7 +51,7 @@ impl Default for Metadata {
             description: String::new(),
             author: String::new(),
             background: super::Background::default(),
-            outline: true,
+            outline: Optional::Bool(true),
             theme: "serif".to_string(),
             code_theme: "zenburn".to_string(),
             style: String::new(),
@@ -56,5 +61,39 @@ impl Default for Metadata {
             mount: String::new(),
             auto_reload: false,
         }
+    }
+}
+
+impl Metadata {
+    pub fn build(self, slides: super::Slides) -> String {
+        let Self {
+            icon,
+            lang,
+            title,
+            description,
+            author,
+            background,
+            outline,
+            theme,
+            code_theme,
+            style,
+            footer,
+            option,
+            plugin,
+            mount,
+            auto_reload,
+        } = self;
+        let title = match (title.as_str(), slides.slides.first()) {
+            ("", Some(chapter)) => &chapter.slide.title,
+            (title, _) => title,
+        };
+        TEMPLATE
+            .replace("{%icon}", &icon)
+            .replace("{%lang}", &lang)
+            .replace("{%title}", &title.escape())
+            .replace("{%description}", &description.escape())
+            .replace("{%author}", &author.escape())
+            .replace("{%theme}", &theme)
+            .replace("{%code-theme}", &code_theme)
     }
 }
