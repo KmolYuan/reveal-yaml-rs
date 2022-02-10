@@ -25,6 +25,8 @@ pub struct Metadata {
     /// Global background setting.
     pub background: Background,
     /// Auto generated table of the contents (TOC), `true` by default.
+    ///
+    /// To specify the outline title, just provide a string.
     pub outline: Optional<String>,
     /// Reveal.js theme, "serif" by default.
     pub theme: String,

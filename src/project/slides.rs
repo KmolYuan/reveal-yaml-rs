@@ -37,6 +37,7 @@ impl ToHtml for Slides {
             let doc = slides
                 .iter()
                 .enumerate()
+                .skip(1)
                 .map(|(i, chapter)| {
                     let title = slide_title(&chapter.slide);
                     if title.is_empty() {
