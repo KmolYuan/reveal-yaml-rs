@@ -30,7 +30,7 @@ struct Cache {
 }
 
 /// Launch function.
-pub async fn serve<P>(port: u16, path: P, project: &str, edit: bool) -> Result<()>
+pub async fn serve<P>(port: u16, path: P, project: &str, edit: bool, open: bool) -> Result<()>
 where
     P: AsRef<Path>,
 {
@@ -56,6 +56,9 @@ where
         help_doc: loader(HELP_DOC, "/static/", false)?,
         reload: edit,
     });
+    if open {
+        webbrowser::open(&format!("http://localhost:{}/", port))?;
+    }
     HttpServer::new(move || {
         let app = App::new()
             .app_data(cache.clone())

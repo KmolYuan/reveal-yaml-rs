@@ -1,4 +1,3 @@
-use reqwest::get;
 use std::{
     env::current_exe,
     fs::File,
@@ -23,7 +22,12 @@ pub(crate) use archive;
 /// Download the archive from Reveal.js repository.
 pub async fn update() -> Result<()> {
     println!(concat!("Downloading archive from ", reveal_url!()));
-    let b = get(reveal_url!()).await.unwrap().bytes().await.unwrap();
+    let b = reqwest::get(reveal_url!())
+        .await
+        .unwrap()
+        .bytes()
+        .await
+        .unwrap();
     let archive = current_exe()?.with_file_name(concat!(archive!(), ".zip"));
     let mut r = ZipArchive::new(Cursor::new(b))?;
     let mut w = ZipWriter::new(File::create(archive)?);

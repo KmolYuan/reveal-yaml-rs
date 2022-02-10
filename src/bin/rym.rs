@@ -44,6 +44,9 @@ enum Subcommand {
         /// Edit mode, watch the state of the project
         #[clap(short, long)]
         edit: bool,
+        /// Open the browser.
+        #[clap(long)]
+        open: bool,
     },
     /// Format the current project
     Fmt {
@@ -82,7 +85,8 @@ async fn main() -> Result<(), Error> {
             port,
             name,
             edit,
-        } => serve(port, dir, &name, edit).await,
+            open,
+        } => serve(port, dir, &name, edit, open).await,
         Subcommand::Fmt { dir, name, dry_run } => fmt(dir, dry_run, &name),
         Subcommand::Pack { dir, name, out } => pack(dir, out, &name).await,
     }
