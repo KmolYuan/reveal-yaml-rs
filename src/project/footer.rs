@@ -1,4 +1,4 @@
-use super::{Ctx, StringWrap};
+use super::*;
 
 /// Global footer option.
 #[derive(Default, serde::Deserialize)]
@@ -10,10 +10,10 @@ pub struct Footer {
     pub link: String,
     /// This item is sized. (*flatten*)
     #[serde(flatten)]
-    pub size: super::Sized,
+    pub size: Sized,
 }
 
-impl super::ToHtml for Footer {
+impl ToHtml for Footer {
     fn to_html(self, _ctx: &Ctx) -> String {
         let Self { label, link, size } = self;
         let (src, size) = size.size();

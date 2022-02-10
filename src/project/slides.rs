@@ -1,4 +1,4 @@
-use super::{md2html, Ctx, StringWrap};
+use super::*;
 use yaml_peg::serialize::Optional;
 
 fn slide_title(slide: &Slide) -> &str {
@@ -30,7 +30,7 @@ pub struct Slides {
     pub slides: Vec<ChapterSlide>,
 }
 
-impl super::ToHtml for Slides {
+impl ToHtml for Slides {
     fn to_html(self, ctx: &Ctx) -> String {
         let Self { mut slides } = self;
         if !ctx.outline.is_empty() {
@@ -62,7 +62,7 @@ impl super::ToHtml for Slides {
             if let Some(cover) = slides.first_mut() {
                 cover.sub.push(Slide {
                     title: ctx.outline.clone(),
-                    content: super::Content {
+                    content: Content {
                         doc,
                         ..Default::default()
                     },
@@ -88,7 +88,7 @@ pub struct ChapterSlide {
     pub sub: Vec<Slide>,
 }
 
-impl super::ToHtml for ChapterSlide {
+impl ToHtml for ChapterSlide {
     fn to_html(self, ctx: &Ctx) -> String {
         let Self { slide, sub } = self;
         let slide = slide.to_html(ctx) + &sub.to_html(ctx);
@@ -114,13 +114,13 @@ pub struct Slide {
     ///
     /// `Content` type can be placed with different layouts.
     #[serde(flatten)]
-    pub content: super::Content,
+    pub content: Content,
     /// Note in Speaker's view, Markdown syntax.
     pub note: String,
     /// Background setting, as same as global.
     ///
     /// + Local background option can be boolean `false` to disable global background.
-    pub background: Optional<super::Background>,
+    pub background: Optional<Background>,
     /// [Transition](https://revealjs.com/transitions/) option.
     pub trans: String,
     /// [Background transition](https://revealjs.com/transitions/#background-transitions) option.
@@ -128,7 +128,7 @@ pub struct Slide {
     pub bg_trans: String,
 }
 
-impl super::ToHtml for Slide {
+impl ToHtml for Slide {
     fn to_html(self, ctx: &Ctx) -> String {
         let Self {
             title,

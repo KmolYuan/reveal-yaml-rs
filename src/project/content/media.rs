@@ -10,7 +10,7 @@ pub struct Img {
     pub pop: bool,
     /// This item is sized. (*flatten*)
     #[serde(flatten)]
-    pub size: super::Sized,
+    pub size: Sized,
 }
 
 /// Embed videos.
@@ -25,7 +25,7 @@ pub struct Video {
     pub r#type: String,
     /// This item is sized. (*flatten*)
     #[serde(flatten)]
-    pub size: super::Sized,
+    pub size: Sized,
 }
 
 impl Default for Video {
@@ -34,7 +34,7 @@ impl Default for Video {
             controls: true,
             autoplay: false,
             r#type: "video/mp4".to_string(),
-            size: super::Sized::default(),
+            size: Sized::default(),
         }
     }
 }
@@ -47,10 +47,10 @@ impl Default for Video {
 pub struct IFrame {
     /// This item is sized. (*flatten*)
     #[serde(flatten)]
-    pub size: super::Sized,
+    pub size: Sized,
 }
 
-impl super::ToHtml for Img {
+impl ToHtml for Img {
     fn to_html(self, _ctx: &Ctx) -> String {
         let Self { label, pop, size } = self;
         let pop = if pop {
@@ -67,7 +67,7 @@ impl super::ToHtml for Img {
     }
 }
 
-impl super::ToHtml for Video {
+impl ToHtml for Video {
     fn to_html(self, _ctx: &Ctx) -> String {
         let Self {
             controls,
@@ -85,7 +85,7 @@ impl super::ToHtml for Video {
     }
 }
 
-impl super::ToHtml for IFrame {
+impl ToHtml for IFrame {
     fn to_html(self, _ctx: &Ctx) -> String {
         let Self { size } = self;
         format!("<iframe{}></iframe>", size)

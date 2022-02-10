@@ -1,5 +1,4 @@
-pub(super) use self::marked::md2html;
-pub use self::{frag_map::*, lay_img::*, media::*};
+pub use self::{frag_map::*, lay_img::*, marked::*, media::*};
 use super::*;
 use yaml_peg::serialize::{InlineList, Stringify};
 
@@ -84,7 +83,7 @@ pub struct Content {
     pub v_stack_border: Vec<Self>,
 }
 
-impl super::ToHtml for Content {
+impl ToHtml for Content {
     fn to_html(self, ctx: &Ctx) -> String {
         let Self {
             fit,

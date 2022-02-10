@@ -1,4 +1,4 @@
-use super::{Ctx, StringWrap, ToHtml};
+use super::*;
 use yaml_peg::{serialize::Optional, Anchors};
 
 const TEMPLATE: &str = include_str!("../assets/template.html");
@@ -23,7 +23,7 @@ pub struct Metadata {
     /// Webpage author.
     pub author: String,
     /// Global background setting.
-    pub background: super::Background,
+    pub background: Background,
     /// Auto generated table of the contents (TOC), `true` by default.
     pub outline: Optional<String>,
     /// Reveal.js theme, "serif" by default.
@@ -34,11 +34,11 @@ pub struct Metadata {
     /// Extra CSS script in `<style>` tag.
     pub style: String,
     /// Global footer option. You can add your logo here.
-    pub footer: super::Footer,
+    pub footer: Footer,
     /// Other Reveal.js options.
-    pub option: super::JsOption,
+    pub option: JsOption,
     /// Third-party Reveal plugins.
-    pub plugin: super::JsPlugin,
+    pub plugin: JsPlugin,
 }
 
 impl Default for Metadata {
@@ -49,27 +49,21 @@ impl Default for Metadata {
             title: String::new(),
             description: String::new(),
             author: String::new(),
-            background: super::Background::default(),
+            background: Background::default(),
             outline: Optional::Bool(true),
             theme: "serif".to_string(),
             code_theme: "zenburn".to_string(),
             style: String::new(),
-            footer: super::Footer::default(),
-            option: super::JsOption::default(),
-            plugin: super::JsPlugin::default(),
+            footer: Footer::default(),
+            option: JsOption::default(),
+            plugin: JsPlugin::default(),
         }
     }
 }
 
 impl Metadata {
     /// Build HTML from template.
-    pub fn build(
-        self,
-        slides: super::Slides,
-        anchor: Anchors,
-        mount: &str,
-        auto_reload: bool,
-    ) -> String {
+    pub fn build(self, slides: Slides, anchor: Anchors, mount: &str, auto_reload: bool) -> String {
         let Self {
             icon,
             lang,

@@ -8,10 +8,10 @@ pub struct LayImg {
     pub fragment: String,
     /// This item is sized. (*flatten*)
     #[serde(flatten)]
-    pub size: super::Sized,
+    pub size: Sized,
 }
 
-impl super::ToHtml for LayImg {
+impl ToHtml for LayImg {
     fn to_html(self, _ctx: &Ctx) -> String {
         let Self { fragment, size } = self;
         format!("<img class=\"fragment {}\"{}/>", fragment, size)

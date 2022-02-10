@@ -1,4 +1,4 @@
-use super::{Ctx, StringWrap};
+use super::*;
 use std::collections::HashMap;
 
 fn lower_camelcase(doc: &str) -> String {
@@ -32,7 +32,7 @@ pub struct JsOption {
     pub inner: HashMap<String, JsType>,
 }
 
-impl super::ToHtml for JsOption {
+impl ToHtml for JsOption {
     fn to_html(self, _ctx: &Ctx) -> String {
         self.inner
             .into_iter()
@@ -72,7 +72,7 @@ impl Default for JsType {
     }
 }
 
-impl super::ToHtml for JsType {
+impl ToHtml for JsType {
     fn to_html(self, _ctx: &Ctx) -> String {
         match self {
             JsType::Bool(b) => if b { "true" } else { "false" }.to_string(),

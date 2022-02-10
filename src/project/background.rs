@@ -1,4 +1,4 @@
-use crate::project::{wrap_string::StringWrap, Ctx};
+use super::*;
 use yaml_peg::serialize::Stringify;
 
 /// Background setting.
@@ -18,7 +18,7 @@ impl Default for Background {
     }
 }
 
-impl super::ToHtml for Background {
+impl ToHtml for Background {
     fn to_html(self, _ctx: &Ctx) -> String {
         match self {
             Background::Color(color) => color.wrap(" data-background-color=\"", "\""),
@@ -43,7 +43,7 @@ pub struct ImgBackground {
     pub opacity: Stringify,
 }
 
-impl super::ToHtml for ImgBackground {
+impl ToHtml for ImgBackground {
     fn to_html(self, _ctx: &Ctx) -> String {
         let Self {
             src,
