@@ -62,7 +62,7 @@ style: |
   doc: |
     This title is invisible in the [table of content](#/0/1). Same as its section.
     ```yaml
-    title-only: Hidden Title
+    title-only: Title Only
     ```
 - title: Markdown
   doc: |
