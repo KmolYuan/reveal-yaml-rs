@@ -1,7 +1,10 @@
-use crate::project::wrap_string::WrapString;
-use yaml_peg::serialize::Optional;
+use super::{Ctx, ToHtml, WrapString};
+use yaml_peg::{serialize::Optional, Anchors};
 
 const TEMPLATE: &str = include_str!("../assets/template.html");
+const RELOAD: &str = "\
+let ws = new WebSocket(\"ws://\" + window.location.host + \"/ws/\");
+        ws.onmessage = _ => location.reload();";
 
 /// Metadata contains HTML settings and global slide settings, they are totally YAML Maps.
 ///
@@ -36,10 +39,6 @@ pub struct Metadata {
     pub option: super::JsOption,
     /// Third-party Reveal plugins.
     pub plugin: super::JsPlugin,
-    #[serde(skip)]
-    mount: String,
-    #[serde(skip)]
-    auto_reload: bool,
 }
 
 impl Default for Metadata {
@@ -58,14 +57,19 @@ impl Default for Metadata {
             footer: super::Footer::default(),
             option: super::JsOption::default(),
             plugin: super::JsPlugin::default(),
-            mount: String::new(),
-            auto_reload: false,
         }
     }
 }
 
 impl Metadata {
-    pub fn build(self, slides: super::Slides) -> String {
+    /// Build HTML from template.
+    pub fn build(
+        self,
+        slides: super::Slides,
+        anchor: Anchors,
+        mount: &str,
+        auto_reload: bool,
+    ) -> String {
         let Self {
             icon,
             lang,
@@ -80,13 +84,23 @@ impl Metadata {
             footer,
             option,
             plugin,
-            mount,
-            auto_reload,
         } = self;
+        let outline = match outline {
+            Optional::Bool(true) => "Outline".to_string(),
+            Optional::Bool(false) => String::new(),
+            Optional::Some(outline) => outline,
+        };
+        let ctx = Ctx {
+            outline,
+            anchor,
+            background: background.to_html(&Default::default()),
+            frag: Default::default(),
+        };
         let title = match (title.as_str(), slides.slides.first()) {
             ("", Some(chapter)) => &chapter.slide.title,
             (title, _) => title,
         };
+        let (plugin_names, plugin_files) = plugin.name_and_files();
         TEMPLATE
             .replace("{%icon}", &icon)
             .replace("{%lang}", &lang)
@@ -95,5 +109,13 @@ impl Metadata {
             .replace("{%author}", &author.escape())
             .replace("{%theme}", &theme)
             .replace("{%code-theme}", &code_theme)
+            .replace("{%footer}", &footer.to_html(&ctx))
+            .replace("{%slides}", &slides.to_html(&ctx))
+            .replace("{%auto-reload}", if auto_reload { RELOAD } else { "" })
+            .replace("{%option}", &option.to_html(&ctx))
+            .replace("{%style}", &style)
+            .replace("{%plugin}", &plugin_names)
+            .replace("<!-- {%plugin} -->", &plugin_files)
+            .replace("{%mount}", mount)
     }
 }

@@ -1,7 +1,5 @@
 use super::Error;
-use std::cell::Cell;
-use std::collections::HashMap;
-use std::rc::Rc;
+use std::{cell::Cell, collections::HashMap, rc::Rc};
 use yaml_peg::{Anchors, Node};
 
 pub(crate) struct FragMapOld(HashMap<String, HashMap<usize, String>>);

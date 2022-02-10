@@ -1,4 +1,6 @@
 use super::{md2html, Error, WrapString};
+use crate::project::Ctx;
+use std::collections::HashMap;
 use yaml_peg::{Node, Yaml};
 
 fn lower_camelcase(doc: &str) -> String {
@@ -79,21 +81,74 @@ fn as_json(n: &Node) -> Result<String, Error> {
 pub struct JsOption {
     /// Inner data structure. (*flatten*)
     #[serde(flatten)]
-    pub inner: std::collections::HashMap<String, JsType>,
+    pub inner: HashMap<String, JsType>,
+}
+
+impl super::ToHtml for JsOption {
+    fn to_html(self, _ctx: &Ctx) -> String {
+        self.inner
+            .into_iter()
+            .map(|(k, j)| {
+                "\n".to_string()
+                    + &" ".repeat(8)
+                    + &lower_camelcase(&k)
+                    + ": "
+                    + &j.to_html(_ctx)
+                    + ","
+            })
+            .collect()
+    }
 }
 
 /// The union type of the options.
 #[derive(serde::Deserialize)]
 #[serde(untagged)]
 pub enum JsType {
-    /// The string value (any kind) of the option.
+    /// Boolean values.
+    Bool(bool),
+    /// Integer values.
+    Int(u32),
+    /// Float values.
+    Float(f32),
+    /// String values.
     String(String),
+    /// Sequence values.
+    Seq(Vec<Self>),
     /// A subsequence of options, map-like.
-    MapLike(JsOption),
+    Map(HashMap<String, Self>),
 }
 
 impl Default for JsType {
     fn default() -> Self {
         Self::String(String::new())
+    }
+}
+
+impl super::ToHtml for JsType {
+    fn to_html(self, _ctx: &Ctx) -> String {
+        match self {
+            JsType::Bool(b) => if b { "true" } else { "false" }.to_string(),
+            JsType::Int(n) => n.to_string(),
+            JsType::Float(n) => n.to_string(),
+            JsType::String(s) => format!("\"{}\"", s.escape()),
+            JsType::Seq(seq) => {
+                "[".to_string()
+                    + &seq
+                        .into_iter()
+                        .map(|j| j.to_html(_ctx))
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                    + "]"
+            }
+            JsType::Map(map) => {
+                "{".to_string()
+                    + &map
+                        .into_iter()
+                        .map(|(k, v)| format!("{}: {}", lower_camelcase(&k), v.to_html(_ctx)))
+                        .collect::<Vec<_>>()
+                        .join(",\n")
+                    + "}"
+            }
+        }
     }
 }

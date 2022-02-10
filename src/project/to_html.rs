@@ -1,7 +1,7 @@
-use std::cell::Cell;
-use std::rc::Rc;
+use std::{cell::Cell, rc::Rc};
 
 /// A shared data between parent configuration and its children.
+#[derive(Default)]
 pub struct Ctx {
     /// Outline option.
     pub outline: String,

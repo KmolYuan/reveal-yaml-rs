@@ -33,3 +33,18 @@ pub struct JsPlugin {
     #[serde(flatten)]
     pub inner: std::collections::HashMap<String, Vec<String>>,
 }
+
+impl JsPlugin {
+    /// Get plugin names and files.
+    pub fn name_and_files(self) -> (String, String) {
+        let mut names = String::new();
+        let mut files = String::new();
+        for (name, file) in self.inner {
+            names += &format!("{}, ", name);
+            for f in file {
+                files += &format!("<script src=\"{}\"></script>\n", f);
+            }
+        }
+        (names, files)
+    }
+}

@@ -220,13 +220,13 @@ impl super::ToHtml for Slide {
     fn to_html(self, ctx: &Ctx) -> String {
         let Self {
             title,
+            title_hidden: _,
             title_only,
             content,
             note,
             background,
             trans,
             bg_trans,
-            ..
         } = self;
         let background = match background {
             Optional::Bool(false) => String::new(),

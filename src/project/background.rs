@@ -1,5 +1,4 @@
-use crate::project::wrap_string::WrapString;
-use crate::project::Ctx;
+use crate::project::{wrap_string::WrapString, Ctx};
 use yaml_peg::Node;
 
 /// The background setting.
@@ -22,11 +21,11 @@ impl Default for Background {
 }
 
 impl super::ToHtml for Background {
-    fn to_html(self, ctx: &Ctx) -> String {
+    fn to_html(self, _ctx: &Ctx) -> String {
         match self {
             Background::None => String::new(),
             Background::Color(color) => color.wrap(" data-background-color=\"", "\""),
-            Background::Img(img) => img.to_html(ctx),
+            Background::Img(img) => img.to_html(_ctx),
         }
     }
 }
