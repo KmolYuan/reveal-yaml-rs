@@ -390,8 +390,6 @@ style: |
       ...
     });
     ```
-  sub:
-    - title-only: Example
-      doc: |
-        + [reveal.yaml-menu](https://kmolyuan.github.io/reveal.yaml-menu/):
-          wrapping [reveal.js-menu](https://github.com/denehyg/reveal.js-menu).
+    ## Example
+    + [reveal.yaml-menu](https://kmolyuan.github.io/reveal.yaml-menu/):
+      wrapping [reveal.js-menu](https://github.com/denehyg/reveal.js-menu).
