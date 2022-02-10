@@ -1,5 +1,5 @@
 use super::*;
-use yaml_peg::serialize::Optional;
+use yaml_peg::serialize::{Foreign, Optional};
 
 fn slide_title(slide: &Slide) -> &str {
     if !slide.title.is_empty() {
@@ -58,12 +58,12 @@ impl ToHtml for Slides {
                                 .collect::<String>()
                     }
                 })
-                .collect::<String>();
+                .collect();
             if let Some(cover) = slides.first_mut() {
                 cover.sub.push(Slide {
                     title: ctx.outline.clone(),
                     content: Content {
-                        doc,
+                        doc: Foreign::data(doc),
                         ..Default::default()
                     },
                     background: Optional::Bool(true),

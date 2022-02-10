@@ -1,6 +1,6 @@
 pub use self::{frag_map::*, lay_img::*, marked::*, media::*};
 use super::*;
-use yaml_peg::serialize::{InlineList, Stringify};
+use yaml_peg::serialize::{Foreign, InlineList, Stringify};
 
 mod frag_map;
 mod lay_img;
@@ -40,6 +40,11 @@ impl std::fmt::Display for Sized {
 /// A content block, which visualize all contents in the layout.
 ///
 /// The attributes will placed in the following order.
+///
+/// # Anchors
+///
+/// There are some attributes supports YAML anchor insertion syntax,
+/// which marked with `Foreign` type.
 #[derive(Default, serde::Deserialize)]
 #[serde(default)]
 pub struct Content {
@@ -49,14 +54,14 @@ pub struct Content {
     /// + Special symbol `---` represents horizontal line `<hr/>`.
     pub fit: Vec<String>,
     /// Multiline Markdown text, accept HTML.
-    pub doc: String,
+    pub doc: Foreign<String>,
     /// Include a Markdown file from path, append after `doc`.
     pub include: String,
     /// If you want to include an HTML file without conversion, enable this option.
     #[serde(rename = "include-html")]
     pub include_html: bool,
     /// Latex math without `$$` / `\[\]` brackets.
-    pub math: String,
+    pub math: Foreign<String>,
     /// Embed images.
     pub img: InlineList<Img>,
     /// Embed videos.
@@ -112,13 +117,13 @@ impl ToHtml for Content {
                     .wrap("<h2 class=\"r-fit-text\">", "</h2>\n");
             }
         }
-        s += &frag.wrap("doc", &md2html(&doc));
+        s += &frag.wrap("doc", &md2html(&doc.visit(&ctx.anchor).unwrap()));
         if !include.is_empty() {
             let doc = std::fs::read_to_string(include).unwrap();
             let doc = if include_html { doc } else { md2html(&doc) };
             s += &frag.wrap("include", &doc);
         }
-        s += &frag.wrap("math", &math.wrap("\\[", "\\]"));
+        s += &frag.wrap("math", &math.visit(&ctx.anchor).unwrap().wrap("\\[", "\\]"));
         for media in [img.to_html(ctx), video.to_html(ctx), iframe.to_html(ctx)] {
             s += &media.wrap("<div class=\"hstack\">\n", "</div>\n");
         }
@@ -151,13 +156,13 @@ impl ToHtml for Content {
                 .map(|(i, c)| {
                     let text = c.to_html(ctx);
                     if i == 0 {
-                        text
+                        text.wrap(&format!("<div style=\"width:{:.04}%\">", width), "</div>")
                     } else {
-                        text.wrap(&pre, "</div>\n")
+                        text.wrap(&pre, "</div>")
                     }
                 })
                 .collect::<String>()
-                .wrap("<div class=\"hstack\">", "</div>\n");
+                .wrap("<div class=\"hstack\">", "</div>");
         }
         s += &v_stack_border
             .into_iter()
@@ -165,7 +170,7 @@ impl ToHtml for Content {
             .map(|(i, c)| {
                 let text = c.to_html(ctx);
                 if i == 0 {
-                    text
+                    text.wrap("<div class=\"vstack\">", "</div>\n")
                 } else {
                     text.wrap("<div class=\"vstack-border\">", "</div>\n")
                 }

@@ -322,19 +322,19 @@ style: |
         ```yaml
         v-stack:
           - doc: Since there is only one `doc`,
-            frag: &doc-frag [ { doc: "" } ]
+            frag: [ { doc: "" } ]
           - doc: so it may splitted by `v-stack`.
-            frag: *doc-frag
+            frag: [ { doc: "" } ]
           - doc: The anchors can be used on `frag` array.
-            frag: *doc-frag
+            frag: [ { doc: "" } ]
         ```
-      vstack: # TODO
+      v-stack:
         - doc: Since there is only one `doc`,
-          frag: &doc-frag [ { doc: "" } ]
+          frag: [ { doc: "" } ]
         - doc: so it may splited by `v-stack`.
-          frag: *doc-frag
+          frag: [ { doc: "" } ]
         - doc: The anchors can be used on `frag` array.
-          frag: *doc-frag
+          frag: [ { doc: "" } ]
 - title: Note
   doc: |
     Press "s" key to open speaker's view.
@@ -351,22 +351,27 @@ style: |
     There are also have **markdown** *syntax*!
 - title: Anchors
   doc: |
-    YAML anchor can be used for almost types of content data.
-
-    But the anchor insertion `<<` is not supported.
+    YAML anchor can be used for specific types of content data.
     ```yaml
-    h-stack:
-      - &content
-        doc: Content A
-      - *content
-      - doc: *document
+    h-stack-border:
+      - v-stack:
+        - doc: &doc Same content here!
+        - doc: *doc
+        - doc: *doc
+      - v-stack:
+        - doc: *doc
+        - doc: *doc
+        - doc: *doc
     ```
-  $hstack:  # TODO
-    - &content
-      doc: &document |
-        Content A
-    - *content
-    - doc: *document
+  h-stack-border:
+    - v-stack:
+      - doc: &doc Same content here!
+      - doc: *doc
+      - doc: *doc
+    - v-stack:
+      - doc: *doc
+      - doc: *doc
+      - doc: *doc
 - title: Third-party Plugins
   doc: |
     The third-party plugins can be loaded from metadata.
