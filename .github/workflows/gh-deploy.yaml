@@ -38,10 +38,10 @@ jobs:
         run: |
           cargo clippy -- -D warnings
           cargo build --release
-      - if: github.ref == 'refs/heads/main' && matrix.os == 'reveal-yaml-linux-amd64'
+      - if: github.ref == 'refs/heads/main' && matrix.os == 'ubuntu-latest'
         name: Pack gh-pages
         run: cargo run --release -- pack src/assets
-      - if: github.ref == 'refs/heads/main' && matrix.os == 'reveal-yaml-linux-amd64'
+      - if: github.ref == 'refs/heads/main' && matrix.os == 'ubuntu-latest'
         name: Deploy gh-pages
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
