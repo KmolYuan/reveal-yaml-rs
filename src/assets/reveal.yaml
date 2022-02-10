@@ -33,14 +33,14 @@ style: |
     Scroll right → to see the examples.
 
     Scroll down ↓ to see an auto-generated outline.
-- $title: Examples
+- title-only: Examples
   doc: |
     You can see the source of this doc to see those example:
 
     + [KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
 
     Scroll right → to see the examples, and scroll down ↓ to see their YAML format.
-- -title: Cover
+- title-hidden: Cover
   fit:
     - Hello My Friends!
     - Longer title become smaller~
@@ -50,7 +50,7 @@ style: |
   sub:
     - doc: |
         ```yaml
-        -title: Cover
+        title-hidden: Cover
         fit:
           - Hello My Friends!
           - Longer title become smaller~
@@ -58,11 +58,11 @@ style: |
           - ---
           - This is actually the "cover" page, check the table of content!
         ```
-- $title: Hidden Title
+- title-only: Title Only
   doc: |
     This title is invisible in the [table of content](#/0/1). Same as its section.
     ```yaml
-    $title: Hidden Title
+    title-only: Hidden Title
     ```
 - title: Markdown
   doc: |
@@ -105,7 +105,7 @@ style: |
     label: Kitten 🐱
     src: https://placekitten.com/600/400
   sub:
-    - $title: Multiple Images
+    - title-only: Multiple Images
       img:
         - label: Kitten 1
           src: https://placekitten.com/700/500
@@ -113,7 +113,7 @@ style: |
         - label: Kitten 2
           src: https://placekitten.com/800/500
           pop: true
-    - $title: Lay with Images
+    - title-only: Lay with Images
       lay-img:
         - src: https://placekitten.com/450/300
         - src: https://placekitten.com/300/450
@@ -213,7 +213,7 @@ style: |
         size: 25%
         opacity: 0.5
 - title: Layout
-  hstack:
+  h-stack:
     - doc: |
         *Data types*
 
@@ -226,20 +226,20 @@ style: |
         src: https://placekitten.com/600/600
   sub:
     - title: Nested Layout
-      hstack:
-        - vstack:
-          - hstack:
+      h-stack:
+        - v-stack:
+          - h-stack:
             - doc: Left Top Left
             - doc: Left Top Right
           - doc: Left Bottom
-        - $vstack:
+        - v-stack-border:
           - doc: Right Top
-          - $hstack:
+          - h-stack-border:
             - doc: Right Bottom Left
             - doc: Right Bottom Right
     - doc: |
         ```yaml
-        hstack:
+        h-stack:
           - doc: |
               *Data types*
 
@@ -251,17 +251,17 @@ style: |
           - img:
               src: https://placekitten.com/600/600
         ```
-        The stack can be nested, and the splitter line can be drawn by starts with `$`.
+        The stack can be nested, and the border will be add with `*-border`.
         ```yaml
-        hstack:
-          - vstack:
-            - hstack:
+        h-stack:
+          - v-stack:
+            - h-stack:
               - doc: Left Top Left
               - doc: Left Top Right
             - doc: Left Bottom
-          - $vstack:
+          - v-stack-border:
             - doc: Right Top
-            - $hstack:
+            - h-stack-border:
               - doc: Right Bottom Left
               - doc: Right Bottom Right
         ```
@@ -269,72 +269,72 @@ style: |
   doc: Almost content support fragment except `lay-img`.
   lay-img:
     - src: https://placekitten.com/450/450
-      fragment: fade-right
+      frag: fade-right
     - src: https://placekitten.com/600/300
-      fragment: fade-left
-  fragment:
+      frag: fade-left
+  frag:
     - doc: highlight-current-blue
   sub:
     - title: Fragment in Stacks
-      hstack:
+      h-stack:
         - doc: AAA
           math: f(x)
-          fragment:
-            - doc: ~
-              math: ~
+          frag:
+            - doc: ""
+              math: ""
         - doc: BBB
           math: g(y)
-          fragment:
-            - doc: ~
-            - math: ~
+          frag:
+            - doc: ""
+            - math: ""
         - doc: CCC
           math: h(z)
-          fragment:
-            - math: ~
+          frag:
+            - math: ""
     - doc: |
         ```yaml
         doc: Almost content support fragment except `lay-img`.
         lay-img:
           - src: https://placekitten.com/450/450
-            fragment: fade-right
+            frag: fade-right
           - src: https://placekitten.com/600/300
-            fragment: fade-left
-        fragment:
+            frag: fade-left
+        frag:
           - doc: highlight-current-blue
         ```
         The index of fragment is the order of the animation.
 
-        The blank / `~` / `null` represents normal `class="framgment"` effect.
+        The blank represents normal `class="framgment"` effect.
         ```yaml
-        hstack:
+        h-stack:
           - doc: AAA
             math: f(x)
-            fragment: [ { doc: ~, math: ~ } ]  # one action
+            frag: [ { doc: "", math: "" } ]  # one action
           - doc: BBB
             math: g(y)
-            fragment: [ doc: ~, math: ~ ]  # two action
+            frag: [ doc: "", math: "" ]  # two action
           - doc: CCC
             math: h(z)
-            fragment: [ math: ~ ]  # one element
+            frag: [ math: "" ]  # one element
         ```
     - title: Fragment with Multiple `doc`s
       doc: |
         ```yaml
-        vstack:
+        v-stack:
           - doc: Since there is only one `doc`,
-            fragment: &doc-frag [ { doc: ~ } ]
-          - doc: so it may splitted by `vstack`.
-            fragment: *doc-frag
-          - doc: The anchors can be used on `fragment` array.
-            fragment: *doc-frag
+            frag: &doc-frag [ { doc: "" } ]
+          - doc: so it may splitted by `v-stack`.
+            frag: *doc-frag
+          - doc: The anchors can be used on `frag` array.
+            frag: *doc-frag
         ```
-      vstack:
+      vstack: # TODO
         - doc: Since there is only one `doc`,
-          fragment: &doc-frag [ { doc: ~ } ]
-        - doc: so it may splited by `vstack`.
-          fragment: *doc-frag
-        - doc: The anchors can be used on `fragment` array.
-          fragment: *doc-frag
+          frag: &doc-frag [ { doc: "" } ]
+        - doc: so it may splited by `v-stack`.
+          frag: *doc-frag
+        - doc: The anchors can be used on `frag` array.
+          frag: *doc-frag
 - title: Note
   doc: |
     Press "s" key to open speaker's view.
@@ -355,13 +355,13 @@ style: |
 
     But the anchor insertion `<<` is not supported.
     ```yaml
-    $hstack:
+    h-stack:
       - &content
         doc: Content A
       - *content
       - doc: *document
     ```
-  $hstack:
+  $hstack:  # TODO
     - &content
       doc: &document |
         Content A
@@ -386,7 +386,7 @@ style: |
     });
     ```
   sub:
-    - $title: Example
+    - title-only: Example
       doc: |
         + [reveal.yaml-menu](https://kmolyuan.github.io/reveal.yaml-menu/):
           wrapping [reveal.js-menu](https://github.com/denehyg/reveal.js-menu).

@@ -1,4 +1,4 @@
-use super::{Ctx, ToHtml, WrapString};
+use super::{Ctx, StringWrap, ToHtml};
 use yaml_peg::{serialize::Optional, Anchors};
 
 const TEMPLATE: &str = include_str!("../assets/template.html");
@@ -100,6 +100,7 @@ impl Metadata {
             ("", Some(chapter)) => &chapter.slide.title,
             (title, _) => title,
         };
+        let auto_reload = if auto_reload { RELOAD } else { "" };
         let (plugin_names, plugin_files) = plugin.name_and_files();
         TEMPLATE
             .replace("{%icon}", &icon)
@@ -111,10 +112,10 @@ impl Metadata {
             .replace("{%code-theme}", &code_theme)
             .replace("{%footer}", &footer.to_html(&ctx))
             .replace("{%slides}", &slides.to_html(&ctx))
-            .replace("{%auto-reload}", if auto_reload { RELOAD } else { "" })
-            .replace("{%option}", &option.to_html(&ctx))
-            .replace("{%style}", &style)
-            .replace("{%plugin}", &plugin_names)
+            .replace("/* {%auto-reload} */", auto_reload)
+            .replace("/* {%option} */", &option.to_html(&ctx))
+            .replace("/* {%style} */", &style)
+            .replace("/* {%plugin} */", &plugin_names)
             .replace("<!-- {%plugin} -->", &plugin_files)
             .replace("{%mount}", mount)
     }

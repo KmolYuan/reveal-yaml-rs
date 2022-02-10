@@ -1,4 +1,4 @@
-use crate::project::wrap_string::WrapString;
+use crate::project::StringWrap;
 use std::{
     fs::{create_dir, File},
     io::{stdin, stdout, Result, Write},

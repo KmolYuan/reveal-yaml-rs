@@ -100,76 +100,36 @@
 //! Some functions are planed to be demonstrated in the help page. Open the help page by adding `/help/` after URL, like `http://localhost:8080/help/`.
 pub use self::{
     background::*, content::*, footer::*, js_option::*, js_plugin::*, metadata::*, slides::*,
-    to_html::*,
+    to_html::*, wrap_string::*,
 };
-use self::{error::*, visible_title::*, wrap_string::*};
+use serde::Deserialize;
 use std::io::{Error as IoError, ErrorKind};
-use yaml_peg::{indicated_msg, parse, Anchors, Node};
+use yaml_peg::{indicated_msg, parse, serialize::SerdeError};
 
 mod background;
 mod content;
-mod error;
 mod footer;
 mod js_option;
 mod js_plugin;
 mod metadata;
 mod slides;
 mod to_html;
-mod visible_title;
-pub(crate) mod wrap_string;
-
-const TEMPLATE: &str = include_str!("../assets/template.html");
-const ICON: &str = "help/icon.png";
-const RELOAD: &str = "\
-let ws = new WebSocket(\"ws://\" + window.location.host + \"/ws/\");
-        ws.onmessage = _ => location.reload();";
-
-fn load_main(
-    meta: &Node,
-    slide: &Node,
-    v: &Anchors,
-    mount: &str,
-    reload: bool,
-) -> Result<String, Error> {
-    let bg = ImgBackground::new(meta)?;
-    let outline = meta.get_default("outline", true, Node::as_bool)?;
-    let style = meta.get_default("style", "", Node::as_str)?;
-    let (doc, title) = slides(slide.as_seq()?, v, bg, outline)?;
-    let title = meta.get_default("title", title.as_ref(), Node::as_str)?;
-    let description = meta.get_default("description", title.as_ref(), Node::as_str)?;
-    let author = meta.get_default("author", "", Node::as_str)?;
-    let theme = meta.get_default("theme", "serif", Node::as_str)?;
-    let code_theme = meta.get_default("code-theme", "zenburn", Node::as_str)?;
-    let (plugin_names, plugin_files) = js_plugin(meta)?;
-    let reload_script = if reload { RELOAD } else { "" };
-    Ok(TEMPLATE
-        .replace("{%icon}", meta.get_default("icon", ICON, Node::as_str)?)
-        .replace("{%lang}", meta.get_default("lang", "en", Node::as_str)?)
-        .replace("{%title}", &title.escape())
-        .replace("{%description}", &description.escape())
-        .replace("{%author}", &author.escape())
-        .replace("{%theme}", theme)
-        .replace("{%code-theme}", code_theme)
-        .replace("{%footer}", &footer(meta)?)
-        .replace("{%slides}", &doc)
-        .replace("/* {%auto-reload} */", reload_script)
-        .replace("/* {%option} */", &js_option(meta)?)
-        .replace("/* {%style} */", style)
-        .replace("/* {%plugin} */", &plugin_names)
-        .replace("<!-- {%plugin} -->", &plugin_files)
-        .replace("{%mount}", mount))
-}
+mod wrap_string;
 
 /// Load YAML string as HTML.
-pub(crate) fn loader(yaml_str: &str, mount: &str, reload: bool) -> Result<String, IoError> {
-    let (yaml, anchor) = parse(yaml_str).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
-    if let [meta, slide] = yaml.as_slice() {
-        load_main(meta, slide, &anchor, mount, reload).map_err(|Error(name, pos)| {
-            let msg = format!("{}:\n{}", name, indicated_msg(yaml_str, pos));
-            IoError::new(ErrorKind::InvalidData, msg)
-        })
-    } else {
-        let err = IoError::new(ErrorKind::InvalidData, "Missing metadata or slides");
-        Err(err)
-    }
+pub(crate) fn loader(yaml_str: &str, mount: &str, auto_reload: bool) -> Result<String, IoError> {
+    let (mut yaml, anchor) =
+        parse(yaml_str).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
+    let metadata = yaml.remove(0);
+    let slides = yaml.remove(0);
+    std::mem::drop(yaml);
+    let display_error = |SerdeError { msg, pos }| {
+        let msg = format!("{}:\n{}", msg, indicated_msg(yaml_str, pos));
+        IoError::new(ErrorKind::InvalidData, msg)
+    };
+    let metadata = Metadata::deserialize(metadata).map_err(display_error)?;
+    let slides = Slides {
+        slides: Deserialize::deserialize(slides).map_err(display_error)?,
+    };
+    Ok(metadata.build(slides, anchor, mount, auto_reload))
 }
