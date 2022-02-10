@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="dist/reset.css">
     <link rel="stylesheet" href="dist/reveal.css">
     <link rel="stylesheet" href="dist/theme/serif.css" id="theme">
-    <!-- Theme used for syntax highlighted code -->
     <link rel="stylesheet" href="plugin/highlight/zenburn.css" id="highlight-theme">
     <style>
         #footer-left {
@@ -203,19 +202,24 @@
 </head>
 <body>
 <div id="hidden" style="display: none"><div id="footer"><div id="footer-left">
-<a href="https://github.com/KmolYuan/reveal-yaml/"><img src="help/icon.png" width="50pt"/><span>&nbsp;Reveal.yaml</span></a>
+<a href="https://github.com/KmolYuan/reveal-yaml/">
+<img src="help/icon.png" width="50pt"/></a>
 </div></div></div>
 <div class="reveal">
     <div class="slides">
-        <section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Reveal.yaml Documentation</h1>
-<hr/><p><em>Author: <a href="https://github.com/KmolYuan">Yuan Chang</a></em></p>
+        <section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Reveal.yaml Documentation</h1>
+<p><em>Author: <a href="https://github.com/KmolYuan">Yuan Chang</a></em></p>
 <ul>
 <li><a href="https://github.com/KmolYuan/reveal-yaml-rs">https://github.com/KmolYuan/reveal-yaml-rs</a></li>
 <li><a href="https://github.com/hakimel/reveal.js">https://github.com/hakimel/reveal.js</a></li>
 </ul>
 <p>Scroll right → to see the examples.</p>
 <p>Scroll down ↓ to see an auto-generated outline.</p>
-</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h2>Outline</h2><hr/><ul>
+</section><section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Outline</h1>
+<ul>
 <li><a href="#/2">Cover</a></li>
 <li><a href="#/4">Markdown</a></li>
 <li><a href="#/5">Image</a></li>
@@ -241,17 +245,25 @@
 <li><a href="#/12">Anchors</a></li>
 <li><a href="#/13">Third-party Plugins</a></li>
 </ul>
-</section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Examples</h1>
-<hr/><p>You can see the source of this doc to see those example:</p>
+</section>
+</section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Examples</h1>
+<p>You can see the source of this doc to see those example:</p>
 <ul>
 <li><a href="https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml">KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml</a></li>
 </ul>
 <p>Scroll right → to see the examples, and scroll down ↓ to see their YAML format.</p>
-</section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+</section></section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
 <h2 class="r-fit-text">Hello My Friends!</h2>
 <h2 class="r-fit-text">Longer title become smaller~</h2>
-<h2 class="r-fit-text">Here comes the THRID LINE!!</h2><hr/>
-<h2 class="r-fit-text">This is actually the "cover" page, check the table of content!</h2></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><pre><code class="language-yaml">-title: Cover
+<h2 class="r-fit-text">Here comes the THRID LINE!!</h2>
+<hr/><h2 class="r-fit-text">This is actually the "cover" page, check the table of content!</h2>
+</section><section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<pre><code class="language-yaml">title-hidden: Cover
 fit:
   - Hello My Friends!
   - Longer title become smaller~
@@ -259,14 +271,21 @@ fit:
   - ---
   - This is actually the &quot;cover&quot; page, check the table of content!
 </code></pre>
-</section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Hidden Title</h1>
-<hr/><p>This title is invisible in the <a href="#/0/1">table of content</a>. Same as its section.</p>
-<pre><code class="language-yaml">$title: Hidden Title
+</section>
+</section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Title Only</h1>
+<p>This title is invisible in the <a href="#/0/1">table of content</a>. Same as its section.</p>
+<pre><code class="language-yaml">title-only: Hidden Title
 </code></pre>
-</section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Markdown</h1>
-<hr/><p><em>Something</em> <strong>important</strong>.</p>
-<table><thead><tr><th align="center">item 1</th><th align="center">item 2</th></tr></thead><tbody>
-<tr><td align="center">A</td><td align="center">B</td></tr>
+</section></section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Markdown</h1>
+<p><em>Something</em> <strong>important</strong>.</p>
+<table><thead><tr><th style="text-align: center">item 1</th><th style="text-align: center">item 2</th></tr></thead><tbody>
+<tr><td style="text-align: center">A</td><td style="text-align: center">B</td></tr>
 </tbody></table>
 <pre><code class="language-python" data-line-numbers="1-2">import sys
 print(sys.path)
@@ -277,7 +296,8 @@ for i in range(10):
 <li>Item</li>
 <li><a href="#/5">Next page</a></li>
 </ul>
-</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><pre><code class="language-yaml">doc: |
+</section><section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<pre><code class="language-yaml">doc: |
   *Something* **important**.
 
   | item 1 | item 2 |
@@ -294,13 +314,30 @@ for i in range(10):
   + Item
   + [Next page](#/5)
 </code></pre>
-</section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Image</h1>
-<hr/><figure><img alt="Kitten 🐱" src="https://placekitten.com/600/400"/><figcaption>Kitten 🐱</figcaption></figure></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Multiple Images</h1>
-<hr/><div class="hstack">
+</section>
+</section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Image</h1>
+<div class="hstack">
+<figure><img alt="Kitten 🐱" src="https://placekitten.com/600/400"/><figcaption>Kitten 🐱</figcaption></figure>
+</div>
+</section><section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Multiple Images</h1>
+<div class="hstack">
 <figure><img alt="Kitten 1" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/700/500"/><figcaption>Kitten 1</figcaption></figure>
 <figure><img alt="Kitten 2" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/800/500"/><figcaption>Kitten 2</figcaption></figure>
-</div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Lay with Images</h1>
-<hr/><div class="r-stack"><img class="fragment " src="https://placekitten.com/450/300"/><img class="fragment " src="https://placekitten.com/300/450"/><img class="fragment " src="https://placekitten.com/400/400"/></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><pre><code class="language-yaml">img:
+</div>
+</section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Lay with Images</h1>
+<div class="r-stack"><img class="fragment " src="https://placekitten.com/450/300"/>
+<img class="fragment " src="https://placekitten.com/300/450"/>
+<img class="fragment " src="https://placekitten.com/400/400"/>
+</div>
+</section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<pre><code class="language-yaml">img:
   label: Kitten 🐱
   src: https://placekitten.com/600/400
 </code></pre>
@@ -319,11 +356,17 @@ for i in range(10):
   - src: https://placekitten.com/300/450
   - src: https://placekitten.com/400/400
 </code></pre>
-</section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Video</h1>
-<hr/><div class="hstack">
+</section>
+</section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Video</h1>
+<div class="hstack">
 <video width="320" height="240" controls><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
 <video><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
-</div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><p>The videos can be placed by same logic.</p>
+</div>
+</section><section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<p>The videos can be placed by same logic.</p>
 <pre><code class="language-yaml">video:
   - width: 320
     height: 240
@@ -331,8 +374,12 @@ for i in range(10):
   - src: https://www.w3schools.com/html/movie.mp4
     controls: false
 </code></pre>
-</section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Maths</h1>
-<hr/><p>Inline math text $x^2$.</p>
+</section>
+</section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Maths</h1>
+<p>Inline math text $x^2$.</p>
 \[\small\begin{aligned}
 \min_{x_1, x_2}&f(x)
 \\
@@ -340,7 +387,8 @@ for i in range(10):
 \\
 &c(x) = 0
 \end{aligned}
-\]</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><pre><code class="language-yaml">doc: Inline math text $x^2$.
+\]</section><section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<pre><code class="language-yaml">doc: Inline math text $x^2$.
 math: |
   \small\begin{aligned}
   \min_{x_1, x_2}&amp;f(x)
@@ -350,38 +398,69 @@ math: |
   &amp;c(x) = 0
   \end{aligned}
 </code></pre>
-</section></section><section><section data-background-color="rgb(70, 70, 255)" data-transition="convex-in convex-out"><h1>Background Color &amp; Transition</h1>
-<hr/><p>Override global setting, use a single color background.</p>
+</section>
+</section>
+<section>
+<section data-transition="convex-in convex-out">
+<h1>Background Color &amp; Transition</h1>
+<p>Override global setting, use a single color background.</p>
 <pre><code class="language-yaml">trans: convex-in convex-out
 background: false
 bg-color: rgb(70, 70, 255)
 doc: &quot;# 🐳&quot;
 </code></pre>
 <h1>🐳</h1>
-</section><section data-background-transition="fade-in fade-out" data-background="https://placekitten.com/800/800" data-background-size="25%" data-background-opacity="0.5"><h1>Local Background Options</h1>
-<hr/><p>Override global setting, use a local background.</p>
+</section><section src=https://placekitten.com/800/800 data-background-size="25%" data-background-opacity="0.5" data-background-transition="fade-in fade-out">
+<h1>Local Background Options</h1>
+<p>Override global setting, use a local background.</p>
 <pre><code class="language-yaml">bg-trans: fade-in fade-out
 background:
   src: https://placekitten.com/800/800
   size: 25%
   opacity: 0.5
 </code></pre>
-</section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Layout</h1>
-<hr/><div class="hstack"><div style="width:33.333332%"><p><em>Data types</em></p>
+</section>
+</section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Layout</h1>
+<div class="hstack"><div style="width:33.3333%"><p><em>Data types</em></p>
 <ul>
 <li>primitive types</li>
 <li>sturct</li>
 <li>enum</li>
 <li>union</li>
 </ul>
-</div><div style="width:33.333332%">\[\small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}\]</div><div style="width:33.333332%"><img alt="" src="https://placekitten.com/600/600"/></div></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Nested Layout</h1>
-<hr/><div class="hstack"><div style="width:50%"><div class="vstack"><div><div class="hstack"><div style="width:50%"><p>Left Top Left</p>
-</div><div style="width:50%"><p>Left Top Right</p>
-</div></div></div><div><p>Left Bottom</p>
-</div></div></div><div style="width:50%"><div class="vstack"><div><p>Right Top</p>
-</div><div class="vstack-border"><div class="hstack"><div style="width:50%"><p>Right Bottom Left</p>
-</div><div class="hstack-border" style="width:50%"><p>Right Bottom Right</p>
-</div></div></div></div></div></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><pre><code class="language-yaml">hstack:
+</div>
+<div style="width:33.3333%">\[\small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}\]</div>
+<div style="width:33.3333%"><div class="hstack">
+<img alt="" src="https://placekitten.com/600/600"/>
+</div>
+</div>
+</div>
+</section><section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Nested Layout</h1>
+<div class="hstack"><div style="width:50.0000%"><div class="vstack"><div><div class="hstack"><div style="width:50.0000%"><p>Left Top Left</p>
+</div>
+<div style="width:50.0000%"><p>Left Top Right</p>
+</div>
+</div>
+</div>
+<div><p>Left Bottom</p>
+</div>
+</div>
+</div>
+<div style="width:50.0000%"><div class="vstack"><div class="vstack"><p>Right Top</p>
+</div>
+<div class="vstack-border"><div class="hstack"><div style="width:50.0000%"><p>Right Bottom Left</p>
+</div><div class="hstack-border" style="width:50.0000%"><p>Right Bottom Right</p>
+</div></div></div>
+</div>
+</div>
+</div>
+</section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<pre><code class="language-yaml">h-stack:
   - doc: |
       *Data types*
 
@@ -393,61 +472,85 @@ background:
   - img:
       src: https://placekitten.com/600/600
 </code></pre>
-<p>The stack can be nested, and the splitter line can be drawn by starts with <code>$</code>.</p>
-<pre><code class="language-yaml">hstack:
-  - vstack:
-    - hstack:
+<p>The stack can be nested, and the border will be add with <code>*-border</code>.</p>
+<pre><code class="language-yaml">h-stack:
+  - v-stack:
+    - h-stack:
       - doc: Left Top Left
       - doc: Left Top Right
     - doc: Left Bottom
-  - $vstack:
+  - v-stack-border:
     - doc: Right Top
-    - $hstack:
+    - h-stack-border:
       - doc: Right Bottom Left
       - doc: Right Bottom Right
 </code></pre>
-</section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Fragment</h1>
-<hr/><span class="fragment highlight-current-blue" data-fragment-index="0"><p>Almost content support fragment except <code>lay-img</code>.</p>
-</span><div class="r-stack"><img class="fragment fade-right" src="https://placekitten.com/450/450"/><img class="fragment fade-left" src="https://placekitten.com/600/300"/></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Fragment in Stacks</h1>
-<hr/><div class="hstack"><div style="width:33.333332%"><span class="fragment " data-fragment-index="0"><p>AAA</p>
-</span><span class="fragment " data-fragment-index="0">\[f(x)\]</span></div><div style="width:33.333332%"><span class="fragment " data-fragment-index="1"><p>BBB</p>
-</span><span class="fragment " data-fragment-index="2">\[g(y)\]</span></div><div style="width:33.333332%"><p>CCC</p>
-<span class="fragment " data-fragment-index="3">\[h(z)\]</span></div></div></section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><pre><code class="language-yaml">doc: Almost content support fragment except `lay-img`.
+</section>
+</section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Fragment</h1>
+<span class="fragment highlight-current-blue" data-fragment-index="0"><p>Almost content support fragment except <code>lay-img</code>.</p>
+</span><div class="r-stack"><img class="fragment " src="https://placekitten.com/450/450"/>
+<img class="fragment " src="https://placekitten.com/600/300"/>
+</div>
+</section><section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Fragment in Stacks</h1>
+<div class="hstack"><div style="width:33.3333%"><span class="fragment " data-fragment-index="0"><p>AAA</p>
+</span><span class="fragment " data-fragment-index="1">\[f(x)\]</span></div>
+<div style="width:33.3333%"><span class="fragment " data-fragment-index="2"><p>BBB</p>
+</span><span class="fragment " data-fragment-index="3">\[g(y)\]</span></div>
+<div style="width:33.3333%"><p>CCC</p>
+<span class="fragment " data-fragment-index="4">\[h(z)\]</span></div>
+</div>
+</section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<pre><code class="language-yaml">doc: Almost content support fragment except `lay-img`.
 lay-img:
   - src: https://placekitten.com/450/450
-    fragment: fade-right
+    frag: fade-right
   - src: https://placekitten.com/600/300
-    fragment: fade-left
-fragment:
+    frag: fade-left
+frag:
   - doc: highlight-current-blue
 </code></pre>
 <p>The index of fragment is the order of the animation.</p>
-<p>The blank / <code>~</code> / <code>null</code> represents normal <code>class=&quot;framgment&quot;</code> effect.</p>
-<pre><code class="language-yaml">hstack:
+<p>The blank represents normal <code>class=&quot;framgment&quot;</code> effect.</p>
+<pre><code class="language-yaml">h-stack:
   - doc: AAA
     math: f(x)
-    fragment: [ { doc: ~, math: ~ } ]  # one action
+    frag: [ { doc: &quot;&quot;, math: &quot;&quot; } ]  # one action
   - doc: BBB
     math: g(y)
-    fragment: [ doc: ~, math: ~ ]  # two action
+    frag: [ doc: &quot;&quot;, math: &quot;&quot; ]  # two action
   - doc: CCC
     math: h(z)
-    fragment: [ math: ~ ]  # one element
+    frag: [ math: &quot;&quot; ]  # one element
 </code></pre>
-</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Fragment with Multiple <code>doc</code>s</h1>
-<hr/><pre><code class="language-yaml">vstack:
+</section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Fragment with Multiple <code>doc</code>s</h1>
+<pre><code class="language-yaml">v-stack:
   - doc: Since there is only one `doc`,
-    fragment: &amp;doc-frag [ { doc: ~ } ]
-  - doc: so it may splitted by `vstack`.
-    fragment: *doc-frag
-  - doc: The anchors can be used on `fragment` array.
-    fragment: *doc-frag
+    frag: [ { doc: &quot;&quot; } ]
+  - doc: so it may splitted by `v-stack`.
+    frag: [ { doc: &quot;&quot; } ]
+  - doc: The anchors can be used on `frag` array.
+    frag: [ { doc: &quot;&quot; } ]
 </code></pre>
 <div class="vstack"><div><span class="fragment " data-fragment-index="0"><p>Since there is only one <code>doc</code>,</p>
-</span></div><div><span class="fragment " data-fragment-index="1"><p>so it may splited by <code>vstack</code>.</p>
-</span></div><div><span class="fragment " data-fragment-index="2"><p>The anchors can be used on <code>fragment</code> array.</p>
-</span></div></div></section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Note</h1>
-<hr/><p>Press “s” key to open speaker’s view.</p>
+</span></div>
+<div><span class="fragment " data-fragment-index="1"><p>so it may splited by <code>v-stack</code>.</p>
+</span></div>
+<div><span class="fragment " data-fragment-index="2"><p>The anchors can be used on <code>frag</code> array.</p>
+</span></div>
+</div>
+</section>
+</section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Note</h1>
+<p>Press “s” key to open speaker’s view.</p>
 <pre><code class="language-yaml">note: |
   Note text here!
 
@@ -455,20 +558,41 @@ fragment:
 </code></pre>
 <aside class="notes"><p>Note text here!</p>
 <p>There are also have <strong>markdown</strong> <em>syntax</em>!</p>
-</aside></section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Anchors</h1>
-<hr/><p>YAML anchor can be used for almost types of content data.</p>
-<p>But the anchor insertion <code>&lt;&lt;</code> is not supported.</p>
-<pre><code class="language-yaml">$hstack:
-  - &amp;content
-    doc: Content A
-  - *content
-  - doc: *document
+</aside>
+</section></section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Anchors</h1>
+<p>YAML anchor can be used for specific types of content data.</p>
+<pre><code class="language-yaml">h-stack-border:
+  - v-stack:
+    - doc: &amp;doc Same content here!
+    - doc: *doc
+    - doc: *doc
+  - v-stack:
+    - doc: *doc
+    - doc: *doc
+    - doc: *doc
 </code></pre>
-<div class="hstack"><div style="width:33.333332%"><p>Content A</p>
-</div><div class="hstack-border" style="width:33.333332%"><p>Content A</p>
-</div><div class="hstack-border" style="width:33.333332%"><p>Content A</p>
-</div></div></section></section><section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Third-party Plugins</h1>
-<hr/><p>The third-party plugins can be loaded from metadata.</p>
+<div class="hstack"><div style="width:50.0000%"><div class="vstack"><div><p>Same content here!</p>
+</div>
+<div><p>Same content here!</p>
+</div>
+<div><p>Same content here!</p>
+</div>
+</div>
+</div><div class="hstack-border" style="width:50.0000%"><div class="vstack"><div><p>Same content here!</p>
+</div>
+<div><p>Same content here!</p>
+</div>
+<div><p>Same content here!</p>
+</div>
+</div>
+</div></div></section></section>
+<section>
+<section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
+<h1>Third-party Plugins</h1>
+<p>The third-party plugins can be loaded from metadata.</p>
 <pre><code class="language-yaml">plugin:
   RevealNotes:
     - plugin/notes/notes.js
@@ -481,12 +605,13 @@ fragment:
   ...
 });
 </code></pre>
-</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7"><h1>Example</h1>
-<hr/><ul>
+<h2>Example</h2>
+<ul>
 <li><a href="https://kmolyuan.github.io/reveal.yaml-menu/">reveal.yaml-menu</a>:
 wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.</li>
 </ul>
 </section></section>
+
     </div>
 </div>
 <div id="modal">
@@ -506,8 +631,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 
 <script>
     Reveal.initialize({
-        hash: true,
         slideNumber: "c/t",
+        hash: true,
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath, RevealZoom, ],
         math: {
             mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.9/MathJax.js',

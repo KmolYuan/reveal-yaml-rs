@@ -1,3 +1,6 @@
+<!--
+	NOTE: You need to build the notes plugin after making changes to this file.
+-->
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -432,6 +435,7 @@
 						setupKeyboard();
 						setupNotes();
 						setupTimer();
+						setupHeartbeat();
 					}
 
 				}
@@ -530,6 +534,18 @@
 
 					notes = document.querySelector( '.speaker-controls-notes' );
 					notesValue = document.querySelector( '.speaker-controls-notes .value' );
+
+				}
+
+				/**
+				 * We send out a heartbeat at all times to ensure we can
+				 * reconnect with the main presentation window after reloads.
+				 */
+				function setupHeartbeat() {
+
+					setInterval( () => {
+						window.opener.postMessage( JSON.stringify({ namespace: 'reveal-notes', type: 'heartbeat'} ), '*' );
+					}, 1000 );
 
 				}
 
