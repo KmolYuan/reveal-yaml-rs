@@ -22,27 +22,22 @@ style: |
       color: #877b68;
       background-color: transparent;
   }
-  #local > p {
+  .left-align > p {
     text-align: left;
   }
 ---
-- title: Reveal.yaml Documentation
+- title: Reveal.yaml Demo Slide
   doc: |
     *Author: [Yuan Chang](https://github.com/KmolYuan)*
-
-    + <https://github.com/KmolYuan/reveal-yaml-rs>
-    + <https://github.com/hakimel/reveal.js>
 
     Scroll right → to see the examples.
 
     Scroll down ↓ to see an auto-generated outline.
-- title-only: Examples
-  doc: |
-    You can see the source of this doc to see those example:
-
-    + [KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
-
-    Scroll right → to see the examples, and scroll down ↓ to see their YAML format.
+  h-stack:
+    - doc: "[Repository](https://github.com/KmolYuan/reveal-yaml-rs)"
+    - doc: "[Documentation](https://docs.rs/reveal-yaml)"
+    - doc: "[Demo Source](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)"
+    - doc: "[Reveal.js](https://github.com/hakimel/reveal.js)"
 - title-hidden: Cover
   fit:
     - Hello My Friends!
@@ -191,9 +186,7 @@ style: |
     ```yaml
     trans: convex-in convex-out
     background: rgb(70, 70, 255)
-    doc: 🐳🐳🐳
     ```
-
     🐳🐳🐳
   trans: convex-in convex-out
   background: rgb(70, 70, 255)
@@ -202,27 +195,42 @@ style: |
       doc: |
         Override global setting, use a local background.
         ```yaml
-        id: local
+        class: left-align
         bg-trans: fade-in fade-out
         background:
           src: https://placekitten.com/800/800
           size: 25%
           opacity: 0.5
         ```
-        This page has a "local" id, and "text-align: left" has been set for "#local > p".
-        So all the pargraphs are left aligned. ("class" also works!)
+        This page has a "left-align" class, and "text-align: left" has been set for ".left-align > p".
+        So all the pargraphs are left aligned.
+
+        "Id"s are also work, but the page id will be replaced.
         ```css
-        #local > p {
+        .left-align > p {
             text-align: left;
         }
         ```
-      id: local
+      class: left-align
       bg-trans: fade-in fade-out
       background:
         src: https://placekitten.com/800/800
         size: 25%
         opacity: 0.5
 - title: Layout
+  doc: |
+    ```yaml
+    h-stack:
+      - doc: |
+          *Data types*
+
+          + primitive types
+          + sturct
+          + enum
+          + union
+      - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
+      - img: { src: https://placekitten.com/600/600 }
+    ```
   h-stack:
     - doc: |
         *Data types*
@@ -232,36 +240,10 @@ style: |
         + enum
         + union
     - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
-    - img:
-        src: https://placekitten.com/600/600
+    - img: { src: https://placekitten.com/600/600 }
   sub:
     - title: Nested Layout
-      h-stack:
-        - v-stack:
-          - h-stack:
-            - doc: Left Top Left
-            - doc: Left Top Right
-          - doc: Left Bottom
-        - v-stack-border:
-          - doc: Right Top
-          - h-stack-border:
-            - doc: Right Bottom Left
-            - doc: Right Bottom Right
-    - doc: |
-        ```yaml
-        h-stack:
-          - doc: |
-              *Data types*
-
-              + primitive types
-              + sturct
-              + enum
-              + union
-          - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
-          - img:
-              src: https://placekitten.com/600/600
-        ```
-        The stack can be nested, and the border will be add with `*-border`.
+      doc: |
         ```yaml
         h-stack:
           - v-stack:
@@ -275,6 +257,17 @@ style: |
               - doc: Right Bottom Left
               - doc: Right Bottom Right
         ```
+      h-stack:
+        - v-stack:
+          - h-stack:
+            - doc: Left Top Left
+            - doc: Left Top Right
+          - doc: Left Bottom
+        - v-stack-border:
+          - doc: Right Top
+          - h-stack-border:
+            - doc: Right Bottom Left
+            - doc: Right Bottom Right
 - title: Fragment
   doc: Almost content support fragment except `lay-img`.
   lay-img:
