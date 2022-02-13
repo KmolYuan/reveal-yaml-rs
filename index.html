@@ -197,6 +197,9 @@
     color: #877b68;
     background-color: transparent;
 }
+#local > p {
+  text-align: left;
+}
 
     </style>
 </head>
@@ -227,7 +230,7 @@
 <li><a href="#/7">Maths</a></li>
 <li><a href="#/8">Background Color &amp; Transition</a>
 <ul>
-<li><a href="#/8/1">Local Background Options</a></li>
+<li><a href="#/8/1">Local Background &amp; Style Options</a></li>
 </ul>
 </li>
 <li><a href="#/9">Layout</a>
@@ -409,14 +412,21 @@ background: rgb(70, 70, 255)
 doc: 🐳🐳🐳
 </code></pre>
 <p>🐳🐳🐳</p>
-</section><section data-background="https://placekitten.com/800/800" data-background-size="25%" data-background-opacity="0.5" data-background-transition="fade-in fade-out">
-<h1>Local Background Options</h1>
+</section><section data-background="https://placekitten.com/800/800" data-background-size="25%" data-background-opacity="0.5" id="local" data-background-transition="fade-in fade-out">
+<h1>Local Background &amp; Style Options</h1>
 <p>Override global setting, use a local background.</p>
-<pre><code class="language-yaml">bg-trans: fade-in fade-out
+<pre><code class="language-yaml">id: local
+bg-trans: fade-in fade-out
 background:
   src: https://placekitten.com/800/800
   size: 25%
   opacity: 0.5
+</code></pre>
+<p>This page has a “local” id, and “text-align: left” has been set for “#local &gt; p”.
+So all the pargraphs are left aligned. (“class” also works!)</p>
+<pre><code class="language-css">#local &gt; p {
+    text-align: left;
+}
 </code></pre>
 </section>
 </section>
@@ -631,8 +641,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 
 <script>
     Reveal.initialize({
-        slideNumber: "c/t",
         hash: true,
+        slideNumber: "c/t",
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath, RevealZoom, ],
         math: {
             mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.9/MathJax.js',
