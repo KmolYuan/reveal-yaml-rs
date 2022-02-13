@@ -1,5 +1,5 @@
 use super::*;
-use yaml_peg::serialize::Stringify;
+use yaml_peg::serde::Stringify;
 
 /// Background setting.
 #[derive(serde::Deserialize)]

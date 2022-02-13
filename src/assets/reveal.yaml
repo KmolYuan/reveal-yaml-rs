@@ -351,27 +351,30 @@ style: |
     There are also have **markdown** *syntax*!
 - title: Anchors
   doc: |
-    YAML anchor can be used for specific types of content data.
+    YAML anchor can be used in the content data.
+
+    Anchors will be only resolve twice,
+    
+    which not allow to serializing self-loop in anchor chain.
+
     ```yaml
     h-stack-border:
-      - v-stack:
-        - doc: &doc Same content here!
+      - &stack
+        v-stack:
+        - &map
+          doc: &doc Same content here!
         - doc: *doc
-        - doc: *doc
-      - v-stack:
-        - doc: *doc
-        - doc: *doc
-        - doc: *doc
+        - *map
+      - *stack
     ```
   h-stack-border:
-    - v-stack:
-      - doc: &doc Same content here!
-      - doc: *doc
-      - doc: *doc
-    - v-stack:
-      - doc: *doc
-      - doc: *doc
-      - doc: *doc
+    - &stack
+      v-stack:
+        - &map
+          doc: &doc Same content here!
+        - doc: *doc
+        - *map
+    - *stack
 - title: Third-party Plugins
   doc: |
     The third-party plugins can be loaded from metadata.

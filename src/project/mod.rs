@@ -104,7 +104,7 @@ pub use self::{
 };
 use serde::Deserialize;
 use std::io::{Error as IoError, ErrorKind};
-use yaml_peg::{indicated_msg, parse, serialize::SerdeError};
+use yaml_peg::{indicated_msg, parse, repr::RcRepr, serde::SerdeError};
 
 mod background;
 mod content;
@@ -117,19 +117,23 @@ mod to_html;
 mod wrap_string;
 
 /// Load YAML string as HTML.
-pub(crate) fn loader(yaml_str: &str, mount: &str, auto_reload: bool) -> Result<String, IoError> {
-    let (mut yaml, anchor) =
-        parse(yaml_str).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
-    let metadata = yaml.remove(0);
-    let slides = yaml.remove(0);
-    std::mem::drop(yaml);
+pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, IoError> {
+    let (mut root, mut anchor) =
+        parse::<RcRepr>(doc).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
+    anchor
+        .resolve(2)
+        .map_err(|e| IoError::new(ErrorKind::InvalidData, e.anchor))?;
+    let metadata = root.remove(0).replace_anchor(&anchor).unwrap();
+    let slides = root.remove(0).replace_anchor(&anchor).unwrap();
+    std::mem::drop(root);
+    std::mem::drop(anchor);
     let display_error = |SerdeError { msg, pos }| {
-        let msg = format!("{}:\n{}", msg, indicated_msg(yaml_str, pos));
+        eprintln!("{}\n{}", msg, indicated_msg(doc, pos));
         IoError::new(ErrorKind::InvalidData, msg)
     };
     let metadata = Metadata::deserialize(metadata).map_err(display_error)?;
     let slides = Slides {
         slides: Deserialize::deserialize(slides).map_err(display_error)?,
     };
-    Ok(metadata.build(slides, anchor, mount, auto_reload))
+    Ok(metadata.build(slides, mount, auto_reload))
 }

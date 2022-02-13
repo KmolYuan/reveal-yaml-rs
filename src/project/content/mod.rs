@@ -1,6 +1,6 @@
 pub use self::{frag_map::*, lay_img::*, marked::*, media::*};
 use super::*;
-use yaml_peg::serialize::{Foreign, InlineList, Stringify};
+use yaml_peg::serde::{InlineList, Stringify};
 
 mod frag_map;
 mod lay_img;
@@ -40,11 +40,6 @@ impl std::fmt::Display for Sized {
 /// A content block, which visualize all contents in the layout.
 ///
 /// The attributes will placed in the following order.
-///
-/// # Anchors
-///
-/// There are some attributes supports YAML anchor insertion syntax,
-/// which marked with `Foreign` type.
 #[derive(Default, serde::Deserialize)]
 #[serde(default)]
 pub struct Content {
@@ -54,14 +49,14 @@ pub struct Content {
     /// + Special symbol `---` represents horizontal line `<hr/>`.
     pub fit: Vec<String>,
     /// Multiline Markdown text, accept HTML.
-    pub doc: Foreign<String>,
+    pub doc: String,
     /// Include a Markdown file from path, append after `doc`.
     pub include: String,
     /// If you want to include an HTML file without conversion, enable this option.
     #[serde(rename = "include-html")]
     pub include_html: bool,
     /// Latex math without `$$` / `\[\]` brackets.
-    pub math: Foreign<String>,
+    pub math: String,
     /// Embed images.
     pub img: InlineList<Img>,
     /// Embed videos.
@@ -117,13 +112,13 @@ impl ToHtml for Content {
                     .wrap("<h2 class=\"r-fit-text\">", "</h2>\n");
             }
         }
-        s += &frag.wrap("doc", &md2html(&doc.visit(&ctx.anchor).unwrap()));
+        s += &frag.wrap("doc", &md2html(&doc));
         if !include.is_empty() {
             let doc = std::fs::read_to_string(include).unwrap();
             let doc = if include_html { doc } else { md2html(&doc) };
             s += &frag.wrap("include", &doc);
         }
-        s += &frag.wrap("math", &math.visit(&ctx.anchor).unwrap().wrap("\\[", "\\]"));
+        s += &frag.wrap("math", &math.wrap("\\[", "\\]"));
         for media in [img.to_html(ctx), video.to_html(ctx), iframe.to_html(ctx)] {
             s += &media.wrap("<div class=\"hstack\">\n", "</div>\n");
         }

@@ -6,7 +6,7 @@ pub(super) async fn index(data: Data<Cache>) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html;charset=utf-8")
         .body(if data.doc.is_empty() {
-            loader(&read_to_string(&data.project)?, "/static/", data.reload)?
+            load(&read_to_string(&data.project)?, "/static/", data.reload)?
         } else {
             data.doc.clone()
         }))

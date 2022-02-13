@@ -1,7 +1,7 @@
 use self::edit_mode::ServerMonitor;
 use crate::{
     pack::{extract, listdir},
-    project::loader,
+    project::load,
     update::archive,
 };
 use actix_files::Files;
@@ -51,9 +51,9 @@ where
         doc: if edit {
             String::new()
         } else {
-            loader(&read_to_string(project)?, "/static/", edit)?
+            load(&read_to_string(project)?, "/static/", edit)?
         },
-        help_doc: loader(HELP_DOC, "/static/", false)?,
+        help_doc: load(HELP_DOC, "/static/", false)?,
         reload: edit,
     });
     if open {

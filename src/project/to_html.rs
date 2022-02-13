@@ -5,8 +5,6 @@ use std::{cell::Cell, rc::Rc};
 pub struct Ctx {
     /// Outline option.
     pub outline: String,
-    /// The anchor of the original YAML file.
-    pub anchor: yaml_peg::Anchors,
     /// Background setting (in HTML).
     pub background: String,
     /// Fragment counter.

@@ -1,5 +1,5 @@
 use super::*;
-use yaml_peg::{serialize::Optional, Anchors};
+use yaml_peg::serde::Optional;
 
 const TEMPLATE: &str = include_str!("../assets/template.html");
 const RELOAD: &str = "\
@@ -65,7 +65,7 @@ impl Default for Metadata {
 
 impl Metadata {
     /// Build HTML from template.
-    pub fn build(self, slides: Slides, anchor: Anchors, mount: &str, auto_reload: bool) -> String {
+    pub fn build(self, slides: Slides, mount: &str, auto_reload: bool) -> String {
         let Self {
             icon,
             lang,
@@ -88,7 +88,6 @@ impl Metadata {
         };
         let ctx = Ctx {
             outline,
-            anchor,
             background: background.to_html(&Default::default()),
             frag: Default::default(),
         };

@@ -1,5 +1,5 @@
 use crate::{
-    project::loader,
+    project::load,
     serve::{ICON, WATERMARK},
     update::{archive, update},
 };
@@ -88,7 +88,7 @@ where
 
 fn pack_inner(project: &str) -> Result<()> {
     let archive = Path::new(archive!());
-    let contents = loader(&read_to_string(project)?, "", false)?;
+    let contents = load(&read_to_string(project)?, "", false)?;
     write(archive.join("index.html"), &contents)?;
     for assets in listdir(".")? {
         let name = assets.file_name().unwrap().to_str().unwrap();
