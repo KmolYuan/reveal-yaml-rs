@@ -6,18 +6,16 @@ pub trait StringWrap {
     fn escape(&self) -> String;
 }
 
-impl<S: AsRef<str>> StringWrap for S {
+impl StringWrap for str {
     fn wrap(&self, prefix: &str, suffix: &str) -> String {
-        let s = self.as_ref();
-        if s.is_empty() {
-            s.to_string()
+        if self.is_empty() {
+            self.to_string()
         } else {
-            format!("{}{}{}", prefix, s, suffix)
+            format!("{}{}{}", prefix, self, suffix)
         }
     }
 
     fn escape(&self) -> String {
-        let s = self.as_ref();
-        s.replace('\n', "\\n").replace('"', "\\\"")
+        self.replace('\n', "\\n").replace('"', "\\\"")
     }
 }
