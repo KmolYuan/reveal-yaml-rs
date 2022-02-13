@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Reveal.yaml Documentation</title>
+    <title>Reveal.yaml Demo Slide</title>
     <meta name="description" content="Rust implementation of Reveal.js YAML server.">
     <meta name="author" content="Yuan Chang">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -197,7 +197,7 @@
     color: #877b68;
     background-color: transparent;
 }
-#local > p {
+.left-align > p {
   text-align: left;
 }
 
@@ -212,14 +212,17 @@
     <div class="slides">
         <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<h1>Reveal.yaml Documentation</h1>
+<h1>Reveal.yaml Demo Slide</h1>
 <p><em>Author: <a href="https://github.com/KmolYuan">Yuan Chang</a></em></p>
-<ul>
-<li><a href="https://github.com/KmolYuan/reveal-yaml-rs">https://github.com/KmolYuan/reveal-yaml-rs</a></li>
-<li><a href="https://github.com/hakimel/reveal.js">https://github.com/hakimel/reveal.js</a></li>
-</ul>
 <p>Scroll right → to see the examples.</p>
 <p>Scroll down ↓ to see an auto-generated outline.</p>
+<div class="hstack"><div style="width:33.3333%"><p><a href="https://github.com/KmolYuan/reveal-yaml-rs">Repository</a></p>
+</div>
+<div style="width:33.3333%"><p><a href="https://docs.rs/reveal-yaml">Documentation</a></p>
+</div>
+<div style="width:33.3333%"><p><a href="https://github.com/hakimel/reveal.js">Reveal.js</a></p>
+</div>
+</div>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Outline</h1>
 <ul>
@@ -409,22 +412,22 @@ math: |
 <p>Override global setting, use a single color background.</p>
 <pre><code class="language-yaml">trans: convex-in convex-out
 background: rgb(70, 70, 255)
-doc: 🐳🐳🐳
 </code></pre>
 <p>🐳🐳🐳</p>
-</section><section data-background="https://placekitten.com/800/800" data-background-size="25%" data-background-opacity="0.5" id="local" data-background-transition="fade-in fade-out">
+</section><section data-background="https://placekitten.com/800/800" data-background-size="25%" data-background-opacity="0.5" class="left-align" data-background-transition="fade-in fade-out">
 <h1>Local Background &amp; Style Options</h1>
 <p>Override global setting, use a local background.</p>
-<pre><code class="language-yaml">id: local
+<pre><code class="language-yaml">class: left-align
 bg-trans: fade-in fade-out
 background:
   src: https://placekitten.com/800/800
   size: 25%
   opacity: 0.5
 </code></pre>
-<p>This page has a “local” id, and “text-align: left” has been set for “#local &gt; p”.
-So all the pargraphs are left aligned. (“class” also works!)</p>
-<pre><code class="language-css">#local &gt; p {
+<p>This page has a “left-align” class, and “text-align: left” has been set for “.left-align &gt; p”.
+So all the pargraphs are left aligned.</p>
+<p>“Id“s are also work, but the page id will be replaced.</p>
+<pre><code class="language-css">.left-align &gt; p {
     text-align: left;
 }
 </code></pre>
