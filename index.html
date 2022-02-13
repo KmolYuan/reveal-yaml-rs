@@ -563,16 +563,17 @@ frag:
 <section>
 <section src=help/watermark.png data-background-size="50%" data-background-opacity="0.7">
 <h1>Anchors</h1>
-<p>YAML anchor can be used for specific types of content data.</p>
+<p>YAML anchor can be used in the content data.</p>
+<p>Anchors will be only resolve twice,</p>
+<p>which not allow to serializing self-loop in anchor chain.</p>
 <pre><code class="language-yaml">h-stack-border:
-  - v-stack:
-    - doc: &amp;doc Same content here!
+  - &amp;stack
+    v-stack:
+    - &amp;map
+      doc: &amp;doc Same content here!
     - doc: *doc
-    - doc: *doc
-  - v-stack:
-    - doc: *doc
-    - doc: *doc
-    - doc: *doc
+    - *map
+  - *stack
 </code></pre>
 <div class="hstack"><div style="width:50.0000%"><div class="vstack"><div><p>Same content here!</p>
 </div>
