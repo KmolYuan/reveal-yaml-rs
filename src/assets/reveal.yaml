@@ -187,15 +187,13 @@ style: |
     Override global setting, use a single color background.
     ```yaml
     trans: convex-in convex-out
-    background: false
-    bg-color: rgb(70, 70, 255)
-    doc: "# 🐳"
+    background: rgb(70, 70, 255)
+    doc: 🐳🐳🐳
     ```
 
-    # 🐳
+    🐳🐳🐳
   trans: convex-in convex-out
-  background: false
-  bg-color: rgb(70, 70, 255)
+  background: rgb(70, 70, 255)
   sub:
     - title: Local Background Options
       doc: |
