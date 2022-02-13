@@ -22,6 +22,9 @@ style: |
       color: #877b68;
       background-color: transparent;
   }
+  #local > p {
+    text-align: left;
+  }
 ---
 - title: Reveal.yaml Documentation
   doc: |
@@ -195,16 +198,25 @@ style: |
   trans: convex-in convex-out
   background: rgb(70, 70, 255)
   sub:
-    - title: Local Background Options
+    - title: Local Background & Style Options
       doc: |
         Override global setting, use a local background.
         ```yaml
+        id: local
         bg-trans: fade-in fade-out
         background:
           src: https://placekitten.com/800/800
           size: 25%
           opacity: 0.5
         ```
+        This page has a "local" id, and "text-align: left" has been set for "#local > p".
+        So all the pargraphs are left aligned. ("class" also works!)
+        ```css
+        #local > p {
+            text-align: left;
+        }
+        ```
+      id: local
       bg-trans: fade-in fade-out
       background:
         src: https://placekitten.com/800/800

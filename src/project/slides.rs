@@ -122,6 +122,10 @@ pub struct Slide {
     ///
     /// + Local background option can be boolean `false` to disable global background.
     pub background: Optional<Background>,
+    /// HTML "class" attribute for this section.
+    pub class: String,
+    /// HTML "id" attribute for this section.
+    pub id: String,
     /// [Transition](https://revealjs.com/transitions/) option.
     pub trans: String,
     /// [Background transition](https://revealjs.com/transitions/#background-transitions) option.
@@ -138,6 +142,8 @@ impl ToHtml for Slide {
             content,
             note,
             background,
+            class,
+            id,
             trans,
             bg_trans,
         } = self;
@@ -147,6 +153,8 @@ impl ToHtml for Slide {
             Optional::Some(bg) => bg.to_html(ctx),
         };
         let data = background
+            + &class.wrap(" class=\"", "\"")
+            + &id.wrap(" id=\"", "\"")
             + &trans.wrap(" data-transition=\"", "\"")
             + &bg_trans.wrap(" data-background-transition=\"", "\"");
         let content = md2html(&title.wrap("# ", ""))
