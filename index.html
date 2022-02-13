@@ -216,52 +216,45 @@
 <p><em>Author: <a href="https://github.com/KmolYuan">Yuan Chang</a></em></p>
 <p>Scroll right → to see the examples.</p>
 <p>Scroll down ↓ to see an auto-generated outline.</p>
-<div class="hstack"><div style="width:33.3333%"><p><a href="https://github.com/KmolYuan/reveal-yaml-rs">Repository</a></p>
+<div class="hstack"><div style="width:25.0000%"><p><a href="https://github.com/KmolYuan/reveal-yaml-rs">Repository</a></p>
 </div>
-<div style="width:33.3333%"><p><a href="https://docs.rs/reveal-yaml">Documentation</a></p>
+<div style="width:25.0000%"><p><a href="https://docs.rs/reveal-yaml">Documentation</a></p>
 </div>
-<div style="width:33.3333%"><p><a href="https://github.com/hakimel/reveal.js">Reveal.js</a></p>
+<div style="width:25.0000%"><p><a href="https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml">Demo Source</a></p>
+</div>
+<div style="width:25.0000%"><p><a href="https://github.com/hakimel/reveal.js">Reveal.js</a></p>
 </div>
 </div>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Outline</h1>
 <ul>
-<li><a href="#/2">Cover</a></li>
-<li><a href="#/4">Markdown</a></li>
-<li><a href="#/5">Image</a></li>
-<li><a href="#/6">Video</a></li>
-<li><a href="#/7">Maths</a></li>
-<li><a href="#/8">Background Color &amp; Transition</a>
+<li><a href="#/1">Cover</a></li>
+<li><a href="#/3">Markdown</a></li>
+<li><a href="#/4">Image</a></li>
+<li><a href="#/5">Video</a></li>
+<li><a href="#/6">Maths</a></li>
+<li><a href="#/7">Background Color &amp; Transition</a>
 <ul>
-<li><a href="#/8/1">Local Background &amp; Style Options</a></li>
+<li><a href="#/7/1">Local Background &amp; Style Options</a></li>
 </ul>
 </li>
-<li><a href="#/9">Layout</a>
+<li><a href="#/8">Layout</a>
 <ul>
-<li><a href="#/9/1">Nested Layout</a></li>
+<li><a href="#/8/1">Nested Layout</a></li>
 </ul>
 </li>
-<li><a href="#/10">Fragment</a>
+<li><a href="#/9">Fragment</a>
 <ul>
-<li><a href="#/10/1">Fragment in Stacks</a></li>
-<li><a href="#/10/3">Fragment with Multiple <code>doc</code>s</a></li>
+<li><a href="#/9/1">Fragment in Stacks</a></li>
+<li><a href="#/9/3">Fragment with Multiple <code>doc</code>s</a></li>
 </ul>
 </li>
-<li><a href="#/11">Note</a></li>
-<li><a href="#/12">Anchors</a></li>
-<li><a href="#/13">Third-party Plugins</a></li>
+<li><a href="#/10">Note</a></li>
+<li><a href="#/11">Anchors</a></li>
+<li><a href="#/12">Third-party Plugins</a></li>
 </ul>
 </section>
 </section>
-<section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<h1>Examples</h1>
-<p>You can see the source of this doc to see those example:</p>
-<ul>
-<li><a href="https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml">KmolYuan/reveal-yaml-rs/src/assets/reveal.yaml</a></li>
-</ul>
-<p>Scroll right → to see the examples, and scroll down ↓ to see their YAML format.</p>
-</section></section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h2 class="r-fit-text">Hello My Friends!</h2>
@@ -436,6 +429,17 @@ So all the pargraphs are left aligned.</p>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Layout</h1>
+<pre><code class="language-yaml">h-stack:
+  - doc: |
+      *Data types*
+
+      + primitive types
+      + sturct
+      + enum
+      + union
+  - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
+  - img: { src: https://placekitten.com/600/600 }
+</code></pre>
 <div class="hstack"><div style="width:33.3333%"><p><em>Data types</em></p>
 <ul>
 <li>primitive types</li>
@@ -452,6 +456,18 @@ So all the pargraphs are left aligned.</p>
 </div>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Nested Layout</h1>
+<pre><code class="language-yaml">h-stack:
+  - v-stack:
+    - h-stack:
+      - doc: Left Top Left
+      - doc: Left Top Right
+    - doc: Left Bottom
+  - v-stack-border:
+    - doc: Right Top
+    - h-stack-border:
+      - doc: Right Bottom Left
+      - doc: Right Bottom Right
+</code></pre>
 <div class="hstack"><div style="width:50.0000%"><div class="vstack"><div><div class="hstack"><div style="width:50.0000%"><p>Left Top Left</p>
 </div>
 <div style="width:50.0000%"><p>Left Top Right</p>
@@ -470,33 +486,6 @@ So all the pargraphs are left aligned.</p>
 </div>
 </div>
 </div>
-</section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<pre><code class="language-yaml">h-stack:
-  - doc: |
-      *Data types*
-
-      + primitive types
-      + sturct
-      + enum
-      + union
-  - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
-  - img:
-      src: https://placekitten.com/600/600
-</code></pre>
-<p>The stack can be nested, and the border will be add with <code>*-border</code>.</p>
-<pre><code class="language-yaml">h-stack:
-  - v-stack:
-    - h-stack:
-      - doc: Left Top Left
-      - doc: Left Top Right
-    - doc: Left Bottom
-  - v-stack-border:
-    - doc: Right Top
-    - h-stack-border:
-      - doc: Right Bottom Left
-      - doc: Right Bottom Right
-</code></pre>
 </section>
 </section>
 <section>
