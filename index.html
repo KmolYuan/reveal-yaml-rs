@@ -520,24 +520,24 @@ frag:
 <pre><code class="language-yaml">h-stack:
   - doc: AAA
     math: f(x)
-    frag: [ { doc: &quot;&quot;, math: &quot;&quot; } ]  # one action
+    frag: [ { doc: ~, math: ~ } ]  # one action
   - doc: BBB
     math: g(y)
-    frag: [ doc: &quot;&quot;, math: &quot;&quot; ]  # two action
+    frag: [ { doc: ~ }, { math: ~ } ]  # two action
   - doc: CCC
     math: h(z)
-    frag: [ math: &quot;&quot; ]  # one element
+    frag: [ { math: ~ } ]  # one element
 </code></pre>
 </section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Fragment with Multiple <code>doc</code>s</h1>
 <pre><code class="language-yaml">v-stack:
   - doc: Since there is only one `doc`,
-    frag: [ { doc: &quot;&quot; } ]
+    frag: [ { doc: ~ } ]
   - doc: so it may splitted by `v-stack`.
-    frag: [ { doc: &quot;&quot; } ]
+    frag: [ { doc: ~ } ]
   - doc: The anchors can be used on `frag` array.
-    frag: [ { doc: &quot;&quot; } ]
+    frag: [ { doc: ~ } ]
 </code></pre>
 <div class="v-stack"><div><span class="fragment " data-fragment-index="0"><p>Since there is only one <code>doc</code>,</p>
 </span></div>
@@ -633,8 +633,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 
 <script>
     Reveal.initialize({
-        slideNumber: "c/t",
         hash: true,
+        slideNumber: "c/t",
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath, RevealZoom, ],
         math: {
             mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.9/MathJax.js',
