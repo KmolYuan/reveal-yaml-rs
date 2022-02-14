@@ -33,7 +33,7 @@
             margin: 20px;
         }
 
-        .reveal figure figcaption {
+        .reveal figcaption {
             text-align: center;
         }
 
@@ -197,7 +197,7 @@
     color: #877b68;
     background-color: transparent;
 }
-.left-align > p {
+.left-align p {
   text-align: left;
 }
 
@@ -417,10 +417,10 @@ background:
   size: 25%
   opacity: 0.5
 </code></pre>
-<p>This page has a “left-align” class, and “text-align: left” has been set for “.left-align &gt; p”.
+<p>This page has a “left-align” class, and “text-align: left” has been set for “.left-align p”.
 So all the pargraphs are left aligned.</p>
 <p>“Id“s are also work, but the page id will be replaced.</p>
-<pre><code class="language-css">.left-align &gt; p {
+<pre><code class="language-css">.left-align p {
     text-align: left;
 }
 </code></pre>
@@ -492,8 +492,8 @@ So all the pargraphs are left aligned.</p>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Fragment</h1>
 <span class="fragment highlight-current-blue" data-fragment-index="0"><p>Almost content support fragment except <code>lay-img</code>.</p>
-</span><div class="r-stack"><img class="fragment " src="https://placekitten.com/450/450"/>
-<img class="fragment " src="https://placekitten.com/600/300"/>
+</span><div class="r-stack"><img class="fragment fade-right" src="https://placekitten.com/450/450"/>
+<img class="fragment fade-left" src="https://placekitten.com/600/300"/>
 </div>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Fragment in Stacks</h1>
@@ -633,8 +633,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 
 <script>
     Reveal.initialize({
-        slideNumber: "c/t",
         hash: true,
+        slideNumber: "c/t",
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath, RevealZoom, ],
         math: {
             mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.9/MathJax.js',
