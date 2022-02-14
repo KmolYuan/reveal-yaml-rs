@@ -352,7 +352,7 @@ style: |
     YAML anchor can be used in the content data.
 
     Anchors will be only resolve twice,
-    
+
     which not allow to serializing self-loop in anchor chain.
 
     ```yaml
