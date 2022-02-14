@@ -5,7 +5,7 @@ use super::*;
 #[serde(default)]
 pub struct LayImg {
     /// The animation option. Independent from `FragMap` option.
-    pub fragment: String,
+    pub frag: Option<String>,
     /// This item is sized. (*flatten*)
     #[serde(flatten)]
     pub size: Sized,
@@ -13,7 +13,8 @@ pub struct LayImg {
 
 impl ToHtml for LayImg {
     fn to_html(self, _ctx: &Ctx) -> String {
-        let Self { fragment, size } = self;
-        format!("<img class=\"fragment {}\"{}/>", fragment, size)
+        let Self { frag, size } = self;
+        let frag = frag.unwrap_or_default();
+        format!("<img class=\"fragment {}\"{}/>", frag, size)
     }
 }

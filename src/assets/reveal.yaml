@@ -22,7 +22,7 @@ style: |
       color: #877b68;
       background-color: transparent;
   }
-  .left-align > p {
+  .left-align p {
     text-align: left;
   }
 ---
@@ -202,12 +202,12 @@ style: |
           size: 25%
           opacity: 0.5
         ```
-        This page has a "left-align" class, and "text-align: left" has been set for ".left-align > p".
+        This page has a "left-align" class, and "text-align: left" has been set for ".left-align p".
         So all the pargraphs are left aligned.
 
         "Id"s are also work, but the page id will be replaced.
         ```css
-        .left-align > p {
+        .left-align p {
             text-align: left;
         }
         ```
