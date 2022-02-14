@@ -1,4 +1,4 @@
-use clap::{AppSettings, Parser};
+use clap::Parser;
 use reveal_yaml::*;
 use std::{io::Error, path::PathBuf};
 
@@ -8,7 +8,7 @@ use std::{io::Error, path::PathBuf};
     version = env!("CARGO_PKG_VERSION"),
     author = env!("CARGO_PKG_AUTHORS"),
     about = env!("CARGO_PKG_DESCRIPTION"),
-    setting = AppSettings::ArgRequiredElseHelp
+    setting = clap::AppSettings::ArgRequiredElseHelp
 )]
 struct Entry {
     #[clap(subcommand)]
@@ -24,7 +24,7 @@ enum Subcommand {
         /// Project dir
         dir: PathBuf,
     },
-    /// Create a new project from exist directory
+    /// Create a new project from an existing directory
     Init {
         /// Project dir
         #[clap(default_value = ".")]
