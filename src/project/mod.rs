@@ -44,29 +44,30 @@
 //!
 //! ### Layout
 //!
-//! There are two layout types, called "horizontal stack" (`hstack`) and "vertical stack" (`vstack`). The vertical layout is default, as same as HTML.
+//! There are two layout types, called "horizontal stack" ([`Content::h_stack`]) and "vertical stack" ([`Content::v_stack`]). The vertical layout is default, as same as HTML.
 //!
-//! The stack blocks list in the `hstack` / `vstack` tag, and the stack tags can be nested.
+//! The stack blocks list in the `h-stack` / `v-stack` tag, and the stack tags can be nested.
 //!
 //! ```yaml
-//! hstack:
+//! h-stack:
 //!   - doc: Left
-//!   - vstack:
+//!   - v-stack:
 //!     - doc: Right Top
 //!     - doc: Right Bottom
 //! ```
 //!
-//! The stack tag can add a dollar sign `$` to add a borderline between the elements.
+//! The stack tag can add a suffix `*-border` to add a borderline between the elements.
+//! ([`Content::h_stack_border`] and [`Content::v_stack_border`])
 //!
 //! ```yaml
-//! $hstack:
+//! h-stack-border:
 //!   - doc: Splitted left
 //!   - doc: Splitted right
 //! ```
 //!
 //! ### Sized Attribute
 //!
-//! The images and resizeable items are support "sized" attribute, which contains three options: `src`, `width` and `height`. The `src` option is required, otherwise the feature will be disabled or invalid.
+//! The images and resizeable items are support [`Sized`] attribute, which contains three options: `src`, `width` and `height`. The `src` option is required, otherwise the feature will be disabled or invalid.
 //!
 //! The `width` and `height` options are the same as the attributes on the `<img>` tag, they are optional.
 //!
@@ -78,8 +79,8 @@
 //!   link: https://github.com/KmolYuan/reveal-yaml/
 //! img:
 //!   - src: img/icon.png
-//!     width: 50%  # same as width="50%"
-//!     height: 70  # same as height="70"
+//!     width: 50% # same as width="50%"
+//!     height: 70 # same as height="70"
 //! video:
 //!   width: 320
 //!   height: 240
@@ -91,13 +92,19 @@
 //!
 //! The plugins excluding `markdown` are enabled by default.
 //!
-//! ## Functions
+//! Additional plugins can be added via [`JsPlugin`] in metadata.
 //!
-//! Here are the implemented features, or the functions are designed in progress.
+//! ## Writing Guide
 //!
-//! Generally, the parser will not check extra key values. In addition, almost all values support the `null` placeholder to present the default value (blank, `~`, `null`).
+//! Generally, `reveal.yaml` divides into two parts, the first part will be deserialized to [`Metadata`],
+//! and the second part will be deserialized to [`Slides`], other parts will be ignored.
+//! YAML parser will not check extra key values.
 //!
-//! Some functions are planed to be demonstrated in the help page. Open the help page by adding `/help/` after URL, like `http://localhost:8080/help/`.
+//! During the deserialization, "flatten" field means the child field will be inherited by the parent,
+//! such as [`Sized`].
+//!
+//! Most of functions are planed to be demonstrated in the help page.
+//! Open the help page by adding `/help/` after URL, like `http://localhost:8080/help/`.
 pub use self::{
     background::*, content::*, footer::*, js_option::*, js_plugin::*, metadata::*, slides::*,
     to_html::*, wrap_string::*,

@@ -21,7 +21,8 @@ fn lower_camelcase(doc: &str) -> String {
 
 /// Other Reveal.js [options](https://revealjs.com/config/).
 ///
-/// + Use any case string to indicate the option, this function will translate into lower camelcase, for example, YAML `slide number: c/t` will be JavaScript `slideNumber: "c/t"`.
+/// + Use any case string to indicate the option, this function will translate into lower camelcase,
+///   for example, YAML `slide number: c/t` will be transformed to JavaScript `slideNumber: "c/t"`.
 /// + This place is actually what `Reveal.initialize` input. So plugin options should be placed here.
 /// + Use `!!markdown` type on the string type, let us help you convert from Markdown to HTML simply!
 #[derive(Default, serde::Deserialize)]

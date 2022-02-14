@@ -13,7 +13,7 @@ This manager downloads the latest Reveal.js archive to provide serving and packi
 
 Static demo on gh-pages: <https://kmolyuan.github.io/reveal-yaml-rs>
 
-YAML backend: <https://github.com/KmolYuan/yaml-peg-rs> (hosted by myself)
+YAML 1.2 backend: <https://github.com/KmolYuan/yaml-peg-rs> (hosted by myself)
 
 ### Why should I use this?
 

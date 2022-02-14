@@ -12,11 +12,11 @@ let ws = new WebSocket(\"ws://\" + window.location.host + \"/ws/\");
 #[derive(serde::Deserialize)]
 #[serde(default)]
 pub struct Metadata {
-    /// Icon path, "img/icon.png" by default.
+    /// Webpage icon path, "img/icon.png" by default.
     pub icon: String,
-    /// Set the "lang" attribute for the page, "en" by default.
+    /// Webpage "lang" attribute, "en" by default.
     pub lang: String,
-    /// The webpage title, defaults to the first page.
+    /// Webpage title, defaults to the first page.
     pub title: String,
     /// Webpage description.
     pub description: String,
