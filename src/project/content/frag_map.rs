@@ -11,7 +11,7 @@ pub struct FragMap {
     #[serde(skip)]
     counter: Rc<Cell<u8>>,
     /// Fragment data structure.
-    pub frag: Vec<HashMap<String, String>>,
+    pub frag: Vec<HashMap<String, Option<String>>>,
 }
 
 impl FragMap {
@@ -29,6 +29,7 @@ impl FragMap {
         let mut end = String::new();
         for map in &self.frag {
             if let Some(frag) = map.get(tag) {
+                let frag = frag.as_ref().map(String::as_str).unwrap_or_default();
                 let i = self.counter.get();
                 head += &format!(
                     "<span class=\"fragment {}\" data-fragment-index=\"{}\">",

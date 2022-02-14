@@ -282,18 +282,13 @@ style: |
       h-stack:
         - doc: AAA
           math: f(x)
-          frag:
-            - doc: ""
-              math: ""
+          frag: [ { doc: ~, math: ~ } ]
         - doc: BBB
           math: g(y)
-          frag:
-            - doc: ""
-            - math: ""
+          frag: [ { doc: ~ }, { math: ~ } ]
         - doc: CCC
           math: h(z)
-          frag:
-            - math: ""
+          frag: [ { math: ~ } ]
     - doc: |
         ```yaml
         doc: Almost content support fragment except `lay-img`.
@@ -312,32 +307,32 @@ style: |
         h-stack:
           - doc: AAA
             math: f(x)
-            frag: [ { doc: "", math: "" } ]  # one action
+            frag: [ { doc: ~, math: ~ } ]  # one action
           - doc: BBB
             math: g(y)
-            frag: [ doc: "", math: "" ]  # two action
+            frag: [ { doc: ~ }, { math: ~ } ]  # two action
           - doc: CCC
             math: h(z)
-            frag: [ math: "" ]  # one element
+            frag: [ { math: ~ } ]  # one element
         ```
     - title: Fragment with Multiple `doc`s
       doc: |
         ```yaml
         v-stack:
           - doc: Since there is only one `doc`,
-            frag: [ { doc: "" } ]
+            frag: [ { doc: ~ } ]
           - doc: so it may splitted by `v-stack`.
-            frag: [ { doc: "" } ]
+            frag: [ { doc: ~ } ]
           - doc: The anchors can be used on `frag` array.
-            frag: [ { doc: "" } ]
+            frag: [ { doc: ~ } ]
         ```
       v-stack:
         - doc: Since there is only one `doc`,
-          frag: [ { doc: "" } ]
+          frag: [ { doc: ~ } ]
         - doc: so it may splited by `v-stack`.
-          frag: [ { doc: "" } ]
+          frag: [ { doc: ~ } ]
         - doc: The anchors can be used on `frag` array.
-          frag: [ { doc: "" } ]
+          frag: [ { doc: ~ } ]
 - title: Note
   doc: |
     Press "s" key to open speaker's view.
