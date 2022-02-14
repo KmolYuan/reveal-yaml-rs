@@ -34,10 +34,10 @@ style: |
 
     Scroll down ↓ to see an auto-generated outline.
   h-stack:
-    - doc: "[Repository](https://github.com/KmolYuan/reveal-yaml-rs)"
-    - doc: "[Documentation](https://docs.rs/reveal-yaml)"
-    - doc: "[Demo Source](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)"
-    - doc: "[Reveal.js](https://github.com/hakimel/reveal.js)"
+    - doc: 🏗 [Repository](https://github.com/KmolYuan/reveal-yaml-rs)
+    - doc: 📜 [Documentation](https://docs.rs/reveal-yaml)
+    - doc: 🎞 [Demo Source](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
+    - doc: ☕ [Reveal.js](https://github.com/hakimel/reveal.js)
 - title-hidden: Cover
   fit:
     - Hello My Friends!

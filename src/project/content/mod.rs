@@ -120,7 +120,7 @@ impl ToHtml for Content {
         }
         s += &frag.wrap("math", &math.wrap("\\[", "\\]"));
         for media in [img.to_html(ctx), video.to_html(ctx), iframe.to_html(ctx)] {
-            s += &media.wrap("<div class=\"hstack\">\n", "</div>\n");
+            s += &media.wrap("<div class=\"h-stack\">\n", "</div>\n");
         }
         s += &lay_img
             .to_html(ctx)
@@ -132,17 +132,17 @@ impl ToHtml for Content {
                 .into_iter()
                 .map(|c| c.to_html(ctx).wrap(&pre, "</div>\n"))
                 .collect::<String>()
-                .wrap("<div class=\"hstack\">", "</div>\n");
+                .wrap("<div class=\"h-stack\">", "</div>\n");
         }
         s += &v_stack
             .into_iter()
             .map(|c| c.to_html(ctx).wrap("<div>", "</div>\n"))
             .collect::<String>()
-            .wrap("<div class=\"vstack\">", "</div>\n");
+            .wrap("<div class=\"v-stack\">", "</div>\n");
         if !h_stack_border.is_empty() {
             let width = 100. / h_stack_border.len() as f32;
             let pre = format!(
-                "<div class=\"hstack-border\" style=\"width:{:.04}%\">",
+                "<div class=\"h-stack-border\" style=\"width:{:.04}%\">",
                 width
             );
             s += &h_stack_border
@@ -157,7 +157,7 @@ impl ToHtml for Content {
                     }
                 })
                 .collect::<String>()
-                .wrap("<div class=\"hstack\">", "</div>");
+                .wrap("<div class=\"h-stack\">", "</div>");
         }
         s += &v_stack_border
             .into_iter()
@@ -165,13 +165,13 @@ impl ToHtml for Content {
             .map(|(i, c)| {
                 let text = c.to_html(ctx);
                 if i == 0 {
-                    text.wrap("<div class=\"vstack\">", "</div>\n")
+                    text.wrap("<div class=\"v-stack\">", "</div>\n")
                 } else {
-                    text.wrap("<div class=\"vstack-border\">", "</div>\n")
+                    text.wrap("<div class=\"v-stack-border\">", "</div>\n")
                 }
             })
             .collect::<String>()
-            .wrap("<div class=\"vstack\">", "</div>\n");
+            .wrap("<div class=\"v-stack\">", "</div>\n");
         s
     }
 }
