@@ -37,23 +37,23 @@
             text-align: center;
         }
 
-        .vstack > * {
-            display: block;
-        }
-
-        .vstack-border {
-            border-top: 2px solid;
-        }
-
-        .hstack {
+        .h-stack {
             display: flex;
             flex-direction: row;
             justify-content: center;
             align-items: center;
         }
 
-        .hstack-border {
+        .h-stack-border {
             border-left: 2px solid;
+        }
+
+        .v-stack > * {
+            display: block;
+        }
+
+        .v-stack-border {
+            border-top: 2px solid;
         }
 
         .reveal h1 {
@@ -216,13 +216,13 @@
 <p><em>Author: <a href="https://github.com/KmolYuan">Yuan Chang</a></em></p>
 <p>Scroll right → to see the examples.</p>
 <p>Scroll down ↓ to see an auto-generated outline.</p>
-<div class="hstack"><div style="width:25.0000%"><p><a href="https://github.com/KmolYuan/reveal-yaml-rs">Repository</a></p>
+<div class="h-stack"><div style="width:25.0000%"><p>🏗 <a href="https://github.com/KmolYuan/reveal-yaml-rs">Repository</a></p>
 </div>
-<div style="width:25.0000%"><p><a href="https://docs.rs/reveal-yaml">Documentation</a></p>
+<div style="width:25.0000%"><p>📜 <a href="https://docs.rs/reveal-yaml">Documentation</a></p>
 </div>
-<div style="width:25.0000%"><p><a href="https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml">Demo Source</a></p>
+<div style="width:25.0000%"><p>🎞 <a href="https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml">Demo Source</a></p>
 </div>
-<div style="width:25.0000%"><p><a href="https://github.com/hakimel/reveal.js">Reveal.js</a></p>
+<div style="width:25.0000%"><p>☕ <a href="https://github.com/hakimel/reveal.js">Reveal.js</a></p>
 </div>
 </div>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
@@ -318,12 +318,12 @@ for i in range(10):
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Image</h1>
-<div class="hstack">
+<div class="h-stack">
 <figure><img alt="Kitten 🐱" src="https://placekitten.com/600/400"/><figcaption>Kitten 🐱</figcaption></figure>
 </div>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Multiple Images</h1>
-<div class="hstack">
+<div class="h-stack">
 <figure><img alt="Kitten 1" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/700/500"/><figcaption>Kitten 1</figcaption></figure>
 <figure><img alt="Kitten 2" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/800/500"/><figcaption>Kitten 2</figcaption></figure>
 </div>
@@ -360,7 +360,7 @@ for i in range(10):
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Video</h1>
-<div class="hstack">
+<div class="h-stack">
 <video width="320" height="240" controls><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
 <video><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
 </div>
@@ -440,7 +440,7 @@ So all the pargraphs are left aligned.</p>
   - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
   - img: { src: https://placekitten.com/600/600 }
 </code></pre>
-<div class="hstack"><div style="width:33.3333%"><p><em>Data types</em></p>
+<div class="h-stack"><div style="width:33.3333%"><p><em>Data types</em></p>
 <ul>
 <li>primitive types</li>
 <li>sturct</li>
@@ -449,7 +449,7 @@ So all the pargraphs are left aligned.</p>
 </ul>
 </div>
 <div style="width:33.3333%">\[\small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}\]</div>
-<div style="width:33.3333%"><div class="hstack">
+<div style="width:33.3333%"><div class="h-stack">
 <img alt="" src="https://placekitten.com/600/600"/>
 </div>
 </div>
@@ -468,7 +468,7 @@ So all the pargraphs are left aligned.</p>
       - doc: Right Bottom Left
       - doc: Right Bottom Right
 </code></pre>
-<div class="hstack"><div style="width:50.0000%"><div class="vstack"><div><div class="hstack"><div style="width:50.0000%"><p>Left Top Left</p>
+<div class="h-stack"><div style="width:50.0000%"><div class="v-stack"><div><div class="h-stack"><div style="width:50.0000%"><p>Left Top Left</p>
 </div>
 <div style="width:50.0000%"><p>Left Top Right</p>
 </div>
@@ -478,10 +478,10 @@ So all the pargraphs are left aligned.</p>
 </div>
 </div>
 </div>
-<div style="width:50.0000%"><div class="vstack"><div class="vstack"><p>Right Top</p>
+<div style="width:50.0000%"><div class="v-stack"><div class="v-stack"><p>Right Top</p>
 </div>
-<div class="vstack-border"><div class="hstack"><div style="width:50.0000%"><p>Right Bottom Left</p>
-</div><div class="hstack-border" style="width:50.0000%"><p>Right Bottom Right</p>
+<div class="v-stack-border"><div class="h-stack"><div style="width:50.0000%"><p>Right Bottom Left</p>
+</div><div class="h-stack-border" style="width:50.0000%"><p>Right Bottom Right</p>
 </div></div></div>
 </div>
 </div>
@@ -497,7 +497,7 @@ So all the pargraphs are left aligned.</p>
 </div>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Fragment in Stacks</h1>
-<div class="hstack"><div style="width:33.3333%"><span class="fragment " data-fragment-index="0"><p>AAA</p>
+<div class="h-stack"><div style="width:33.3333%"><span class="fragment " data-fragment-index="0"><p>AAA</p>
 </span><span class="fragment " data-fragment-index="1">\[f(x)\]</span></div>
 <div style="width:33.3333%"><span class="fragment " data-fragment-index="2"><p>BBB</p>
 </span><span class="fragment " data-fragment-index="3">\[g(y)\]</span></div>
@@ -539,7 +539,7 @@ frag:
   - doc: The anchors can be used on `frag` array.
     frag: [ { doc: &quot;&quot; } ]
 </code></pre>
-<div class="vstack"><div><span class="fragment " data-fragment-index="0"><p>Since there is only one <code>doc</code>,</p>
+<div class="v-stack"><div><span class="fragment " data-fragment-index="0"><p>Since there is only one <code>doc</code>,</p>
 </span></div>
 <div><span class="fragment " data-fragment-index="1"><p>so it may splited by <code>v-stack</code>.</p>
 </span></div>
@@ -576,14 +576,14 @@ frag:
     - *map
   - *stack
 </code></pre>
-<div class="hstack"><div style="width:50.0000%"><div class="vstack"><div><p>Same content here!</p>
+<div class="h-stack"><div style="width:50.0000%"><div class="v-stack"><div><p>Same content here!</p>
 </div>
 <div><p>Same content here!</p>
 </div>
 <div><p>Same content here!</p>
 </div>
 </div>
-</div><div class="hstack-border" style="width:50.0000%"><div class="vstack"><div><p>Same content here!</p>
+</div><div class="h-stack-border" style="width:50.0000%"><div class="v-stack"><div><p>Same content here!</p>
 </div>
 <div><p>Same content here!</p>
 </div>
@@ -633,8 +633,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 
 <script>
     Reveal.initialize({
-        hash: true,
         slideNumber: "c/t",
+        hash: true,
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath, RevealZoom, ],
         math: {
             mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.9/MathJax.js',
