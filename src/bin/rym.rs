@@ -73,21 +73,20 @@ enum Subcommand {
     },
 }
 
-#[actix_web::main]
-async fn main() -> Result<(), Error> {
+fn main() -> Result<(), Error> {
     let args = Entry::parse();
     match args.subcommand {
-        Subcommand::Update => update().await,
-        Subcommand::New { dir } => blank::<_, true>(dir),
-        Subcommand::Init { dir } => blank::<_, false>(dir),
+        Subcommand::Update => update(),
+        Subcommand::New { dir } => blank(dir, true),
+        Subcommand::Init { dir } => blank(dir, false),
         Subcommand::Serve {
             dir,
             port,
             name,
             edit,
             open,
-        } => serve(port, dir, &name, edit, open).await,
+        } => serve(port, dir, &name, edit, open),
         Subcommand::Fmt { dir, name, dry_run } => fmt(dir, dry_run, &name),
-        Subcommand::Pack { dir, name, out } => pack(dir, out, &name).await,
+        Subcommand::Pack { dir, name, out } => pack(dir, out, &name),
     }
 }

@@ -30,14 +30,14 @@ struct Cache {
 }
 
 /// Launch function.
-pub async fn serve<P>(port: u16, path: P, project: &str, edit: bool, open: bool) -> Result<()>
+pub fn serve<P>(port: u16, path: P, project: &str, edit: bool, open: bool) -> Result<()>
 where
     P: AsRef<Path>,
 {
     set_current_dir(path.as_ref())?;
     let temp = TempDir::new().map_err(|s| Error::new(ErrorKind::PermissionDenied, s))?;
     // Expand Reveal.js
-    extract(temp.path()).await?;
+    extract(temp.path())?;
     // Start server
     let archive = temp.path().join(archive!());
     println!("Serve at: http://localhost:{}/", port);
@@ -59,7 +59,7 @@ where
     if open {
         webbrowser::open(&format!("http://localhost:{}/", port))?;
     }
-    HttpServer::new(move || {
+    let server = HttpServer::new(move || {
         let app = App::new()
             .app_data(cache.clone())
             .app_data(Data::new(ServerMonitor::new(cache.project.clone())))
@@ -75,6 +75,6 @@ where
         })
     })
     .bind(("localhost", port))?
-    .run()
-    .await
+    .run();
+    actix_web::rt::System::new().block_on(server)
 }
