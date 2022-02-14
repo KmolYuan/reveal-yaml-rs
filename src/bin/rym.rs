@@ -1,6 +1,6 @@
 use clap::{AppSettings, Parser};
 use reveal_yaml::*;
-use std::io::Error;
+use std::{io::Error, path::PathBuf};
 
 #[derive(Parser)]
 #[clap(
@@ -22,19 +22,19 @@ enum Subcommand {
     /// Create a new project and its directory
     New {
         /// Project dir
-        dir: String,
+        dir: PathBuf,
     },
     /// Create a new project from exist directory
     Init {
         /// Project dir
         #[clap(default_value = ".")]
-        dir: String,
+        dir: PathBuf,
     },
     /// Serve the current project
     Serve {
         /// Project dir
         #[clap(default_value = ".")]
-        dir: String,
+        dir: PathBuf,
         /// Port number
         #[clap(long, default_value = "8080")]
         port: u16,
@@ -52,7 +52,7 @@ enum Subcommand {
     Fmt {
         /// Project dir
         #[clap(default_value = ".")]
-        dir: String,
+        dir: PathBuf,
         /// Project filename
         #[clap(short, long, default_value = "ROOT")]
         name: String,
@@ -63,7 +63,7 @@ enum Subcommand {
     /// Pack the current project
     Pack {
         /// Project dir
-        dir: String,
+        dir: PathBuf,
         /// Project filename
         #[clap(short, long, default_value = ROOT)]
         name: String,
