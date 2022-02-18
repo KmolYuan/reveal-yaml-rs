@@ -8,7 +8,6 @@ use std::{io::Error, path::PathBuf};
     version = env!("CARGO_PKG_VERSION"),
     author = env!("CARGO_PKG_AUTHORS"),
     about = env!("CARGO_PKG_DESCRIPTION"),
-    setting = clap::AppSettings::ArgRequiredElseHelp
 )]
 struct Entry {
     #[clap(subcommand)]
