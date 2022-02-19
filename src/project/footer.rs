@@ -23,12 +23,11 @@ impl ToHtml for Footer {
         let link = link.wrap("<a href=\"", "\">\n");
         let link_end = if link.is_empty() { "" } else { "</a>\n" };
         let img = src.wrap("<img", &format!("{}/>", size));
-        "<div id=\"hidden\" style=\"display: none\">".to_string()
-            + "<div id=\"footer\">"
-            + "<div id=\"footer-left\">\n"
+        "<div class=\"footer\">\n".to_string()
             + &link
             + &img
+            + &label.wrap("<span>&nbsp;", "</span>")
             + link_end
-            + "</div></div></div>"
+            + "</div>"
     }
 }
