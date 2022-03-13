@@ -1,6 +1,6 @@
 use crate::project::StringWrap;
 use std::{
-    fs::{create_dir, File},
+    fs::{canonicalize, create_dir, File},
     io::{stdin, stdout, Result, Write},
     path::Path,
 };
@@ -14,9 +14,9 @@ pub fn blank<P>(path: P, new_dir: bool) -> Result<()>
 where
     P: AsRef<Path>,
 {
-    let path = path.as_ref();
+    let path = canonicalize(path.as_ref())?;
     if new_dir && !path.is_dir() {
-        create_dir(path)?;
+        create_dir(&path)?;
     }
     File::create(path.join(ROOT))?.write_all(
         BLANK_DOC
