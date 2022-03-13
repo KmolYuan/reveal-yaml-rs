@@ -368,6 +368,11 @@
 
 				window.addEventListener( 'message', function( event ) {
 
+					// Ignore post messages from other origins to prevent XSS
+					if( window.location.origin !== event.origin ){
+						return;
+					}
+
 					clearTimeout( connectionTimeout );
 					connectionStatus.style.display = 'none';
 
@@ -398,12 +403,20 @@
 						}
 						else if( /slidechanged|fragmentshown|fragmenthidden|paused|resumed/.test( data.eventName ) && currentState !== JSON.stringify( data.state ) ) {
 
-							window.opener.postMessage( JSON.stringify({ method: 'setState', args: [ data.state ]} ), '*' );
+							dispatchStateToMainWindow( data.state );
 
 						}
 					}
 
 				} );
+
+				/**
+				 * Updates the presentation in the main window to match the state
+				 * of the presentation in the notes window.
+				 */
+				const dispatchStateToMainWindow = debounce(( state ) => {
+					window.opener.postMessage( JSON.stringify({ method: 'setState', args: [ state ]} ), '*' );
+				}, 500);
 
 				/**
 				 * Asynchronously calls the Reveal.js API of the main frame.
