@@ -1,4 +1,4 @@
-use self::edit_mode::ServerMonitor;
+use self::edit_mode::Monitor;
 use crate::{
     pack::{extract, listdir},
     project::load,
@@ -62,7 +62,7 @@ where
     let server = HttpServer::new(move || {
         let app = App::new()
             .app_data(cache.clone())
-            .app_data(Data::new(ServerMonitor::new(cache.project.clone())))
+            .app_data(Data::new(Monitor::new(cache.project.clone())))
             .service(site::index)
             .service(site::help_page)
             .service(site::icon)

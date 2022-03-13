@@ -23,10 +23,10 @@ impl Actor for Ws {
     type Context = ws::WebsocketContext<Self>;
 }
 
-impl Handler<ServerEvent> for Ws {
+impl Handler<Event> for Ws {
     type Result = ();
 
-    fn handle(&mut self, msg: ServerEvent, ctx: &mut Self::Context) {
+    fn handle(&mut self, msg: Event, ctx: &mut Self::Context) {
         ctx.text(msg.0);
     }
 }
@@ -35,13 +35,13 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for Ws {
     fn handle(&mut self, _item: Result<ws::Message, ws::ProtocolError>, _ctx: &mut Self::Context) {}
 }
 
-pub(super) struct ServerMonitor {
+pub(super) struct Monitor {
     last: Duration,
     project: String,
     listeners: Vec<Addr<Ws>>,
 }
 
-impl ServerMonitor {
+impl Monitor {
     pub(super) fn new(project: String) -> Addr<Self> {
         Self {
             last: file_date(&project),
@@ -52,7 +52,7 @@ impl ServerMonitor {
     }
 }
 
-impl Actor for ServerMonitor {
+impl Actor for Monitor {
     type Context = Context<Self>;
 
     fn started(&mut self, ctx: &mut Self::Context) {
@@ -61,7 +61,7 @@ impl Actor for ServerMonitor {
             if last != act.last {
                 // Broadcast
                 for l in &act.listeners {
-                    l.do_send(ServerEvent("changed!".to_string()));
+                    l.do_send(Event("changed!".to_string()));
                 }
                 act.last = last;
             }
@@ -69,29 +69,29 @@ impl Actor for ServerMonitor {
     }
 }
 
-impl Handler<RegisterClient> for ServerMonitor {
+impl Handler<Client> for Monitor {
     type Result = ();
 
-    fn handle(&mut self, msg: RegisterClient, _ctx: &mut Context<Self>) {
+    fn handle(&mut self, msg: Client, _ctx: &mut Context<Self>) {
         self.listeners.push(msg.0);
     }
 }
 
 #[derive(Message)]
 #[rtype(result = "()")]
-struct ServerEvent(String);
+struct Event(String);
 
 #[derive(Message)]
 #[rtype(result = "()")]
-struct RegisterClient(Addr<Ws>);
+struct Client(Addr<Ws>);
 
 #[get("/ws/")]
 pub(super) async fn ws_index(
     req: HttpRequest,
     stream: web::Payload,
-    data: web::Data<Addr<ServerMonitor>>,
+    data: web::Data<Addr<Monitor>>,
 ) -> Result<HttpResponse, Error> {
     let (addr, res) = ws::WsResponseBuilder::new(Ws, &req, stream).start_with_addr()?;
-    data.do_send(RegisterClient(addr));
+    data.do_send(Client(addr));
     Ok(res)
 }
