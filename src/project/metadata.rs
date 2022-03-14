@@ -28,9 +28,6 @@ pub struct Metadata {
     ///
     /// To specify the outline title, just provide a string.
     pub outline: Optional<String>,
-    /// If true, add chapter title on the slides, default to true.
-    #[serde(rename = "outline-nav")]
-    pub outline_nav: bool,
     /// Reveal.js theme, "serif" by default.
     pub theme: String,
     /// Highlight theme, "zenburn" by default.
@@ -56,7 +53,6 @@ impl Default for Metadata {
             author: String::new(),
             background: Background::default(),
             outline: Optional::Bool(true),
-            outline_nav: true,
             theme: "serif".to_string(),
             code_theme: "zenburn".to_string(),
             style: String::new(),
@@ -78,7 +74,6 @@ impl Metadata {
             author,
             background,
             outline,
-            outline_nav,
             theme,
             code_theme,
             style,
@@ -100,9 +95,6 @@ impl Metadata {
             ("", Some(chapter)) => &chapter.slide.title,
             (title, _) => title,
         };
-        if outline_nav {
-            // TODO
-        }
         let auto_reload = if auto_reload { RELOAD } else { "" };
         let (plugin_names, plugin_files) = plugin.name_and_files();
         TEMPLATE
@@ -113,7 +105,6 @@ impl Metadata {
             .replace("{%author}", &author.escape())
             .replace("{%theme}", &theme)
             .replace("{%code-theme}", &code_theme)
-            .replace("{%outline-nav}", "")
             .replace("{%footer}", &footer.to_html(&ctx))
             .replace("{%slides}", &slides.to_html(&ctx))
             .replace("/* {%auto-reload} */", auto_reload)

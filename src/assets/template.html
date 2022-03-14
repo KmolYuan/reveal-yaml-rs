@@ -210,7 +210,6 @@
 <body>
 <div style="display: none">
     <div class="top-object">
-        {%outline-nav}
         {%footer}
     </div>
 </div>
@@ -245,9 +244,7 @@
     $(document).ready(() => {
         let top = $('.top-object').html();
         if (window.location.search.match(/print-pdf/gi))
-            Reveal.addEventListener('ready', _ => {
-                $('.slide-background').append(top);
-            });
+            Reveal.addEventListener('ready', _ => $('.slide-background').append(top));
         else
             $('div.reveal').append(top);
         // Open external links in new windows or tabs
