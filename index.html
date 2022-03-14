@@ -221,7 +221,6 @@
 <body>
 <div style="display: none">
     <div class="top-object">
-        
         <div class="footer">
 <a href="https://github.com/KmolYuan/reveal-yaml/">
 <img src="help/icon.png" width="50pt"/><span>&nbsp;Reveal.yaml</span></a>
@@ -664,9 +663,7 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
     $(document).ready(() => {
         let top = $('.top-object').html();
         if (window.location.search.match(/print-pdf/gi))
-            Reveal.addEventListener('ready', _ => {
-                $('.slide-background').append(top);
-            });
+            Reveal.addEventListener('ready', _ => $('.slide-background').append(top));
         else
             $('div.reveal').append(top);
         // Open external links in new windows or tabs
