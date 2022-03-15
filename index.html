@@ -262,10 +262,11 @@
 <li><a href="#/8/1">Nested Layout</a></li>
 </ul>
 </li>
-<li><a href="#/9">Fragment</a>
+<li><a href="#/9">Auto Animate</a>
 <ul>
-<li><a href="#/9/1">Fragment in Stacks</a></li>
-<li><a href="#/9/3">Fragment with Multiple <code>doc</code>s</a></li>
+<li><a href="#/9/2">Lay images</a></li>
+<li><a href="#/9/3">Fragment</a></li>
+<li><a href="#/9/4">Fragment with Multiple <code>doc</code>s</a></li>
 </ul>
 </li>
 <li><a href="#/10">Note</a></li>
@@ -508,32 +509,34 @@ So all the pargraphs are left aligned.</p>
 </section>
 </section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<h1>Fragment</h1>
-<span class="fragment highlight-current-blue" data-fragment-index="0"><p>Almost content support fragment except <code>lay-img</code>.</p>
-</span><div class="r-stack"><img class="fragment fade-right" src="https://placekitten.com/450/450"/>
-<img class="fragment fade-left" src="https://placekitten.com/600/300"/>
-</div>
-</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<h1>Fragment in Stacks</h1>
-<div class="h-stack"><div style="width:33.3333%"><span class="fragment " data-fragment-index="0"><p>AAA</p>
-</span><span class="fragment " data-fragment-index="1">\[f(x)\]</span></div>
-<div style="width:33.3333%"><span class="fragment " data-fragment-index="2"><p>BBB</p>
-</span><span class="fragment " data-fragment-index="3">\[g(y)\]</span></div>
-<div style="width:33.3333%"><p>CCC</p>
-<span class="fragment " data-fragment-index="4">\[h(z)\]</span></div>
-</div>
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" data-auto-animate>
+<h1>Auto Animate</h1>
+<p>Auto animation is suggested for the most simple cases.</p>
+<p>Enable this option for two continuous slides, the animation will be generated automatically.</p>
+<pre><code class="language-yaml">auto-animate: true
+</code></pre>
+<p>Move</p>
+</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" data-auto-animate>
+<h1>Auto Animate</h1>
+<pre><code class="language-yaml">auto-animate: true
+</code></pre>
+<p>Move</p>
+<p>Smoothly</p>
 </section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<pre><code class="language-yaml">doc: Almost content support fragment except `lay-img`.
-lay-img:
+<h1>Lay images</h1>
+<pre><code class="language-yaml">lay-img:
   - src: https://placekitten.com/450/450
     frag: fade-right
   - src: https://placekitten.com/600/300
     frag: fade-left
-frag:
-  - doc: highlight-current-blue
 </code></pre>
+<div class="r-stack"><img class="fragment fade-right" src="https://placekitten.com/450/450"/>
+<img class="fragment fade-left" src="https://placekitten.com/600/300"/>
+</div>
+</section>
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<h1>Fragment</h1>
 <p>The index of fragment is the order of the animation.</p>
 <p>The blank represents normal <code>class=&quot;framgment&quot;</code> effect.</p>
 <pre><code class="language-yaml">h-stack:
@@ -547,16 +550,23 @@ frag:
     math: h(z)
     frag: [ { math: ~ } ]  # one element
 </code></pre>
+<div class="h-stack"><div style="width:33.3333%"><span class="fragment " data-fragment-index="0"><p>AAA</p>
+</span><span class="fragment " data-fragment-index="1">\[f(x)\]</span></div>
+<div style="width:33.3333%"><span class="fragment " data-fragment-index="2"><p>BBB</p>
+</span><span class="fragment " data-fragment-index="3">\[g(y)\]</span></div>
+<div style="width:33.3333%"><p>CCC</p>
+<span class="fragment " data-fragment-index="4">\[h(z)\]</span></div>
+</div>
 </section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Fragment with Multiple <code>doc</code>s</h1>
 <pre><code class="language-yaml">v-stack:
   - doc: Since there is only one `doc`,
-    frag: [ { doc: ~ } ]
+    frag: &amp;frag [ { doc: ~ } ]
   - doc: so it may splitted by `v-stack`.
-    frag: [ { doc: ~ } ]
+    frag: *frag
   - doc: The anchors can be used on `frag` array.
-    frag: [ { doc: ~ } ]
+    frag: *frag
 </code></pre>
 <div class="v-stack"><div><span class="fragment " data-fragment-index="0"><p>Since there is only one <code>doc</code>,</p>
 </span></div>
@@ -652,8 +662,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 
 <script>
     Reveal.initialize({
-        hash: true,
         slideNumber: "c/t",
+        hash: true,
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
         mathjax2: {
             mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
