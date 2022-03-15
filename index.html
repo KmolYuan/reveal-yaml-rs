@@ -652,18 +652,22 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 
 <script>
     Reveal.initialize({
-        slideNumber: "c/t",
         hash: true,
-        plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath, RevealZoom, ],
-        math: {
-            mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.9/MathJax.js',
+        slideNumber: "c/t",
+        plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
+        mathjax2: {
+            mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
             config: 'TeX-AMS_HTML-full',
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)', '\\[', '\\]']],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
         }
     });
     $(document).ready(() => {
         let top = $('.top-object').html();
         if (window.location.search.match(/print-pdf/gi))
-            Reveal.addEventListener('ready', _ => $('.slide-background').append(top));
+            Reveal.addEventListener('ready', _ => $('.pdf-page').append(top));
         else
             $('div.reveal').append(top);
         // Open external links in new windows or tabs
