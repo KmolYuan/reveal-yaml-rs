@@ -268,17 +268,41 @@ style: |
           - h-stack-border:
             - doc: Right Bottom Left
             - doc: Right Bottom Right
-- title: Fragment
-  doc: Almost content support fragment except `lay-img`.
-  lay-img:
-    - src: https://placekitten.com/450/450
-      frag: fade-right
-    - src: https://placekitten.com/600/300
-      frag: fade-left
-  frag:
-    - doc: highlight-current-blue
+- title: Auto Animate
+  doc: |
+    Auto animation is suggested for the most simple cases.
+    
+    Enable this option for two continuous slides, the animation will be generated automatically.
+    ```yaml
+    auto-animate: true
+    ```
+    Move
+  auto-animate: true
   sub:
-    - title: Fragment in Stacks
+    - title-only: Auto Animate
+      doc: |
+        ```yaml
+        auto-animate: true
+        ```
+        Move
+
+        Smoothly
+      auto-animate: true
+    - title: Lay images
+      doc: |
+        ```yaml
+        lay-img:
+          - src: https://placekitten.com/450/450
+            frag: fade-right
+          - src: https://placekitten.com/600/300
+            frag: fade-left
+        ```
+      lay-img:
+        - src: https://placekitten.com/450/450
+          frag: fade-right
+        - src: https://placekitten.com/600/300
+          frag: fade-left
+    - title: Fragment
       h-stack:
         - doc: AAA
           math: f(x)
@@ -289,17 +313,7 @@ style: |
         - doc: CCC
           math: h(z)
           frag: [ { math: ~ } ]
-    - doc: |
-        ```yaml
-        doc: Almost content support fragment except `lay-img`.
-        lay-img:
-          - src: https://placekitten.com/450/450
-            frag: fade-right
-          - src: https://placekitten.com/600/300
-            frag: fade-left
-        frag:
-          - doc: highlight-current-blue
-        ```
+      doc: |
         The index of fragment is the order of the animation.
 
         The blank represents normal `class="framgment"` effect.
@@ -320,19 +334,19 @@ style: |
         ```yaml
         v-stack:
           - doc: Since there is only one `doc`,
-            frag: [ { doc: ~ } ]
+            frag: &frag [ { doc: ~ } ]
           - doc: so it may splitted by `v-stack`.
-            frag: [ { doc: ~ } ]
+            frag: *frag
           - doc: The anchors can be used on `frag` array.
-            frag: [ { doc: ~ } ]
+            frag: *frag
         ```
       v-stack:
         - doc: Since there is only one `doc`,
-          frag: [ { doc: ~ } ]
+          frag: &frag [ { doc: ~ } ]
         - doc: so it may splited by `v-stack`.
-          frag: [ { doc: ~ } ]
+          frag: *frag
         - doc: The anchors can be used on `frag` array.
-          frag: [ { doc: ~ } ]
+          frag: *frag
 - title: Note
   doc: |
     Press "s" key to open speaker's view.

@@ -126,6 +126,9 @@ pub struct Slide {
     pub class: String,
     /// HTML "id" attribute for this section.
     pub id: String,
+    /// [Auto-Animate](https://revealjs.com/auto-animate/) function.
+    #[serde(rename = "auto-animate")]
+    pub auto_animate: bool,
     /// [Transition](https://revealjs.com/transitions/) option.
     pub trans: String,
     /// [Background transition](https://revealjs.com/transitions/#background-transitions) option.
@@ -144,6 +147,7 @@ impl ToHtml for Slide {
             background,
             class,
             id,
+            auto_animate,
             trans,
             bg_trans,
         } = self;
@@ -152,11 +156,17 @@ impl ToHtml for Slide {
             Optional::Bool(true) => ctx.background.clone(),
             Optional::Some(bg) => bg.to_html(ctx),
         };
+        let auto_animate = if auto_animate {
+            " data-auto-animate"
+        } else {
+            ""
+        };
         let data = background
             + &class.wrap(" class=\"", "\"")
             + &id.wrap(" id=\"", "\"")
             + &trans.wrap(" data-transition=\"", "\"")
-            + &bg_trans.wrap(" data-background-transition=\"", "\"");
+            + &bg_trans.wrap(" data-background-transition=\"", "\"")
+            + auto_animate;
         let content = md2html(&title.wrap("# ", ""))
             + &md2html(&title_only.wrap("# ", ""))
             + &content.to_html(ctx)
