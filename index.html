@@ -667,7 +667,7 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
     $(document).ready(() => {
         let top = $('.top-object').html();
         if (window.location.search.match(/print-pdf/gi))
-            Reveal.addEventListener('ready', _ => $('.pdf-page').append(top));
+            Reveal.on('ready', _ => $('.slide-background').append(top));
         else
             $('div.reveal').append(top);
         // Open external links in new windows or tabs
