@@ -18,13 +18,11 @@ where
     if new_dir && !path.is_dir() {
         create_dir(&path)?;
     }
-    File::create(path.join(ROOT))?.write_all(
-        BLANK_DOC
-            .replace("{%title}", &ask("Title")?)
-            .replace("{%author}", &ask("Author")?)
-            .replace("{%description}", &ask("Description")?)
-            .as_bytes(),
-    )?;
+    let doc = BLANK_DOC
+        .replace("{%title}", &ask("Title")?)
+        .replace("{%author}", &ask("Author")?)
+        .replace("{%description}", &ask("Description")?);
+    File::create(path.join(ROOT))?.write_all(doc.as_bytes())?;
     println!("Create project {:?}", path);
     Ok(())
 }

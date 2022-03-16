@@ -23,7 +23,7 @@ style: |
       background-color: transparent;
   }
   .left-align p {
-    text-align: left;
+      text-align: left;
   }
 ---
 - title: Reveal.yaml Demo Slide
@@ -271,9 +271,9 @@ style: |
 - title: Auto Animate
   doc: |
     Auto animation is suggested for the most simple cases.
-    
+
     Enable this option for two continuous slides, the animation will be generated automatically.
-    ```yaml
+    ```yaml[0]
     auto-animate: true
     ```
     Move
