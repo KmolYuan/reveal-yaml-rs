@@ -12,14 +12,11 @@
     <link rel="stylesheet" href="dist/theme/serif.css" id="theme">
     <link rel="stylesheet" href="plugin/highlight/zenburn.css" id="highlight-theme">
     <style>
-        .outline-nav {
+        .chapter-header {
             position: absolute;
             top: 1em;
             left: 1em;
-        }
-
-        .outline-nav a {
-            font-size: 15pt;
+            font-size: 18pt;
         }
 
         .footer {
@@ -273,7 +270,7 @@
 <li><a href="#/11">Anchors</a></li>
 <li><a href="#/12">Third-party Plugins</a></li>
 </ul>
-</section>
+<div class="chapter-header">Reveal.yaml Demo Slide</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
@@ -290,7 +287,7 @@ fit:
   - ---
   - This is actually the &quot;cover&quot; page, check the table of content!
 </code></pre>
-</section>
+<div class="chapter-header">Cover</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
@@ -333,7 +330,7 @@ for i in range(10):
   + Item
   + [Next page](#/5)
 </code></pre>
-</section>
+<div class="chapter-header">Markdown</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
@@ -347,14 +344,14 @@ for i in range(10):
 <figure><img alt="Kitten 1" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/700/500"/><figcaption>Kitten 1</figcaption></figure>
 <figure><img alt="Kitten 2" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/800/500"/><figcaption>Kitten 2</figcaption></figure>
 </div>
-</section>
+<div class="chapter-header">Image</div></section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Lay with Images</h1>
 <div class="r-stack"><img class="fragment " src="https://placekitten.com/450/300"/>
 <img class="fragment " src="https://placekitten.com/300/450"/>
 <img class="fragment " src="https://placekitten.com/400/400"/>
 </div>
-</section>
+<div class="chapter-header">Image</div></section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <pre><code class="language-yaml">img:
   label: Kitten 🐱
@@ -375,7 +372,7 @@ for i in range(10):
   - src: https://placekitten.com/300/450
   - src: https://placekitten.com/400/400
 </code></pre>
-</section>
+<div class="chapter-header">Image</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
@@ -393,7 +390,7 @@ for i in range(10):
   - src: https://www.w3schools.com/html/movie.mp4
     controls: false
 </code></pre>
-</section>
+<div class="chapter-header">Video</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
@@ -417,7 +414,7 @@ math: |
   &amp;c(x) = 0
   \end{aligned}
 </code></pre>
-</section>
+<div class="chapter-header">Maths</div></section>
 </section>
 <section>
 <section data-background-color="rgb(70, 70, 255)" data-transition="convex-in convex-out">
@@ -444,7 +441,7 @@ So all the pargraphs are left aligned.</p>
     text-align: left;
 }
 </code></pre>
-</section>
+<div class="chapter-header">Background Color & Transition</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
@@ -506,7 +503,7 @@ So all the pargraphs are left aligned.</p>
 </div>
 </div>
 </div>
-</section>
+<div class="chapter-header">Layout</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" data-auto-animate>
@@ -524,7 +521,7 @@ auto-animate: true
 </code></pre>
 <p>Move</p>
 <p>Smoothly</p>
-</section>
+<div class="chapter-header">Auto Animate</div></section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Lay images</h1>
 <pre><code class="language-yaml">lay-img:
@@ -536,7 +533,7 @@ auto-animate: true
 <div class="r-stack"><img class="fragment fade-right" src="https://placekitten.com/450/450"/>
 <img class="fragment fade-left" src="https://placekitten.com/600/300"/>
 </div>
-</section>
+<div class="chapter-header">Auto Animate</div></section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Fragment</h1>
 <p>The index of fragment is the order of the animation.</p>
@@ -559,7 +556,7 @@ auto-animate: true
 <div style="width:33.3333%"><p>CCC</p>
 <span class="fragment " data-fragment-index="4">\[h(z)\]</span></div>
 </div>
-</section>
+<div class="chapter-header">Auto Animate</div></section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Fragment with Multiple <code>doc</code>s</h1>
 <pre><code class="language-yaml">v-stack:
@@ -577,7 +574,7 @@ auto-animate: true
 <div><span class="fragment " data-fragment-index="2"><p>The anchors can be used on <code>frag</code> array.</p>
 </span></div>
 </div>
-</section>
+<div class="chapter-header">Auto Animate</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
@@ -689,10 +686,19 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
         }
     }).then(() => {
         // Pinned objects
-        if (window.location.search.match(/print-pdf/gi))
-            $('div.slide-background').append($('.top-object').html());
-        else
-            $('div.reveal').append($('.top-object').html());
+        if (window.location.search.match(/print-pdf/gi)) {
+            let target = $('div.slide-background');
+            target.append($('.top-object'));
+            $('div.pdf-page').each((_, e) => $(e).append($(e).children('.chapter-header').remove()));
+        } else {
+            let target = $('div.reveal');
+            target.append($('.top-object'));
+            target.append($(Reveal.getCurrentSlide()).children('.chapter-header').remove());
+            Reveal.on('slidechanged', e => {
+                $(e.previousSlide).append(target.children('.chapter-header').remove());
+                target.append($(e.currentSlide).children('.chapter-header').remove());
+            });
+        }
         // Open external links in new windows or tabs
         $('a').filter('[href^="http"], [href^="//"]')
             .not('[href*="' + window.location.host + '"]')
