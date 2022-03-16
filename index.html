@@ -675,27 +675,24 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
         Reveal.configure({keyboard: {27: "toggleOverview"}});
     }
 
-    $(document).ready(() => {
-        Reveal.on('ready', _ => {
-            let top = $('.top-object').html();
-            if (window.location.search.match(/print-pdf/gi))
-                $('div.slide-background').append(top);
-            else
-                $('div.reveal').append(top);
-        });
-        Reveal.initialize({
-            slideNumber: "c/t",
-            hash: true,
-            plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
-            mathjax2: {
-                mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
-                config: 'TeX-AMS_HTML-full',
-                tex2jax: {
-                    inlineMath: [['$', '$'], ['\\(', '\\)', '\\[', '\\]']],
-                    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-                }
+    Reveal.initialize({
+        slideNumber: "c/t",
+        hash: true,
+        plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
+        mathjax2: {
+            mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
+            config: 'TeX-AMS_HTML-full',
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)', '\\[', '\\]']],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
             }
-        });
+        }
+    }).then(() => {
+        let top = $('.top-object').html();
+        if (window.location.search.match(/print-pdf/gi))
+            $('div.slide-background').append(top);
+        else
+            $('div.reveal').append(top);
         // Open external links in new windows or tabs
         $('a').filter('[href^="http"], [href^="//"]')
             .not('[href*="' + window.location.host + '"]')
