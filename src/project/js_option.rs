@@ -39,7 +39,7 @@ impl ToHtml for JsOption {
             .into_iter()
             .map(|(k, j)| {
                 "\n".to_string()
-                    + &" ".repeat(12)
+                    + &" ".repeat(8)
                     + &lower_camelcase(&k)
                     + ": "
                     + &j.to_html(_ctx)

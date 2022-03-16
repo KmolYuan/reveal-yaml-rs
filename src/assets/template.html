@@ -246,30 +246,28 @@
         Reveal.configure({keyboard: {27: "toggleOverview"}});
     }
 
-    $(document).ready(() => {
-        Reveal.on('ready', _ => {
-            let top = $('.top-object').html();
-            if (window.location.search.match(/print-pdf/gi))
-                $('div.slide-background').append(top);
-            else
-                $('div.reveal').append(top);
-        });
-        Reveal.initialize({/* {%option} */
-            plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, /* {%plugin} */],
-            mathjax2: {
-                mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
-                config: 'TeX-AMS_HTML-full',
-                tex2jax: {
-                    inlineMath: [['$', '$'], ['\\(', '\\)', '\\[', '\\]']],
-                    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-                }
+    Reveal.initialize({/* {%option} */
+        plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, /* {%plugin} */],
+        mathjax2: {
+            mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
+            config: 'TeX-AMS_HTML-full',
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)', '\\[', '\\]']],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
             }
-        });
+        }
+    }).then(() => {
+        // Pinned objects
+        if (window.location.search.match(/print-pdf/gi))
+            $('div.slide-background').append($('.top-object').html());
+        else
+            $('div.reveal').append($('.top-object').html());
         // Open external links in new windows or tabs
         $('a').filter('[href^="http"], [href^="//"]')
             .not('[href*="' + window.location.host + '"]')
             .attr('rel', "noopener noreferrer")
             .attr('target', '_blank');
+        // Close button
         $("#close").click(close_modal);
         /* {%auto-reload} */
     });
