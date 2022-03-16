@@ -12,8 +12,8 @@ categories = ["command-line-interface"]
 
 [dependencies]
 clap = { version = "3", features = ["derive"] }
-yaml-peg = { version = "0.25", features = ["serde-std"] }
 serde = { version = "1", features = ["derive"] }
+yaml-peg = { version = "0.25", features = ["serde-std"] }
 temp-dir = "0.1"
 zip = "0.5"
 reqwest = "0.11"
