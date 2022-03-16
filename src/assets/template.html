@@ -12,14 +12,11 @@
     <link rel="stylesheet" href="{%mount}dist/theme/{%theme}.css" id="theme">
     <link rel="stylesheet" href="{%mount}plugin/highlight/{%code-theme}.css" id="highlight-theme">
     <style>
-        .outline-nav {
+        .chapter-header {
             position: absolute;
             top: 1em;
             left: 1em;
-        }
-
-        .outline-nav a {
-            font-size: 15pt;
+            font-size: 18pt;
         }
 
         .footer {
@@ -258,10 +255,19 @@
         }
     }).then(() => {
         // Pinned objects
-        if (window.location.search.match(/print-pdf/gi))
-            $('div.slide-background').append($('.top-object').html());
-        else
-            $('div.reveal').append($('.top-object').html());
+        if (window.location.search.match(/print-pdf/gi)) {
+            let target = $('div.slide-background');
+            target.append($('.top-object'));
+            $('div.pdf-page').each((_, e) => $(e).append($(e).children('.chapter-header').remove()));
+        } else {
+            let target = $('div.reveal');
+            target.append($('.top-object'));
+            target.append($(Reveal.getCurrentSlide()).children('.chapter-header').remove());
+            Reveal.on('slidechanged', e => {
+                $(e.previousSlide).append(target.children('.chapter-header').remove());
+                target.append($(e.currentSlide).children('.chapter-header').remove());
+            });
+        }
         // Open external links in new windows or tabs
         $('a').filter('[href^="http"], [href^="//"]')
             .not('[href*="' + window.location.host + '"]')

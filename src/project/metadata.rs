@@ -31,6 +31,9 @@ pub struct Metadata {
     /// For local option, please see [`Slide::auto_animate`].
     #[serde(rename = "auto-animate")]
     pub auto_animate: bool,
+    /// Show chapter header on the slides.
+    #[serde(rename = "chapter-header")]
+    pub chapter_header: bool,
     /// Auto generated table of the contents (TOC), `true` by default.
     ///
     /// To specify the outline title, just provide a string.
@@ -59,8 +62,9 @@ impl Default for Metadata {
             description: String::new(),
             author: String::new(),
             background: Background::default(),
-            outline: Optional::Bool(true),
             auto_animate: false,
+            chapter_header: false,
+            outline: Optional::Bool(true),
             theme: "serif".to_string(),
             code_theme: "zenburn".to_string(),
             style: String::new(),
@@ -82,6 +86,7 @@ impl Metadata {
             author,
             background,
             auto_animate,
+            chapter_header,
             outline,
             theme,
             code_theme,
@@ -98,6 +103,11 @@ impl Metadata {
         let ctx = Ctx {
             outline,
             auto_animate,
+            chapter_header: if chapter_header {
+                Some(Default::default())
+            } else {
+                None
+            },
             background: background.to_html(&Default::default()),
             frag: Default::default(),
         };

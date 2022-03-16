@@ -1,4 +1,7 @@
-use std::{cell::Cell, rc::Rc};
+use std::{
+    cell::{Cell, RefCell},
+    rc::Rc,
+};
 
 /// A shared data between parent configuration and its children.
 #[derive(Default)]
@@ -7,6 +10,8 @@ pub struct Ctx {
     pub outline: String,
     /// Global auto-animate option.
     pub auto_animate: bool,
+    /// Global chapter-header option.
+    pub chapter_header: Option<RefCell<String>>,
     /// Background setting (in HTML).
     pub background: String,
     /// Fragment counter.

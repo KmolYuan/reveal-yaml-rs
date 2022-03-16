@@ -92,8 +92,15 @@ pub struct ChapterSlide {
 impl ToHtml for ChapterSlide {
     fn to_html(self, ctx: &Ctx) -> String {
         let Self { slide, sub } = self;
-        let slide = slide.to_html(ctx) + &sub.to_html(ctx);
-        format!("<section>\n{}</section>", slide)
+        let title = slide_title(&slide).to_string();
+        if let Some(header) = &ctx.chapter_header {
+            header.replace(String::new());
+        }
+        let slide = slide.to_html(ctx);
+        if let Some(header) = &ctx.chapter_header {
+            header.replace(title);
+        }
+        format!("<section>\n{}</section>", slide + &sub.to_html(ctx))
     }
 }
 
@@ -181,7 +188,14 @@ impl ToHtml for Slide {
             + &md2html(&title_only.wrap("# ", ""))
             + &content.to_html(ctx)
             + &md2html(&note).wrap("<aside class=\"notes\">", "</aside>\n");
+        let header = if let Some(header) = &ctx.chapter_header {
+            header
+                .borrow()
+                .wrap("<div class=\"chapter-header\">", "</div>")
+        } else {
+            String::new()
+        };
         ctx.frag.set(0);
-        format!("<section{}>\n{}</section>", data, content)
+        format!("<section{}>\n{}{}</section>", data, content, header)
     }
 }
