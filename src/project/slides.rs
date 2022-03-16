@@ -123,9 +123,17 @@ pub struct Slide {
     /// + Local background option can be boolean `false` to disable global background.
     pub background: Optional<Background>,
     /// HTML "class" attribute for this section.
+    ///
+    /// For example, "my-class" will become `<section class="my-class">`.
     pub class: String,
     /// HTML "id" attribute for this section.
+    ///
+    /// For example, "my-id" will become `<section id="my-id">`.
     pub id: String,
+    /// HTML tag attributes, separated by space.
+    ///
+    /// For example, "attr1 attr2 ..." will become `<section attr1 attr2 ...>`.
+    pub attr: String,
     /// [Auto-Animate](https://revealjs.com/auto-animate/) function.
     #[serde(rename = "auto-animate")]
     pub auto_animate: bool,
@@ -147,6 +155,7 @@ impl ToHtml for Slide {
             background,
             class,
             id,
+            attr,
             auto_animate,
             trans,
             bg_trans,
@@ -166,7 +175,8 @@ impl ToHtml for Slide {
             + &id.wrap(" id=\"", "\"")
             + &trans.wrap(" data-transition=\"", "\"")
             + &bg_trans.wrap(" data-background-transition=\"", "\"")
-            + auto_animate;
+            + auto_animate
+            + &attr.wrap(" ", "");
         let content = md2html(&title.wrap("# ", ""))
             + &md2html(&title_only.wrap("# ", ""))
             + &content.to_html(ctx)

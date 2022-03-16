@@ -273,7 +273,8 @@ style: |
     Auto animation is suggested for the most simple cases.
 
     Enable this option for two continuous slides, the animation will be generated automatically.
-    ```yaml[0]
+    ```yaml[1]
+    title: Auto Animate
     auto-animate: true
     ```
     Move
@@ -281,7 +282,8 @@ style: |
   sub:
     - title-only: Auto Animate
       doc: |
-        ```yaml
+        ```yaml[2]
+        title: Auto Animate
         auto-animate: true
         ```
         Move
