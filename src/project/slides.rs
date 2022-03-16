@@ -156,7 +156,7 @@ impl ToHtml for Slide {
             Optional::Bool(true) => ctx.background.clone(),
             Optional::Some(bg) => bg.to_html(ctx),
         };
-        let auto_animate = if auto_animate {
+        let auto_animate = if ctx.auto_animate || auto_animate {
             " data-auto-animate"
         } else {
             ""

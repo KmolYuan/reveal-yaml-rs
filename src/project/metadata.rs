@@ -23,7 +23,14 @@ pub struct Metadata {
     /// Webpage author.
     pub author: String,
     /// Global background setting.
+    ///
+    /// For local option, please see [`Slide::background`].
     pub background: Background,
+    /// Global [auto-animate](https://revealjs.com/auto-animate/) function.
+    ///
+    /// For local option, please see [`Slide::auto_animate`].
+    #[serde(rename = "auto-animate")]
+    pub auto_animate: bool,
     /// Auto generated table of the contents (TOC), `true` by default.
     ///
     /// To specify the outline title, just provide a string.
@@ -53,6 +60,7 @@ impl Default for Metadata {
             author: String::new(),
             background: Background::default(),
             outline: Optional::Bool(true),
+            auto_animate: false,
             theme: "serif".to_string(),
             code_theme: "zenburn".to_string(),
             style: String::new(),
@@ -73,6 +81,7 @@ impl Metadata {
             description,
             author,
             background,
+            auto_animate,
             outline,
             theme,
             code_theme,
@@ -88,6 +97,7 @@ impl Metadata {
         };
         let ctx = Ctx {
             outline,
+            auto_animate,
             background: background.to_html(&Default::default()),
             frag: Default::default(),
         };

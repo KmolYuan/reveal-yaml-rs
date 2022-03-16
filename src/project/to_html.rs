@@ -5,6 +5,8 @@ use std::{cell::Cell, rc::Rc};
 pub struct Ctx {
     /// Outline option.
     pub outline: String,
+    /// Global auto-animate option.
+    pub auto_animate: bool,
     /// Background setting (in HTML).
     pub background: String,
     /// Fragment counter.
