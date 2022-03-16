@@ -676,8 +676,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
     }
 
     Reveal.initialize({
-        slideNumber: "c/t",
         hash: true,
+        slideNumber: "c/t",
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
         mathjax2: {
             mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
@@ -688,11 +688,10 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
             }
         }
     }).then(() => {
-        let top = $('.top-object').html();
         if (window.location.search.match(/print-pdf/gi))
-            $('div.slide-background').append(top);
+            $('div.slide-background').append($('.top-object').html());
         else
-            $('div.reveal').append(top);
+            $('div.reveal').append($('.top-object').html());
         // Open external links in new windows or tabs
         $('a').filter('[href^="http"], [href^="//"]')
             .not('[href*="' + window.location.host + '"]')
