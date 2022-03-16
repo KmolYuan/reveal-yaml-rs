@@ -234,31 +234,6 @@
         crossorigin="anonymous"></script>
 <!-- {%plugin} -->
 <script>
-    Reveal.initialize({/* {%option} */
-        plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, /* {%plugin} */],
-        mathjax2: {
-            mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
-            config: 'TeX-AMS_HTML-full',
-            tex2jax: {
-                inlineMath: [['$', '$'], ['\\(', '\\)', '\\[', '\\]']],
-                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-            }
-        }
-    });
-    $(document).ready(() => {
-        let top = $('.top-object').html();
-        if (window.location.search.match(/print-pdf/gi))
-            Reveal.on('ready', _ => $('.slide-background').append(top));
-        else
-            $('div.reveal').append(top);
-        // Open external links in new windows or tabs
-        $('a').filter('[href^="http"], [href^="//"]')
-            .not('[href*="' + window.location.host + '"]')
-            .attr('rel', "noopener noreferrer")
-            .attr('target', '_blank');
-        /* {%auto-reload} */
-    });
-
     function show_modal(a) {
         $("#modal").css("display", "block");
         $("#img-demo").attr("src", a.src);
@@ -271,7 +246,33 @@
         Reveal.configure({keyboard: {27: "toggleOverview"}});
     }
 
-    document.getElementById("close").onclick = close_modal;
+    $(document).ready(() => {
+        Reveal.on('ready', _ => {
+            let top = $('.top-object').html();
+            if (window.location.search.match(/print-pdf/gi))
+                $('div.slide-background').append(top);
+            else
+                $('div.reveal').append(top);
+        });
+        Reveal.initialize({/* {%option} */
+            plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, /* {%plugin} */],
+            mathjax2: {
+                mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                tex2jax: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)', '\\[', '\\]']],
+                    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+                }
+            }
+        });
+        // Open external links in new windows or tabs
+        $('a').filter('[href^="http"], [href^="//"]')
+            .not('[href*="' + window.location.host + '"]')
+            .attr('rel', "noopener noreferrer")
+            .attr('target', '_blank');
+        $("#close").click(close_modal);
+        /* {%auto-reload} */
+    });
 </script>
 </body>
 </html>
