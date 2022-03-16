@@ -676,8 +676,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
     }
 
     Reveal.initialize({
-        hash: true,
         slideNumber: "c/t",
+        hash: true,
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
         mathjax2: {
             mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
@@ -688,6 +688,7 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
             }
         }
     }).then(() => {
+        // Pinned objects
         if (window.location.search.match(/print-pdf/gi))
             $('div.slide-background').append($('.top-object').html());
         else
@@ -697,6 +698,7 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
             .not('[href*="' + window.location.host + '"]')
             .attr('rel', "noopener noreferrer")
             .attr('target', '_blank');
+        // Close button
         $("#close").click(close_modal);
         
     });
