@@ -213,7 +213,7 @@
     background-color: transparent;
 }
 .left-align p {
-  text-align: left;
+    text-align: left;
 }
 
     </style>
@@ -513,7 +513,7 @@ So all the pargraphs are left aligned.</p>
 <h1>Auto Animate</h1>
 <p>Auto animation is suggested for the most simple cases.</p>
 <p>Enable this option for two continuous slides, the animation will be generated automatically.</p>
-<pre><code class="language-yaml">auto-animate: true
+<pre><code class="language-yaml" data-line-numbers="0">auto-animate: true
 </code></pre>
 <p>Move</p>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" data-auto-animate>
@@ -662,8 +662,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 
 <script>
     Reveal.initialize({
-        hash: true,
         slideNumber: "c/t",
+        hash: true,
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
         mathjax2: {
             mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
