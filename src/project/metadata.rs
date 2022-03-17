@@ -38,6 +38,8 @@ pub struct Metadata {
     ///
     /// To specify the outline title, just provide a string,
     /// a markdown level 1 title without `#` notation.
+    ///
+    /// Outline page has an id "outline".
     pub outline: Optional<String>,
     /// Reveal.js theme, "serif" by default.
     pub theme: String,
