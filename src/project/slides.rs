@@ -73,7 +73,7 @@ impl ToHtml for Slides {
             if let Some(cover) = slides.first_mut() {
                 cover.sub.push(Slide {
                     title: ctx.outline.clone(),
-                    id: ctx.outline.to_lowercase().escape(),
+                    id: "outline".to_string(),
                     content: Content {
                         doc,
                         ..Default::default()
