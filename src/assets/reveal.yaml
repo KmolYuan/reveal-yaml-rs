@@ -36,7 +36,7 @@ style: |
     Scroll down ↓ to see an auto-generated outline.
   h-stack:
     - doc: 🏗 [Repository](https://github.com/KmolYuan/reveal-yaml-rs)
-    - doc: 📜 [Documentation](https://docs.rs/reveal-yaml)
+    - doc: 📖 [Documentation](https://docs.rs/reveal-yaml)
     - doc: 🎞 [Demo Source](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
     - doc: ☕ [Reveal.js](https://github.com/hakimel/reveal.js)
 - title-hidden: Cover
@@ -57,12 +57,15 @@ style: |
           - ---
           - This is actually the "cover" page, check the table of content!
         ```
+        [📖 title-hidden](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_hidden)
+        [📖 fit](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.fit)
 - title-only: Title Only
   doc: |
     This title is invisible in the [table of content](#/0/1). Same as its section.
     ```yaml
     title-only: Title Only
     ```
+    [📖 title-only](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_only)
 - title: Markdown
   doc: |
     *Something* **important**.
@@ -99,7 +102,8 @@ style: |
           + Item
           + [Next page](#/5)
         </code></pre>
-- title: Image
+        [📖 doc](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.doc)
+- title: Images
   img:
     label: Kitten 🐱
     src: https://placekitten.com/600/400
@@ -114,9 +118,10 @@ style: |
           pop: true
     - title-only: Lay with Images
       lay-img:
-        - src: https://placekitten.com/450/300
-        - src: https://placekitten.com/300/450
-        - src: https://placekitten.com/400/400
+        - src: https://placekitten.com/450/450
+          frag: fade-right
+        - src: https://placekitten.com/600/300
+          frag: fade-left
     - doc: |
         ```yaml
         img:
@@ -136,30 +141,32 @@ style: |
         Laid images will be placed at the same center.
         ```yaml
         lay-img:
-          - src: https://placekitten.com/450/300
-          - src: https://placekitten.com/300/450
-          - src: https://placekitten.com/400/400
+          - src: https://placekitten.com/450/450
+            frag: fade-right
+          - src: https://placekitten.com/600/300
+            frag: fade-left
         ```
+        [📖 img](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.img)
+        [📖 lay-img](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.lay_img)
 - title: Video
+  doc: |
+    The videos can be placed as same as the images.
+    ```yaml
+    video:
+      - width: 320
+        height: 240
+        src: https://www.w3schools.com/html/movie.mp4
+      - src: https://www.w3schools.com/html/movie.mp4
+        controls: false
+    ```
+    [📖 video](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.video)
   video:
     - width: 320
       height: 240
       src: https://www.w3schools.com/html/movie.mp4
     - src: https://www.w3schools.com/html/movie.mp4
       controls: false
-  sub:
-    - doc: |
-        The videos can be placed by same logic.
-        ```yaml
-        video:
-          - width: 320
-            height: 240
-            src: https://www.w3schools.com/html/movie.mp4
-          - src: https://www.w3schools.com/html/movie.mp4
-            controls: false
-        ```
 - title: Maths
-  doc: Inline math text $x^2$.
   math: |
     \small\begin{aligned}
     \min_{x_1, x_2}&f(x)
@@ -168,19 +175,20 @@ style: |
     \\
     &c(x) = 0
     \end{aligned}
-  sub:
-    - doc: |
-        ```yaml
-        doc: Inline math text $x^2$.
-        math: |
-          \small\begin{aligned}
-          \min_{x_1, x_2}&f(x)
-          \\
-          \text{s.t.}\,&b(x) \le 0
-          \\
-          &c(x) = 0
-          \end{aligned}
-        ```
+  doc: |
+    Inline math text $x^2$.
+    ```yaml
+    doc: Inline math text $x^2$.
+    math: |
+      \small\begin{aligned}
+      \min_{x_1, x_2}&f(x)
+      \\
+      \text{s.t.}\,&b(x) \le 0
+      \\
+      &c(x) = 0
+      \end{aligned}
+    ```
+    [📖 math](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.math)
 - title: Background Color & Transition
   doc: |
     Override global setting, use a single color background.
@@ -212,6 +220,12 @@ style: |
             text-align: left;
         }
         ```
+        [📖 id](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.id)
+        [📖 class](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.class)
+        [📖 background (global)](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.background)
+        [📖 background](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.background)
+        [📖 trans](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.trans)
+        [📖 bg-trans](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.bg_trans)
       class: left-align
       bg-trans: fade-in fade-out
       background:
@@ -224,19 +238,17 @@ style: |
     h-stack:
       - doc: |
           *Data types*
-
-          + primitive types
           + sturct
           + enum
           + union
       - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
       - img: { src: https://placekitten.com/600/600 }
     ```
+    [📖 h-stack](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.h_stack)
+    [📖 v-stack](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.v_stack)
   h-stack:
     - doc: |
         *Data types*
-
-        + primitive types
         + sturct
         + enum
         + union
@@ -258,6 +270,8 @@ style: |
               - doc: Right Bottom Left
               - doc: Right Bottom Right
         ```
+        [📖 h-stack-border](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.h_stack_border)
+        [📖 v-stack-border](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.v_stack_border)
       h-stack:
         - v-stack:
           - h-stack:
@@ -278,6 +292,8 @@ style: |
     title: Auto Animate
     auto-animate: true
     ```
+    [📖 auto-animate](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.auto_animate)
+
     Move
   auto-animate: true
   sub:
@@ -287,24 +303,12 @@ style: |
         title: Auto Animate
         auto-animate: true
         ```
+        [📖 auto-animate](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.auto_animate)
+
         Move
 
         Smoothly
       auto-animate: true
-    - title: Lay images
-      doc: |
-        ```yaml
-        lay-img:
-          - src: https://placekitten.com/450/450
-            frag: fade-right
-          - src: https://placekitten.com/600/300
-            frag: fade-left
-        ```
-      lay-img:
-        - src: https://placekitten.com/450/450
-          frag: fade-right
-        - src: https://placekitten.com/600/300
-          frag: fade-left
     - title: Fragment
       h-stack:
         - doc: AAA
@@ -332,6 +336,7 @@ style: |
             math: h(z)
             frag: [ { math: ~ } ]  # one element
         ```
+        [📖 frag](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.frag)
     - title: Fragment with Multiple `doc`s
       doc: |
         ```yaml
@@ -353,13 +358,13 @@ style: |
 - title: Note
   doc: |
     Press "s" key to open speaker's view.
-
     ```yaml
     note: |
       Note text here!
 
       There are also have **markdown** *syntax*!
     ```
+    [📖 note](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.note)
   note: |
     Note text here!
 
@@ -398,6 +403,8 @@ style: |
       RevealNotes:
         - plugin/notes/notes.js
     ```
+    [📖 plugin](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.plugin)
+
     Will be converted to:
     ```html
     <script src="/plugin/notes/notes.js"></script>
