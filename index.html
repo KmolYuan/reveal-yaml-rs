@@ -234,7 +234,7 @@
 <p>Scroll down ↓ to see an auto-generated outline.</p>
 <div class="h-stack"><div style="width:25.0000%"><p>🏗 <a href="https://github.com/KmolYuan/reveal-yaml-rs">Repository</a></p>
 </div>
-<div style="width:25.0000%"><p>📜 <a href="https://docs.rs/reveal-yaml">Documentation</a></p>
+<div style="width:25.0000%"><p>📖 <a href="https://docs.rs/reveal-yaml">Documentation</a></p>
 </div>
 <div style="width:25.0000%"><p>🎞 <a href="https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml">Demo Source</a></p>
 </div>
@@ -246,7 +246,7 @@
 <ul>
 <li><a href="#/1">Cover</a></li>
 <li><a href="#/3">Markdown</a></li>
-<li><a href="#/4">Image</a></li>
+<li><a href="#/4">Images</a></li>
 <li><a href="#/5">Video</a></li>
 <li><a href="#/6">Maths</a></li>
 <li><a href="#/7">Background Color &amp; Transition</a>
@@ -261,9 +261,8 @@
 </li>
 <li><a href="#/9">Auto Animate</a>
 <ul>
-<li><a href="#/9/2">Lay images</a></li>
-<li><a href="#/9/3">Fragment</a></li>
-<li><a href="#/9/4">Fragment with Multiple <code>doc</code>s</a></li>
+<li><a href="#/9/2">Fragment</a></li>
+<li><a href="#/9/3">Fragment with Multiple <code>doc</code>s</a></li>
 </ul>
 </li>
 <li><a href="#/10">Note</a></li>
@@ -287,6 +286,8 @@ fit:
   - ---
   - This is actually the &quot;cover&quot; page, check the table of content!
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_hidden">📖 title-hidden</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.fit">📖 fit</a></p>
 <div class="chapter-header">Cover</div></section>
 </section>
 <section>
@@ -295,6 +296,7 @@ fit:
 <p>This title is invisible in the <a href="#/0/1">table of content</a>. Same as its section.</p>
 <pre><code class="language-yaml">title-only: Title Only
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_only">📖 title-only</a></p>
 </section></section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
@@ -330,11 +332,12 @@ for i in range(10):
   + Item
   + [Next page](#/5)
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.doc">📖 doc</a></p>
 <div class="chapter-header">Markdown</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<h1>Image</h1>
+<h1>Images</h1>
 <div class="h-stack">
 <figure><img alt="Kitten 🐱" src="https://placekitten.com/600/400"/><figcaption>Kitten 🐱</figcaption></figure>
 </div>
@@ -344,14 +347,13 @@ for i in range(10):
 <figure><img alt="Kitten 1" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/700/500"/><figcaption>Kitten 1</figcaption></figure>
 <figure><img alt="Kitten 2" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/800/500"/><figcaption>Kitten 2</figcaption></figure>
 </div>
-<div class="chapter-header">Image</div></section>
+<div class="chapter-header">Images</div></section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Lay with Images</h1>
-<div class="r-stack"><img class="fragment " src="https://placekitten.com/450/300"/>
-<img class="fragment " src="https://placekitten.com/300/450"/>
-<img class="fragment " src="https://placekitten.com/400/400"/>
+<div class="r-stack"><img class="fragment fade-right" src="https://placekitten.com/450/450"/>
+<img class="fragment fade-left" src="https://placekitten.com/600/300"/>
 </div>
-<div class="chapter-header">Image</div></section>
+<div class="chapter-header">Images</div></section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <pre><code class="language-yaml">img:
   label: Kitten 🐱
@@ -368,21 +370,19 @@ for i in range(10):
 </code></pre>
 <p>Laid images will be placed at the same center.</p>
 <pre><code class="language-yaml">lay-img:
-  - src: https://placekitten.com/450/300
-  - src: https://placekitten.com/300/450
-  - src: https://placekitten.com/400/400
+  - src: https://placekitten.com/450/450
+    frag: fade-right
+  - src: https://placekitten.com/600/300
+    frag: fade-left
 </code></pre>
-<div class="chapter-header">Image</div></section>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.img">📖 img</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.lay_img">📖 lay-img</a></p>
+<div class="chapter-header">Images</div></section>
 </section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Video</h1>
-<div class="h-stack">
-<video width="320" height="240" controls><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
-<video><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
-</div>
-</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<p>The videos can be placed by same logic.</p>
+<p>The videos can be placed as same as the images.</p>
 <pre><code class="language-yaml">video:
   - width: 320
     height: 240
@@ -390,20 +390,16 @@ for i in range(10):
   - src: https://www.w3schools.com/html/movie.mp4
     controls: false
 </code></pre>
-<div class="chapter-header">Video</div></section>
-</section>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.video">📖 video</a></p>
+<div class="h-stack">
+<video width="320" height="240" controls><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
+<video><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4"></video>
+</div>
+</section></section>
 <section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Maths</h1>
 <p>Inline math text $x^2$.</p>
-\[\small\begin{aligned}
-\min_{x_1, x_2}&f(x)
-\\
-\text{s.t.}\,&b(x) \le 0
-\\
-&c(x) = 0
-\end{aligned}
-\]</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <pre><code class="language-yaml">doc: Inline math text $x^2$.
 math: |
   \small\begin{aligned}
@@ -414,8 +410,15 @@ math: |
   &amp;c(x) = 0
   \end{aligned}
 </code></pre>
-<div class="chapter-header">Maths</div></section>
-</section>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.math">📖 math</a></p>
+\[\small\begin{aligned}
+\min_{x_1, x_2}&f(x)
+\\
+\text{s.t.}\,&b(x) \le 0
+\\
+&c(x) = 0
+\end{aligned}
+\]</section></section>
 <section>
 <section data-background-color="rgb(70, 70, 255)" data-transition="convex-in convex-out">
 <h1>Background Color &amp; Transition</h1>
@@ -441,6 +444,12 @@ So all the pargraphs are left aligned.</p>
     text-align: left;
 }
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.id">📖 id</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.class">📖 class</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.background">📖 background (global)</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.background">📖 background</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.trans">📖 trans</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.bg_trans">📖 bg-trans</a></p>
 <div class="chapter-header">Background Color & Transition</div></section>
 </section>
 <section>
@@ -449,17 +458,16 @@ So all the pargraphs are left aligned.</p>
 <pre><code class="language-yaml">h-stack:
   - doc: |
       *Data types*
-
-      + primitive types
       + sturct
       + enum
       + union
   - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
   - img: { src: https://placekitten.com/600/600 }
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.h_stack">📖 h-stack</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.v_stack">📖 v-stack</a></p>
 <div class="h-stack"><div style="width:33.3333%"><p><em>Data types</em></p>
 <ul>
-<li>primitive types</li>
 <li>sturct</li>
 <li>enum</li>
 <li>union</li>
@@ -485,6 +493,8 @@ So all the pargraphs are left aligned.</p>
       - doc: Right Bottom Left
       - doc: Right Bottom Right
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.h_stack_border">📖 h-stack-border</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.v_stack_border">📖 v-stack-border</a></p>
 <div class="h-stack"><div style="width:50.0000%"><div class="v-stack"><div><div class="h-stack"><div style="width:50.0000%"><p>Left Top Left</p>
 </div>
 <div style="width:50.0000%"><p>Left Top Right</p>
@@ -513,26 +523,16 @@ So all the pargraphs are left aligned.</p>
 <pre><code class="language-yaml" data-line-numbers="1">title: Auto Animate
 auto-animate: true
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.auto_animate">📖 auto-animate</a></p>
 <p>Move</p>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" data-auto-animate>
 <h1>Auto Animate</h1>
 <pre><code class="language-yaml" data-line-numbers="2">title: Auto Animate
 auto-animate: true
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.auto_animate">📖 auto-animate</a></p>
 <p>Move</p>
 <p>Smoothly</p>
-<div class="chapter-header">Auto Animate</div></section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<h1>Lay images</h1>
-<pre><code class="language-yaml">lay-img:
-  - src: https://placekitten.com/450/450
-    frag: fade-right
-  - src: https://placekitten.com/600/300
-    frag: fade-left
-</code></pre>
-<div class="r-stack"><img class="fragment fade-right" src="https://placekitten.com/450/450"/>
-<img class="fragment fade-left" src="https://placekitten.com/600/300"/>
-</div>
 <div class="chapter-header">Auto Animate</div></section>
 <section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
 <h1>Fragment</h1>
@@ -549,6 +549,7 @@ auto-animate: true
     math: h(z)
     frag: [ { math: ~ } ]  # one element
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.frag">📖 frag</a></p>
 <div class="h-stack"><div style="width:33.3333%"><span class="fragment " data-fragment-index="0"><p>AAA</p>
 </span><span class="fragment " data-fragment-index="1">\[f(x)\]</span></div>
 <div style="width:33.3333%"><span class="fragment " data-fragment-index="2"><p>BBB</p>
@@ -585,6 +586,7 @@ auto-animate: true
 
   There are also have **markdown** *syntax*!
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.note">📖 note</a></p>
 <aside class="notes"><p>Note text here!</p>
 <p>There are also have <strong>markdown</strong> <em>syntax</em>!</p>
 </aside>
@@ -627,6 +629,7 @@ auto-animate: true
   RevealNotes:
     - plugin/notes/notes.js
 </code></pre>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.plugin">📖 plugin</a></p>
 <p>Will be converted to:</p>
 <pre><code class="language-html">&lt;script src=&quot;/plugin/notes/notes.js&quot;&gt;&lt;/script&gt;
 </code></pre>
@@ -673,8 +676,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
     }
 
     Reveal.initialize({
-        slideNumber: "c/t",
         hash: true,
+        slideNumber: "c/t",
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
         mathjax2: {
             mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
