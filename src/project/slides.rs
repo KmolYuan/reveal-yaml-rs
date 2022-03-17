@@ -43,7 +43,12 @@ impl ToHtml for Slides {
                     if title.is_empty() {
                         String::new()
                     } else {
-                        format!("+ [{}](#/{})\n", title, i)
+                        let id = if chapter.slide.id.is_empty() {
+                            i.to_string()
+                        } else {
+                            chapter.slide.id.clone()
+                        };
+                        format!("+ [{}](#/{})\n", title, id)
                             + &chapter
                                 .sub
                                 .iter()
@@ -51,7 +56,12 @@ impl ToHtml for Slides {
                                 .map(|(j, slide)| {
                                     let title = slide_title(slide);
                                     if !title.is_empty() {
-                                        format!("  + [{}](#/{}/{})\n", title, i, j + 1)
+                                        let id = if slide.id.is_empty() {
+                                            format!("{}/{}", i, j + 1)
+                                        } else {
+                                            slide.id.clone()
+                                        };
+                                        format!("  + [{}](#/{})\n", title, id)
                                     } else {
                                         String::new()
                                     }
@@ -63,6 +73,7 @@ impl ToHtml for Slides {
             if let Some(cover) = slides.first_mut() {
                 cover.sub.push(Slide {
                     title: ctx.outline.clone(),
+                    id: ctx.outline.to_lowercase().escape(),
                     content: Content {
                         doc,
                         ..Default::default()

@@ -13,7 +13,7 @@ footer:
   src: help/icon.png
   width: 50pt
   label: Reveal.yaml
-  link: https://github.com/KmolYuan/reveal-yaml/
+  link: https://github.com/KmolYuan/reveal-yaml-rs/
 style: |
   .reveal .slide-number {
       font-size: 24pt;
@@ -39,27 +39,29 @@ style: |
     - doc: 📖 [Documentation](https://docs.rs/reveal-yaml)
     - doc: 🎞 [Demo Source](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
     - doc: ☕ [Reveal.js](https://github.com/hakimel/reveal.js)
-- title-hidden: Cover
+- title-hidden: Fit
+  id: fit
   fit:
     - Hello My Friends!
     - Longer title become smaller~
     - Here comes the THRID LINE!!
     - ---
-    - This is actually the "cover" page, check the table of content!
+    - This is actually the "Fit" page, check the table of content!
   sub:
     - doc: |
         ```yaml
-        title-hidden: Cover
+        title-hidden: Fit
         fit:
           - Hello My Friends!
           - Longer title become smaller~
           - Here comes the THRID LINE!!
           - ---
-          - This is actually the "cover" page, check the table of content!
+          - This is actually the "Fit" page, check the table of content!
         ```
         [📖 title-hidden](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_hidden)
         [📖 fit](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.fit)
 - title-only: Title Only
+  id: title-only
   doc: |
     This title is invisible in the [table of content](#/0/1). Same as its section.
     ```yaml
@@ -67,6 +69,7 @@ style: |
     ```
     [📖 title-only](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_only)
 - title: Markdown
+  id: doc
   doc: |
     *Something* **important**.
 
@@ -104,6 +107,7 @@ style: |
         </code></pre>
         [📖 doc](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.doc)
 - title: Images
+  id: img
   img:
     label: Kitten 🐱
     src: https://placekitten.com/600/400
@@ -116,7 +120,8 @@ style: |
         - label: Kitten 2
           src: https://placekitten.com/800/500
           pop: true
-    - title-only: Lay with Images
+    - title: Lay with Images
+      id: lay-img
       lay-img:
         - src: https://placekitten.com/450/450
           frag: fade-right
@@ -149,6 +154,7 @@ style: |
         [📖 img](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.img)
         [📖 lay-img](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.lay_img)
 - title: Video
+  id: video
   doc: |
     The videos can be placed as same as the images.
     ```yaml
@@ -167,6 +173,7 @@ style: |
     - src: https://www.w3schools.com/html/movie.mp4
       controls: false
 - title: Maths
+  id: math
   math: |
     \small\begin{aligned}
     \min_{x_1, x_2}&f(x)
@@ -190,6 +197,7 @@ style: |
     ```
     [📖 math](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.math)
 - title: Background Color & Transition
+  id: background
   doc: |
     Override global setting, use a single color background.
     ```yaml
@@ -220,10 +228,12 @@ style: |
             text-align: left;
         }
         ```
+        [📖 style](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.style)
         [📖 id](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.id)
         [📖 class](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.class)
         [📖 background (global)](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.background)
         [📖 background](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.background)
+
         [📖 trans](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.trans)
         [📖 bg-trans](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.bg_trans)
       class: left-align
@@ -233,6 +243,7 @@ style: |
         size: 25%
         opacity: 0.5
 - title: Layout
+  id: stack
   doc: |
     ```yaml
     h-stack:
@@ -256,6 +267,7 @@ style: |
     - img: { src: https://placekitten.com/600/600 }
   sub:
     - title: Nested Layout
+      id: stack-border
       doc: |
         ```yaml
         h-stack:
@@ -284,6 +296,7 @@ style: |
             - doc: Right Bottom Left
             - doc: Right Bottom Right
 - title: Auto Animate
+  id: auto-animate
   doc: |
     Auto animation is suggested for the most simple cases.
 
@@ -310,6 +323,7 @@ style: |
         Smoothly
       auto-animate: true
     - title: Fragment
+      id: frag
       h-stack:
         - doc: AAA
           math: f(x)
@@ -356,6 +370,7 @@ style: |
         - doc: The anchors can be used on `frag` array.
           frag: *frag
 - title: Note
+  id: note
   doc: |
     Press "s" key to open speaker's view.
     ```yaml
@@ -396,6 +411,7 @@ style: |
         - *map
     - *stack
 - title: Third-party Plugins
+  id: plugin
   doc: |
     The third-party plugins can be loaded from metadata.
     ```yaml
