@@ -36,7 +36,8 @@ pub struct Metadata {
     pub chapter_header: bool,
     /// Auto generated table of the contents (TOC), `true` by default.
     ///
-    /// To specify the outline title, just provide a string.
+    /// To specify the outline title, just provide a string,
+    /// a markdown level 1 title without `#` notation.
     pub outline: Optional<String>,
     /// Reveal.js theme, "serif" by default.
     pub theme: String,
