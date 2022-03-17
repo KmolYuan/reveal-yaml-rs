@@ -219,7 +219,7 @@
 <div style="display: none">
     <div class="top-object">
         <div class="footer">
-<a href="https://github.com/KmolYuan/reveal-yaml/">
+<a href="https://github.com/KmolYuan/reveal-yaml-rs/">
 <img src="help/icon.png" width="50pt"/><span>&nbsp;Reveal.yaml</span></a>
 </div>
     </div>
@@ -241,57 +241,61 @@
 <div style="width:25.0000%"><p>☕ <a href="https://github.com/hakimel/reveal.js">Reveal.js</a></p>
 </div>
 </div>
-</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="outline">
 <h1>Outline</h1>
 <ul>
-<li><a href="#/1">Cover</a></li>
-<li><a href="#/3">Markdown</a></li>
-<li><a href="#/4">Images</a></li>
-<li><a href="#/5">Video</a></li>
-<li><a href="#/6">Maths</a></li>
-<li><a href="#/7">Background Color &amp; Transition</a>
+<li><a href="#/fit">Fit</a></li>
+<li><a href="#/doc">Markdown</a></li>
+<li><a href="#/img">Images</a>
+<ul>
+<li><a href="#/lay-img">Lay with Images</a></li>
+</ul>
+</li>
+<li><a href="#/video">Video</a></li>
+<li><a href="#/math">Maths</a></li>
+<li><a href="#/background">Background Color &amp; Transition</a>
 <ul>
 <li><a href="#/7/1">Local Background &amp; Style Options</a></li>
 </ul>
 </li>
-<li><a href="#/8">Layout</a>
+<li><a href="#/stack">Layout</a>
 <ul>
-<li><a href="#/8/1">Nested Layout</a></li>
+<li><a href="#/stack-border">Nested Layout</a></li>
 </ul>
 </li>
-<li><a href="#/9">Auto Animate</a>
+<li><a href="#/auto-animate">Auto Animate</a>
 <ul>
-<li><a href="#/9/2">Fragment</a></li>
+<li><a href="#/frag">Fragment</a></li>
 <li><a href="#/9/3">Fragment with Multiple <code>doc</code>s</a></li>
 </ul>
 </li>
-<li><a href="#/10">Note</a></li>
+<li><a href="#/note">Note</a></li>
 <li><a href="#/11">Anchors</a></li>
-<li><a href="#/12">Third-party Plugins</a></li>
+<li><a href="#/plugin">Third-party Plugins</a></li>
 </ul>
 <div class="chapter-header">Reveal.yaml Demo Slide</div></section>
 </section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="fit">
 <h2 class="r-fit-text">Hello My Friends!</h2>
 <h2 class="r-fit-text">Longer title become smaller~</h2>
 <h2 class="r-fit-text">Here comes the THRID LINE!!</h2>
-<hr/><h2 class="r-fit-text">This is actually the "cover" page, check the table of content!</h2>
+<hr/><h2 class="r-fit-text">This is actually the "Fit" page, check the table of content!</h2>
 </section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
-<pre><code class="language-yaml">title-hidden: Cover
+<pre><code class="language-yaml">title-hidden: Fit
 fit:
   - Hello My Friends!
   - Longer title become smaller~
   - Here comes the THRID LINE!!
   - ---
-  - This is actually the &quot;cover&quot; page, check the table of content!
+  - This is actually the &quot;Fit&quot; page, check the table of content!
 </code></pre>
 <p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_hidden">📖 title-hidden</a>
 <a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.fit">📖 fit</a></p>
-<div class="chapter-header">Cover</div></section>
+<div class="chapter-header">Fit</div></section>
 </section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="title-only">
 <h1>Title Only</h1>
 <p>This title is invisible in the <a href="#/0/1">table of content</a>. Same as its section.</p>
 <pre><code class="language-yaml">title-only: Title Only
@@ -299,7 +303,7 @@ fit:
 <p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_only">📖 title-only</a></p>
 </section></section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="doc">
 <h1>Markdown</h1>
 <p><em>Something</em> <strong>important</strong>.</p>
 <table><thead><tr><th style="text-align: center">item 1</th><th style="text-align: center">item 2</th></tr></thead><tbody>
@@ -336,7 +340,7 @@ for i in range(10):
 <div class="chapter-header">Markdown</div></section>
 </section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="img">
 <h1>Images</h1>
 <div class="h-stack">
 <figure><img alt="Kitten 🐱" src="https://placekitten.com/600/400"/><figcaption>Kitten 🐱</figcaption></figure>
@@ -348,7 +352,7 @@ for i in range(10):
 <figure><img alt="Kitten 2" class="img-pop" onclick="show_modal(this)" title="click to pop-up the image" src="https://placekitten.com/800/500"/><figcaption>Kitten 2</figcaption></figure>
 </div>
 <div class="chapter-header">Images</div></section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="lay-img">
 <h1>Lay with Images</h1>
 <div class="r-stack"><img class="fragment fade-right" src="https://placekitten.com/450/450"/>
 <img class="fragment fade-left" src="https://placekitten.com/600/300"/>
@@ -380,7 +384,7 @@ for i in range(10):
 <div class="chapter-header">Images</div></section>
 </section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="video">
 <h1>Video</h1>
 <p>The videos can be placed as same as the images.</p>
 <pre><code class="language-yaml">video:
@@ -397,7 +401,7 @@ for i in range(10):
 </div>
 </section></section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="math">
 <h1>Maths</h1>
 <p>Inline math text $x^2$.</p>
 <pre><code class="language-yaml">doc: Inline math text $x^2$.
@@ -420,7 +424,7 @@ math: |
 \end{aligned}
 \]</section></section>
 <section>
-<section data-background-color="rgb(70, 70, 255)" data-transition="convex-in convex-out">
+<section data-background-color="rgb(70, 70, 255)" id="background" data-transition="convex-in convex-out">
 <h1>Background Color &amp; Transition</h1>
 <p>Override global setting, use a single color background.</p>
 <pre><code class="language-yaml">trans: convex-in convex-out
@@ -444,16 +448,17 @@ So all the pargraphs are left aligned.</p>
     text-align: left;
 }
 </code></pre>
-<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.id">📖 id</a>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.style">📖 style</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.id">📖 id</a>
 <a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.class">📖 class</a>
 <a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.background">📖 background (global)</a>
-<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.background">📖 background</a>
-<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.trans">📖 trans</a>
+<a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.background">📖 background</a></p>
+<p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.trans">📖 trans</a>
 <a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.bg_trans">📖 bg-trans</a></p>
 <div class="chapter-header">Background Color & Transition</div></section>
 </section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="stack">
 <h1>Layout</h1>
 <pre><code class="language-yaml">h-stack:
   - doc: |
@@ -479,7 +484,7 @@ So all the pargraphs are left aligned.</p>
 </div>
 </div>
 </div>
-</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+</section><section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="stack-border">
 <h1>Nested Layout</h1>
 <pre><code class="language-yaml">h-stack:
   - v-stack:
@@ -516,7 +521,7 @@ So all the pargraphs are left aligned.</p>
 <div class="chapter-header">Layout</div></section>
 </section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" data-auto-animate>
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="auto-animate" data-auto-animate>
 <h1>Auto Animate</h1>
 <p>Auto animation is suggested for the most simple cases.</p>
 <p>Enable this option for two continuous slides, the animation will be generated automatically.</p>
@@ -534,7 +539,7 @@ auto-animate: true
 <p>Move</p>
 <p>Smoothly</p>
 <div class="chapter-header">Auto Animate</div></section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="frag">
 <h1>Fragment</h1>
 <p>The index of fragment is the order of the animation.</p>
 <p>The blank represents normal <code>class=&quot;framgment&quot;</code> effect.</p>
@@ -578,7 +583,7 @@ auto-animate: true
 <div class="chapter-header">Auto Animate</div></section>
 </section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="note">
 <h1>Note</h1>
 <p>Press “s” key to open speaker’s view.</p>
 <pre><code class="language-yaml">note: |
@@ -622,7 +627,7 @@ auto-animate: true
 </div>
 </div></div></section></section>
 <section>
-<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7">
+<section data-background="help/watermark.png" data-background-size="50%" data-background-opacity="0.7" id="plugin">
 <h1>Third-party Plugins</h1>
 <p>The third-party plugins can be loaded from metadata.</p>
 <pre><code class="language-yaml">plugin:
