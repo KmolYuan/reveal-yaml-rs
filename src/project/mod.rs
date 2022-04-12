@@ -125,17 +125,13 @@ mod wrap_string;
 
 /// Load YAML string as HTML.
 pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, IoError> {
-    let (mut root, mut anchor) =
-        parse::<RcRepr>(doc).map_err(|s| IoError::new(ErrorKind::InvalidData, s))?;
-    anchor
-        .resolve(2)
-        .map_err(|e| IoError::new(ErrorKind::InvalidData, e.anchor))?;
-    let metadata = root.remove(0).replace_anchor(&anchor).unwrap();
-    let slides = root.remove(0).replace_anchor(&anchor).unwrap();
-    std::mem::drop(root);
-    std::mem::drop(anchor);
+    let mut yaml =
+        parse::<RcRepr>(doc).map_err(|e| IoError::new(ErrorKind::InvalidData, e.to_string()))?;
+    let metadata = yaml.remove(0);
+    let slides = yaml.remove(0);
+    std::mem::drop(yaml);
     let display_error = |SerdeError { msg, pos }| {
-        eprintln!("{}\n{}", msg, indicated_msg(doc, pos));
+        eprintln!("{}\n{}", msg, indicated_msg(doc.as_bytes(), pos));
         IoError::new(ErrorKind::InvalidData, msg)
     };
     let metadata = Metadata::deserialize(metadata).map_err(display_error)?;

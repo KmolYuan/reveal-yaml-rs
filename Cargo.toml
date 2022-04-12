@@ -13,9 +13,9 @@ categories = ["command-line-interface"]
 [dependencies]
 clap = { version = "3", features = ["derive"] }
 serde = { version = "1", features = ["derive"] }
-yaml-peg = { version = "0.25", features = ["serde-std"] }
+yaml-peg = { version = "0.26", features = ["serde-std"] }
 temp-dir = "0.1"
-zip = "0.5"
+zip = "0.6"
 reqwest = "0.11"
 actix = "0.13"
 actix-web = "4"
