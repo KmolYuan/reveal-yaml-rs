@@ -123,7 +123,6 @@ mod slides;
 mod to_html;
 mod wrap_string;
 
-/// Load YAML string as HTML.
 pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, IoError> {
     let mut yaml =
         parse::<RcRepr>(doc).map_err(|e| IoError::new(ErrorKind::InvalidData, e.to_string()))?;
@@ -139,4 +138,24 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
         slides: Deserialize::deserialize(slides).map_err(display_error)?,
     };
     Ok(metadata.build(slides, mount, auto_reload))
+}
+
+pub(crate) fn error_page(error: IoError) -> String {
+    let slide = Slide {
+        title: "Error".to_string(),
+        content: Content {
+            doc: format!("```\n{}\n```", error),
+            ..Default::default()
+        },
+        ..Default::default()
+    };
+    let slides = Slides {
+        slides: vec![ChapterSlide {
+            slide,
+            ..Default::default()
+        }],
+    };
+    Metadata::default()
+        .disable_outline()
+        .build(slides, "/static/", true)
 }

@@ -82,6 +82,12 @@ impl Default for Metadata {
 }
 
 impl Metadata {
+    /// Disable the outline option.
+    pub fn disable_outline(self) -> Self {
+        let outline = Optional::Bool(false);
+        Self { outline, ..self }
+    }
+
     /// Build HTML from template.
     pub fn build(self, slides: Slides, mount: &str, auto_reload: bool) -> String {
         let Self {

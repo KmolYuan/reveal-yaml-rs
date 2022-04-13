@@ -1,7 +1,7 @@
 use self::edit_mode::Monitor;
 use crate::{
     pack::{extract, listdir},
-    project::load,
+    project::{error_page, load},
     update::archive,
 };
 use actix_files::Files;
@@ -49,7 +49,7 @@ where
         doc: if edit {
             String::new()
         } else {
-            load(&read_to_string(project)?, "/static/", edit)?
+            load(&read_to_string(project)?, "/static/", edit).unwrap_or_else(error_page)
         },
         help_doc: load(HELP_DOC, "/static/", false)?,
         reload: edit,
