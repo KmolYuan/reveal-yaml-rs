@@ -1,6 +1,5 @@
 use crate::{
     project::load,
-    serve::{ICON, WATERMARK},
     update::{archive, update},
 };
 use std::{
@@ -102,21 +101,6 @@ fn pack_inner(project: &str) -> Result<()> {
             }
             println!("{:?} > {:?}", &assets, &dist);
             copy_dir(assets, dist)?;
-        }
-    }
-    // Use help resources
-    for (pat, path, data) in [
-        ("help/icon.png", "icon.png", ICON),
-        ("help/watermark.png", "watermark.png", WATERMARK),
-    ] {
-        if contents.contains(pat) {
-            let folder = archive.join("help");
-            let dist = folder.join(path);
-            if !folder.is_dir() {
-                create_dir(folder)?;
-            }
-            println!("{} > {:?}", pat, &dist);
-            write(dist, data)?;
         }
     }
     Ok(())

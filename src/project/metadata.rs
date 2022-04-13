@@ -1,6 +1,9 @@
 use super::*;
 use yaml_peg::serde::Optional;
 
+/// Rust gear image.
+pub const GEAR_URL: &str =
+    "https://raw.githubusercontent.com/rust-lang/rust-artwork/master/logo/rust-logo-gear-only.svg";
 const TEMPLATE: &str = include_str!("../assets/template.html");
 const RELOAD: &str = "\
 let ws = new WebSocket(\"ws://\" + window.location.host + \"/ws/\");
@@ -12,7 +15,7 @@ let ws = new WebSocket(\"ws://\" + window.location.host + \"/ws/\");
 #[derive(serde::Deserialize)]
 #[serde(default)]
 pub struct Metadata {
-    /// Webpage icon path, "img/icon.png" by default.
+    /// Webpage icon path, a Rust gear icon by default.
     pub icon: String,
     /// Webpage "lang" attribute, "en" by default.
     pub lang: String,
@@ -59,7 +62,7 @@ pub struct Metadata {
 impl Default for Metadata {
     fn default() -> Self {
         Self {
-            icon: "help/icon.png".to_string(),
+            icon: GEAR_URL.to_string(),
             lang: "en".to_string(),
             title: String::new(),
             description: String::new(),

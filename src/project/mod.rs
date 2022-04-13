@@ -73,7 +73,7 @@
 //!
 //! ```yaml
 //! footer:  # Footer is a metadata option
-//!   src: help/icon.png
+//!   src: img/icon.png
 //!   width: 50pt
 //!   label: Reveal.yaml
 //!   link: https://github.com/KmolYuan/reveal-yaml/

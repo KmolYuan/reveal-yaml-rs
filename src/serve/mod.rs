@@ -17,8 +17,6 @@ use temp_dir::TempDir;
 mod edit_mode;
 mod site;
 
-pub(crate) const WATERMARK: &[u8] = include_bytes!("../assets/help/watermark.png");
-pub(crate) const ICON: &[u8] = include_bytes!("../assets/help/icon.png");
 const HELP_DOC: &str = include_str!("../assets/reveal.yaml");
 
 #[derive(Clone)]
@@ -65,8 +63,6 @@ where
             .app_data(Data::new(Monitor::new(cache.project.clone())))
             .service(site::index)
             .service(site::help_page)
-            .service(site::icon)
-            .service(site::watermark)
             .service(edit_mode::ws_index)
             .service(Files::new("/static", &archive));
         assets.iter().fold(app, |app, asset| {
