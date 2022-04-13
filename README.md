@@ -52,7 +52,7 @@ chmod +x rym
 ./rym pack
 ```
 
-The executable can be checked with `rym --help`.
+The executable can be checked with `rym` command.
 
 ## Command Line Interface
 
@@ -61,9 +61,10 @@ The command `rym` stands for "Reveal-Yaml Manager".
 ```bash
 # Download the latest Reveal.js archive
 rym update
-# Create a project to current directory
+# Create/Initialize a project to current directory
 # Only "reveal.yaml" will be create, the rest is up to you!
-rym new .
+rym new PROJECT_PATH
+rym init
 # Serve the slides
 rym serve
 # Reformat the project file
@@ -71,6 +72,8 @@ rym fmt
 # Pack the project to HTML archive
 rym pack
 ```
+
+Please see `rym --help`/`rym subcommand --help` for more information.
 
 ### Edit Mode (Hot Reload / Auto-reload)
 
