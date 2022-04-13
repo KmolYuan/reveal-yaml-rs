@@ -1,8 +1,8 @@
 use super::*;
 use yaml_peg::serde::Optional;
 
-/// Rust gear image.
-pub const GEAR_URL: &str =
+pub(crate) const GEAR_TAG: &str = "gear!";
+pub(crate) const GEAR_URL: &str =
     "https://raw.githubusercontent.com/rust-lang/rust-artwork/master/logo/rust-logo-gear-only.svg";
 const TEMPLATE: &str = include_str!("../assets/template.html");
 const RELOAD: &str = "\

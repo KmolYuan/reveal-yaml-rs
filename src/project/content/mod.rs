@@ -1,41 +1,12 @@
-pub use self::{frag_map::*, lay_img::*, marked::*, media::*};
+pub use self::{frag_map::*, lay_img::*, marked::*, media::*, sized::*};
 use super::*;
-use yaml_peg::serde::{InlineList, Stringify};
+use yaml_peg::serde::InlineList;
 
 mod frag_map;
 mod lay_img;
 mod marked;
 mod media;
-
-/// Sized item option.
-#[derive(Default, serde::Deserialize)]
-#[serde(default)]
-pub struct Sized {
-    /// Source link.
-    pub src: String,
-    /// Item width.
-    pub width: Stringify,
-    /// Item height.
-    pub height: Stringify,
-}
-
-impl Sized {
-    /// Return size information.
-    pub fn size(&self) -> (String, String) {
-        let Self { src, width, height } = self;
-        let src = src.replace("gear!", GEAR_URL).wrap(" src=\"", "\"");
-        let size = width.to_string().wrap(" width=\"", "\"")
-            + &height.to_string().wrap(" height=\"", "\"");
-        (src, size)
-    }
-}
-
-impl std::fmt::Display for Sized {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        let (src, size) = self.size();
-        write!(f, "{}{}", src, size)
-    }
-}
+mod sized;
 
 /// A content block, which visualize all contents in the layout.
 ///
