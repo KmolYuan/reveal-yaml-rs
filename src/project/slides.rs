@@ -30,6 +30,33 @@ pub struct Slides {
     pub slides: Vec<ChapterSlide>,
 }
 
+impl Slides {
+    /// Create single page slide.
+    pub fn single<T, D>(title: T, doc: D) -> String
+    where
+        T: ToString,
+        D: ToString,
+    {
+        let slide = ChapterSlide {
+            slide: Slide {
+                title: title.to_string(),
+                content: Content {
+                    doc: doc.to_string(),
+                    ..Default::default()
+                },
+                ..Default::default()
+            },
+            ..Default::default()
+        };
+        let slides = Self {
+            slides: vec![slide],
+        };
+        Metadata::default()
+            .disable_outline()
+            .build(slides, "/static/", true)
+    }
+}
+
 impl ToHtml for Slides {
     fn to_html(self, ctx: &Ctx) -> String {
         let Self { mut slides } = self;

@@ -1,11 +1,14 @@
 use self::edit_mode::Monitor;
 use crate::{
     pack::{extract, listdir},
-    project::{error_page, load},
+    project::{error_page, load, Slides},
     update::archive,
 };
 use actix_files::Files;
-use actix_web::{web::Data, App, HttpServer};
+use actix_web::{
+    web::{self, Data},
+    App, HttpServer,
+};
 use std::{
     env::set_current_dir,
     fs::{canonicalize, read_to_string},
@@ -63,6 +66,7 @@ where
             .app_data(Data::new(Monitor::new(cache.project.clone())))
             .service(site::index)
             .service(site::help_page)
+            .default_service(web::route().to(site::not_found))
             .service(edit_mode::ws_index)
             .service(Files::new("/static", &archive));
         assets.iter().fold(app, |app, asset| {

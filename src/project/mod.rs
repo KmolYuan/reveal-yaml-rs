@@ -141,21 +141,5 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
 }
 
 pub(crate) fn error_page(error: IoError) -> String {
-    let slide = Slide {
-        title: "Error".to_string(),
-        content: Content {
-            doc: format!("```\n{}\n```", error),
-            ..Default::default()
-        },
-        ..Default::default()
-    };
-    let slides = Slides {
-        slides: vec![ChapterSlide {
-            slide,
-            ..Default::default()
-        }],
-    };
-    Metadata::default()
-        .disable_outline()
-        .build(slides, "/static/", true)
+    Slides::single("Error", format!("```\n{}\n```", error))
 }
