@@ -13,7 +13,7 @@ categories = ["command-line-utilities"]
 [dependencies]
 clap = { version = "3", features = ["derive"] }
 serde = { version = "1", features = ["derive"] }
-yaml-peg = { version = "0.26", features = ["serde-std"] }
+yaml-peg = { version = "0.27", features = ["serde"] }
 temp-dir = "0.1"
 zip = "0.6"
 reqwest = "0.11"
