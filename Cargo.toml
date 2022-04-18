@@ -7,7 +7,7 @@ edition = "2021"
 license = "MIT"
 repository = "https://github.com/KmolYuan/reveal-yaml-rs"
 readme = "README.md"
-keywords = ["cli", "yaml", "revealjs", "reveal", "slide", "slideshow"]
+keywords = ["cli", "web", "yaml", "revealjs", "slideshow"]
 categories = ["command-line-utilities"]
 
 [dependencies]
