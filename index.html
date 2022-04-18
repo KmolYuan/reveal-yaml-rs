@@ -17,6 +17,7 @@
             top: 1em;
             left: 1em;
             font-size: 18pt;
+            opacity: 0.5;
         }
 
         .footer {
@@ -695,26 +696,30 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
     }).then(() => {
         // Pinned objects
         if (window.location.search.match(/print-pdf/gi)) {
-            let target = $('div.slide-background');
-            target.append($('.top-object'));
-            $('div.pdf-page').each((_, e) => $(e).append($(e).children('.chapter-header').remove()));
+            $('div.slide-background').append($('.top-object'));
+
+            function callback() {
+                $('div.pdf-page').each((_, e) => $(e).find('.slide-background').append($(e).find('.chapter-header')));
+            }
+
+            setTimeout(callback, 1000);
         } else {
             let target = $('div.reveal');
             target.append($('.top-object'));
-            target.append($(Reveal.getCurrentSlide()).children('.chapter-header').remove());
+            target.append($(Reveal.getCurrentSlide()).children('.chapter-header'));
             Reveal.on('slidechanged', e => {
-                $(e.previousSlide).append(target.children('.chapter-header').remove());
-                target.append($(e.currentSlide).children('.chapter-header').remove());
+                $(e.previousSlide).append(target.children('.chapter-header'));
+                target.append($(e.currentSlide).children('.chapter-header'));
             });
+            // Close button
+            $("#close").click(close_modal);
+            
         }
         // Open external links in new windows or tabs
         $('a').filter('[href^="http"], [href^="//"]')
             .not('[href*="' + window.location.host + '"]')
             .attr('rel', "noopener noreferrer")
             .attr('target', '_blank');
-        // Close button
-        $("#close").click(close_modal);
-        
     });
 </script>
 </body>
