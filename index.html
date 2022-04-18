@@ -697,12 +697,9 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
         // Pinned objects
         if (window.location.search.match(/print-pdf/gi)) {
             $('div.slide-background').append($('.top-object'));
-
-            function callback() {
+            setTimeout(function () {
                 $('div.pdf-page').each((_, e) => $(e).find('.slide-background').append($(e).find('.chapter-header')));
-            }
-
-            setTimeout(callback, 1000);
+            }, 1000);
         } else {
             let target = $('div.reveal');
             target.append($('.top-object'));
