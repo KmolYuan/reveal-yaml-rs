@@ -1,8 +1,4 @@
-use std::{
-    env::current_exe,
-    fs::File,
-    io::{Cursor, Result},
-};
+use std::io::{Cursor, Result};
 use zip::{ZipArchive, ZipWriter};
 
 macro_rules! archive {
@@ -30,9 +26,9 @@ pub fn update() -> Result<()> {
             .await
             .unwrap()
     });
-    let archive = current_exe()?.with_file_name(concat!(archive!(), ".zip"));
+    let archive = std::env::current_exe()?.with_file_name(concat!(archive!(), ".zip"));
     let mut r = ZipArchive::new(Cursor::new(b))?;
-    let mut w = ZipWriter::new(File::create(archive)?);
+    let mut w = ZipWriter::new(std::fs::File::create(archive)?);
     for i in 0..r.len() {
         let file = r.by_index(i)?;
         if file.is_dir() {

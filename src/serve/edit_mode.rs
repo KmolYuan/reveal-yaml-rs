@@ -1,20 +1,10 @@
 use actix::{Actor, Addr, AsyncContext, Context, Handler, Message, StreamHandler};
 use actix_web::{get, web, Error, HttpRequest, HttpResponse};
 use actix_web_actors::ws;
-use std::{
-    fs::metadata,
-    time::{Duration, SystemTime},
-};
+use std::time::{Duration, SystemTime};
 
-const INTERVAL: Duration = Duration::from_millis(500);
-
-fn file_date(path: &str) -> Duration {
-    metadata(path)
-        .unwrap()
-        .modified()
-        .unwrap()
-        .duration_since(SystemTime::UNIX_EPOCH)
-        .unwrap()
+fn file_date(path: &str) -> SystemTime {
+    std::fs::metadata(path).unwrap().modified().unwrap()
 }
 
 struct Ws;
@@ -26,17 +16,17 @@ impl Actor for Ws {
 impl Handler<Event> for Ws {
     type Result = ();
 
-    fn handle(&mut self, msg: Event, ctx: &mut Self::Context) {
-        ctx.text(msg.0);
+    fn handle(&mut self, _msg: Event, ctx: &mut Self::Context) {
+        ctx.text("changed!");
     }
 }
 
 impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for Ws {
-    fn handle(&mut self, _item: Result<ws::Message, ws::ProtocolError>, _ctx: &mut Self::Context) {}
+    fn handle(&mut self, _msg: Result<ws::Message, ws::ProtocolError>, _ctx: &mut Self::Context) {}
 }
 
 pub(super) struct Monitor {
-    last: Duration,
+    last: SystemTime,
     project: String,
     listeners: Vec<Addr<Ws>>,
 }
@@ -56,12 +46,12 @@ impl Actor for Monitor {
     type Context = Context<Self>;
 
     fn started(&mut self, ctx: &mut Self::Context) {
-        ctx.run_interval(INTERVAL, |act, _| {
+        ctx.run_interval(Duration::from_millis(500), |act, _| {
             let last = file_date(&act.project);
             if last != act.last {
                 // Broadcast
-                for l in &act.listeners {
-                    l.do_send(Event("changed!".to_string()));
+                for listener in &act.listeners {
+                    listener.do_send(Event);
                 }
                 act.last = last;
             }
@@ -79,7 +69,7 @@ impl Handler<Client> for Monitor {
 
 #[derive(Message)]
 #[rtype(result = "()")]
-struct Event(String);
+struct Event;
 
 #[derive(Message)]
 #[rtype(result = "()")]

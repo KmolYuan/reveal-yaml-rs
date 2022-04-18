@@ -3,8 +3,7 @@ use crate::{
     update::{archive, update},
 };
 use std::{
-    env::{current_exe, set_current_dir},
-    fs::{copy, create_dir, read_dir, read_to_string, remove_dir_all, rename, write, File},
+    fs,
     io::Result,
     path::{Path, PathBuf},
 };
@@ -17,10 +16,10 @@ where
 {
     let path = path.as_ref();
     let dist = dist.as_ref();
-    for entry in read_dir(path)? {
+    for entry in fs::read_dir(path)? {
         let path = entry?.path();
         if !dist.is_dir() {
-            create_dir(dist)?;
+            fs::create_dir(dist)?;
         }
         let file_name = path.file_name().unwrap();
         let dist = dist.join(file_name);
@@ -28,7 +27,7 @@ where
         if path.is_dir() {
             copy_dir(&path, dist)?;
         } else if path.is_file() {
-            copy(path, dist)?;
+            fs::copy(path, dist)?;
         }
     }
     Ok(())
@@ -38,11 +37,11 @@ pub(crate) fn extract<D>(d: D) -> Result<()>
 where
     D: AsRef<Path>,
 {
-    let path = current_exe()?.with_file_name(concat!(archive!(), ".zip"));
+    let path = std::env::current_exe()?.with_file_name(concat!(archive!(), ".zip"));
     if !path.exists() {
         update()?;
     }
-    ZipArchive::new(File::open(path)?)
+    ZipArchive::new(fs::File::open(path)?)
         .unwrap()
         .extract(d.as_ref())
         .unwrap();
@@ -54,7 +53,7 @@ where
     P: AsRef<Path>,
 {
     let mut list = Vec::new();
-    for entry in read_dir(path)? {
+    for entry in fs::read_dir(path)? {
         let path = entry?.path();
         if !path.file_name().unwrap().to_str().unwrap().starts_with('.') {
             list.push(path);
@@ -69,26 +68,26 @@ where
     P: AsRef<Path>,
     D: AsRef<Path>,
 {
-    set_current_dir(path.as_ref())?;
+    std::env::set_current_dir(path.as_ref())?;
     let dist = dist.as_ref();
     if dist.is_dir() {
         println!("Remove {:?}", dist);
-        remove_dir_all(dist)?;
+        fs::remove_dir_all(dist)?;
     }
     extract(".")?;
     pack_inner(project).map_err(|e| {
-        remove_dir_all(archive!()).unwrap_or_default();
+        fs::remove_dir_all(archive!()).unwrap_or_default();
         e
     })?;
-    rename(archive!(), dist)?;
+    fs::rename(archive!(), dist)?;
     println!("Done");
     Ok(())
 }
 
 fn pack_inner(project: &str) -> Result<()> {
     let archive = Path::new(archive!());
-    let contents = load(&read_to_string(project)?, "", false)?;
-    write(archive.join("index.html"), &contents)?;
+    let contents = load(&fs::read_to_string(project)?, "", false)?;
+    fs::write(archive.join("index.html"), &contents)?;
     for assets in listdir(".")? {
         let name = assets.file_name().unwrap().to_str().unwrap();
         if name == archive!() || name.starts_with('.') {
@@ -97,7 +96,7 @@ fn pack_inner(project: &str) -> Result<()> {
         if assets.is_dir() {
             let dist = archive.join(name);
             if !dist.is_dir() {
-                create_dir(&dist)?;
+                fs::create_dir(&dist)?;
             }
             println!("{:?} > {:?}", &assets, &dist);
             copy_dir(assets, dist)?;

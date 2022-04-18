@@ -73,8 +73,7 @@ enum Subcommand {
 }
 
 fn main() -> Result<(), Error> {
-    let args = Entry::parse();
-    match args.subcommand {
+    match Entry::parse().subcommand {
         Subcommand::Update => update(),
         Subcommand::New { dir } => blank(dir, true),
         Subcommand::Init { dir } => blank(dir, false),
@@ -84,7 +83,7 @@ fn main() -> Result<(), Error> {
             name,
             edit,
             no_open,
-        } => serve(port, dir, &name, edit, !no_open),
+        } => serve(port, dir, name, edit, !no_open),
         Subcommand::Fmt { dir, name, dry_run } => fmt(dir, dry_run, &name),
         Subcommand::Pack { dir, name, out } => pack(dir, out, &name),
     }

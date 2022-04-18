@@ -5,12 +5,8 @@ use crate::{
     update::archive,
 };
 use actix_files::Files;
-use actix_web::{
-    web::{self, Data},
-    App, HttpServer,
-};
+use actix_web::{web, App, HttpServer};
 use std::{
-    env::set_current_dir,
     fs::{canonicalize, read_to_string},
     io::{Error, ErrorKind, Result},
     path::Path,
@@ -31,11 +27,11 @@ struct Cache {
 }
 
 /// Launch function.
-pub fn serve<P>(port: u16, path: P, project: &str, edit: bool, open: bool) -> Result<()>
+pub fn serve<P>(port: u16, path: P, project: String, edit: bool, open: bool) -> Result<()>
 where
     P: AsRef<Path>,
 {
-    set_current_dir(path.as_ref())?;
+    std::env::set_current_dir(path.as_ref())?;
     let temp = TempDir::new().map_err(|s| Error::new(ErrorKind::PermissionDenied, s))?;
     // Expand Reveal.js
     extract(temp.path())?;
@@ -47,20 +43,20 @@ where
     println!("Edit mode: {}", edit);
     println!("Press Ctrl+C to close the server...");
     let assets = listdir(".")?;
-    let cache = Data::new(Cache {
-        project: project.to_string(),
+    let cache = web::Data::new(Cache {
         doc: if edit {
             String::new()
         } else {
-            load(&read_to_string(project)?, "/static/", edit).unwrap_or_else(error_page)
+            load(&read_to_string(&project)?, "/static/", edit).unwrap_or_else(error_page)
         },
+        project,
         help_doc: load(HELP_DOC, "/static/", false)?,
         reload: edit,
     });
     let server = HttpServer::new(move || {
         let app = App::new()
             .app_data(cache.clone())
-            .app_data(Data::new(Monitor::new(cache.project.clone())))
+            .app_data(web::Data::new(Monitor::new(cache.project.clone())))
             .service(site::index)
             .service(site::help_page)
             .default_service(web::route().to(site::not_found))
