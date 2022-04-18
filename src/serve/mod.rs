@@ -57,9 +57,6 @@ where
         help_doc: load(HELP_DOC, "/static/", false)?,
         reload: edit,
     });
-    if open {
-        webbrowser::open(&format!("http://localhost:{}/", port))?;
-    }
     let server = HttpServer::new(move || {
         let app = App::new()
             .app_data(cache.clone())
@@ -76,5 +73,8 @@ where
     })
     .bind(("localhost", port))?
     .run();
+    if open {
+        webbrowser::open(&format!("http://localhost:{}/", port))?;
+    }
     actix_web::rt::System::new().block_on(server)
 }
