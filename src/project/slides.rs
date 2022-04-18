@@ -37,7 +37,7 @@ impl Slides {
         T: ToString,
         D: ToString,
     {
-        let slide = ChapterSlide {
+        let slides = vec![ChapterSlide {
             slide: Slide {
                 title: title.to_string(),
                 content: Content {
@@ -47,20 +47,15 @@ impl Slides {
                 ..Default::default()
             },
             ..Default::default()
-        };
-        let slides = Self {
-            slides: vec![slide],
-        };
-        Metadata::default()
-            .disable_outline()
-            .build(slides, "/static/", true)
+        }];
+        Metadata::default().build(Self { slides }, "/static/", true)
     }
 }
 
 impl ToHtml for Slides {
     fn to_html(self, ctx: &Ctx) -> String {
         let Self { mut slides } = self;
-        if !ctx.outline.is_empty() {
+        if !ctx.outline.is_empty() && slides.len() > 1 {
             let doc = slides
                 .iter()
                 .enumerate()
@@ -97,18 +92,15 @@ impl ToHtml for Slides {
                     }
                 })
                 .collect();
-            if let Some(cover) = slides.first_mut() {
-                cover.sub.push(Slide {
-                    title: ctx.outline.clone(),
-                    id: "outline".to_string(),
-                    content: Content {
-                        doc,
-                        ..Default::default()
-                    },
-                    background: Optional::Bool(true),
+            slides.first_mut().unwrap().sub.push(Slide {
+                title: ctx.outline.clone(),
+                id: "outline".to_string(),
+                content: Content {
+                    doc,
                     ..Default::default()
-                });
-            }
+                },
+                ..Default::default()
+            });
         }
         slides.to_html(ctx)
     }
@@ -130,10 +122,10 @@ pub struct ChapterSlide {
 impl ToHtml for ChapterSlide {
     fn to_html(self, ctx: &Ctx) -> String {
         let Self { slide, sub } = self;
-        let title = slide_title(&slide).to_string();
         if let Some(header) = &ctx.chapter_header {
-            header.replace(String::new());
+            header.borrow_mut().clear();
         }
+        let title = slide_title(&slide).to_string();
         let slide = slide.to_html(ctx);
         if let Some(header) = &ctx.chapter_header {
             header.replace(title);
