@@ -77,16 +77,10 @@ Please see `rym --help`/`rym subcommand --help` for more information.
 
 ### Edit Mode (Hot Reload / Auto-reload)
 
-There are `-e` / `--edit` flags on the `serve` command. This option let the server keep watching the project file `reveal.yaml`, then reload the page from the web browser.
+There are `-e` / `--edit` flags on the `serve` command. This option let the server keep watching the project file `reveal.yaml`, then reload the page from the web browser. (via JS & WebSocket)
 
 If this option is not enabled, the server will only resolve once at startup, and always use the cache.
 
 ```bash
 rym serve --edit
 ```
-
-## Gear!
-
-![gear](https://raw.githubusercontent.com/rust-lang/rust-artwork/master/logo/rust-logo-gear-only.svg)
-
-Uses "gear!" string at `src` to insert 106x106 Rust gear image (CC-BY) as a placeholder. Empty `icon` also defaults to this image.

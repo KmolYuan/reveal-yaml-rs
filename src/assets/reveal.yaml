@@ -2,15 +2,17 @@ description: Rust implementation of Reveal.js YAML server.
 author: Yuan Chang
 chapter-header: true
 outline: 📖 [Outline](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.outline)
+gear!: &gear https://raw.githubusercontent.com/rust-lang/rust-artwork/master/logo/rust-logo-gear-only.svg
+icon: *gear
 background:
-  src: gear!
+  src: *gear
   size: 50%
   opacity: 0.2
 option:
   hash: true
   slide number: c/t
 footer:
-  src: gear!
+  src: *gear
   width: 50pt
   label: Reveal.yaml
   link: https://github.com/KmolYuan/reveal-yaml-rs/

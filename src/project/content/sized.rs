@@ -17,7 +17,7 @@ impl Sized {
     /// Return size information.
     pub fn size(&self) -> (String, String) {
         let Self { src, width, height } = self;
-        let src = src.replace(GEAR_TAG, GEAR_URL).wrap(" src=\"", "\"");
+        let src = src.wrap(" src=\"", "\"");
         let size = width.to_string().wrap(" width=\"", "\"")
             + &height.to_string().wrap(" height=\"", "\"");
         (src, size)
