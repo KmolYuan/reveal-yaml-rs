@@ -4,7 +4,7 @@ use yaml_peg::serde::Optional;
 const TEMPLATE: &str = include_str!("../assets/template.html");
 const RELOAD: &str = "\
 let ws = new WebSocket(\"ws://\" + window.location.host + \"/ws/\");
-        ws.onmessage = _ => location.reload();";
+            ws.onmessage = _ => location.reload();";
 
 /// Metadata contains HTML settings and global slide settings, they are totally YAML Maps.
 ///
