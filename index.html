@@ -318,9 +318,9 @@ for i in range(10):
 </code></pre>
 <ul>
 <li>Item</li>
-<li><a href="#/5">Next page</a></li>
+<li><a href="#/doc-src">Next page</a></li>
 </ul>
-</section><section data-background="https://raw.githubusercontent.com/rust-lang/rust-artwork/master/logo/rust-logo-gear-only.svg" data-background-size="50%" data-background-opacity="0.2">
+</section><section data-background="https://raw.githubusercontent.com/rust-lang/rust-artwork/master/logo/rust-logo-gear-only.svg" data-background-size="50%" data-background-opacity="0.2" id="doc-src">
 <pre><code class="language-yaml">doc: |
   *Something* **important**.
 
@@ -336,7 +336,7 @@ for i in range(10):
   ```
 
   + Item
-  + [Next page](#/5)
+  + [Next page](#/doc-src)
 </code></pre>
 <p><a href="https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.doc">📖 doc</a></p>
 <div class="chapter-header">Markdown</div></section>
@@ -683,9 +683,9 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
     }
 
     Reveal.initialize({
-        slideNumber: "c/t",
         pdfMaxPagesPerSlide: 1,
         hash: true,
+        slideNumber: "c/t",
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
         mathjax2: {
             mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
