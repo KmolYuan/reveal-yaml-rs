@@ -218,13 +218,11 @@ impl ToHtml for Slide {
             + &md2html(&title_only.wrap("# ", ""))
             + &content.to_html(ctx)
             + &md2html(&note).wrap("<aside class=\"notes\">", "</aside>\n");
-        let header = if let Some(header) = &ctx.chapter_header {
-            header
-                .borrow()
-                .wrap("<div class=\"chapter-header\">", "</div>")
-        } else {
-            String::new()
-        };
+        let header = ctx
+            .chapter_header
+            .as_ref()
+            .map(|s| s.borrow().wrap("<div class=\"chapter-header\">", "</div>"))
+            .unwrap_or_default();
         ctx.frag.set(0);
         format!("<section{}>\n{}{}</section>", data, content, header)
     }

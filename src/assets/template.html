@@ -18,6 +18,7 @@
             left: 1em;
             font-size: 18pt;
             opacity: 0.5;
+            display: none;
         }
 
         .footer {
@@ -259,15 +260,15 @@
         if (window.location.search.match(/print-pdf/gi)) {
             $('div.slide-background').append($('.top-object'));
             setTimeout(function () {
-                $('div.pdf-page').each((_, e) => $(e).find('.slide-background').append($(e).find('.chapter-header')));
+                $('div.pdf-page').each((_, e) => $(e).find('.slide-background').append($(e).find('.chapter-header').show()));
             }, 1000);
         } else {
-            let target = $('div.reveal');
-            target.append($('.top-object'));
-            target.append($(Reveal.getCurrentSlide()).children('.chapter-header'));
+            let top = $('div.reveal');
+            top.append($('.top-object'));
+            top.append($(Reveal.getCurrentSlide()).children('.chapter-header').show());
             Reveal.on('slidechanged', e => {
-                $(e.previousSlide).append(target.children('.chapter-header'));
-                target.append($(e.currentSlide).children('.chapter-header'));
+                $(e.previousSlide).append(top.children('.chapter-header').hide());
+                top.append($(e.currentSlide).children('.chapter-header').show());
             });
             // Close button
             $("#close").click(close_modal);

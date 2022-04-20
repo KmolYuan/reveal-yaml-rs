@@ -11,6 +11,7 @@ background:
 option:
   hash: true
   slide number: c/t
+  pdf max pages per slide: 1
 footer:
   src: *gear
   width: 50pt
