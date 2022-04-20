@@ -88,9 +88,10 @@ style: |
     ```
 
     + Item
-    + [Next page](#/5)
+    + [Next page](#/doc-src)
   sub:
-    - doc: |
+    - id: doc-src
+      doc: |
         <pre><code class="language-yaml">doc: |
           *Something* **important**.
 
@@ -106,7 +107,7 @@ style: |
           ```
 
           + Item
-          + [Next page](#/5)
+          + [Next page](#/doc-src)
         </code></pre>
         [📖 doc](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.doc)
 - title: Images
