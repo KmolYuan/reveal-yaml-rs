@@ -1,3 +1,5 @@
+%YAML 1.2
+---
 description: Rust implementation of Reveal.js YAML server.
 author: Yuan Chang
 chapter-header: true
@@ -30,154 +32,172 @@ style: |
       text-align: left;
   }
 ---
-- title: Reveal.yaml Demo Slide
-  doc: |
-    *Author: [Yuan Chang](https://github.com/KmolYuan)*
+title: Reveal.yaml Demo Slide
+doc: |
+  *Author: [Yuan Chang](https://github.com/KmolYuan)*
 
-    Scroll right → to see the examples.
+  Scroll right → to see the examples.
 
-    Scroll down ↓ to see an auto-generated outline.
-  h-stack:
-    - doc: 🏗 [Repository](https://github.com/KmolYuan/reveal-yaml-rs)
-    - doc: 📖 [Documentation](https://docs.rs/reveal-yaml)
-    - doc: 🎞 [Demo Source](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
-    - doc: ☕ [Reveal.js](https://github.com/hakimel/reveal.js)
-- title-hidden: Fit
-  id: fit
-  fit:
-    - Hello My Friends!
-    - Longer title become smaller~
-    - Here comes the THRID LINE!!
-    - ---
-    - This is actually the "Fit" page, check the table of content!
-  sub:
-    - doc: |
-        ```yaml
-        title-hidden: Fit
-        fit:
-          - Hello My Friends!
-          - Longer title become smaller~
-          - Here comes the THRID LINE!!
-          - ---
-          - This is actually the "Fit" page, check the table of content!
-        ```
-        [📖 title-hidden](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_hidden)
-        [📖 fit](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.fit)
-- title-only: Title Only
-  id: title-only
-  doc: |
-    This title is invisible in the [table of content](#/0/1). Same as its section.
+  Scroll down ↓ to see an auto-generated outline.
+h-stack:
+- doc: 🏗 [Repository](https://github.com/KmolYuan/reveal-yaml-rs)
+- doc: 📖 [Documentation](https://docs.rs/reveal-yaml)
+- doc: 🎞 [Demo Source](https://github.com/KmolYuan/reveal-yaml-rs/blob/main/src/assets/reveal.yaml)
+- doc: ☕ [Reveal.js](https://github.com/hakimel/reveal.js)
+---
+title-hidden: Fit
+id: fit
+fit:
+- Hello My Friends!
+- Longer title become smaller~
+- Here comes the THRID LINE!!
+- ---
+- This is actually the "Fit" page, check the table of content!
+sub:
+- doc: |
     ```yaml
-    title-only: Title Only
+    title-hidden: Fit
+    fit:
+      - Hello My Friends!
+      - Longer title become smaller~
+      - Here comes the THRID LINE!!
+      - ---
+      - This is actually the "Fit" page, check the table of content!
     ```
-    [📖 title-only](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_only)
-- title: Markdown
-  id: doc
+    [📖 title-hidden](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_hidden)
+    [📖 fit](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.fit)
+---
+title-only: Title Only
+id: title-only
+doc: |
+  This title is invisible in the [table of content](#/0/1). Same as its section.
+  ```yaml
+  title-only: Title Only
+  ```
+  [📖 title-only](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.title_only)
+---
+title: Markdown
+id: doc
+doc: |
+  *Something* **important**.
+
+  | item 1 | item 2 |
+  |:------:|:------:|
+  | A | B |
+
+  ```python[1-2]
+  import sys
+  print(sys.path)
+  for i in range(10):
+      print("Hello World!")
+  ```
+
+  + Item
+  + [Next page](#/doc-src)
+sub:
+- id: doc-src
   doc: |
-    *Something* **important**.
+    <pre><code class="language-yaml">doc: |
+      *Something* **important**.
 
-    | item 1 | item 2 |
-    |:------:|:------:|
-    | A | B |
+      | item 1 | item 2 |
+      |:------:|:------:|
+      | A | B |
 
-    ```python[1-2]
-    import sys
-    print(sys.path)
-    for i in range(10):
-        print("Hello World!")
-    ```
+      ```python[1-2]
+      import sys
+      print(sys.path)
+      for i in range(10):
+          print("Hello World!")
+      ```
 
-    + Item
-    + [Next page](#/doc-src)
-  sub:
-    - id: doc-src
-      doc: |
-        <pre><code class="language-yaml">doc: |
-          *Something* **important**.
-
-          | item 1 | item 2 |
-          |:------:|:------:|
-          | A | B |
-
-          ```python[1-2]
-          import sys
-          print(sys.path)
-          for i in range(10):
-              print("Hello World!")
-          ```
-
-          + Item
-          + [Next page](#/doc-src)
-        </code></pre>
-        [📖 doc](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.doc)
-- title: Images
-  id: img
+      + Item
+      + [Next page](#/doc-src)
+    </code></pre>
+    [📖 doc](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.doc)
+---
+title: Images
+id: img
+img:
+  label: Kitten 🐱
+  src: https://placekitten.com/600/400
+sub:
+- title-only: Multiple Images
   img:
-    label: Kitten 🐱
-    src: https://placekitten.com/600/400
-  sub:
-    - title-only: Multiple Images
-      img:
-        - label: Kitten 1
-          src: https://placekitten.com/700/500
-          pop: true
-        - label: Kitten 2
-          src: https://placekitten.com/800/500
-          pop: true
-    - title: Lay with Images
-      id: lay-img
-      lay-img:
-        - src: https://placekitten.com/450/450
-          frag: fade-right
-        - src: https://placekitten.com/600/300
-          frag: fade-left
-    - doc: |
-        ```yaml
-        img:
-          label: Kitten 🐱
-          src: https://placekitten.com/600/400
-        ```
-        Multiple images will be placed horizontally.
-        ```yaml
-        img:
-          - label: Kitten 1
-            src: https://placekitten.com/700/500
-            pop: true
-          - label: Kitten 2
-            src: https://placekitten.com/800/500
-            pop: true
-        ```
-        Laid images will be placed at the same center.
-        ```yaml
-        lay-img:
-          - src: https://placekitten.com/450/450
-            frag: fade-right
-          - src: https://placekitten.com/600/300
-            frag: fade-left
-        ```
-        [📖 img](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.img)
-        [📖 lay-img](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.lay_img)
-- title: Video
-  id: video
-  doc: |
-    The videos can be placed as same as the images.
+  - label: Kitten 1
+    src: https://placekitten.com/700/500
+    pop: true
+  - label: Kitten 2
+    src: https://placekitten.com/800/500
+    pop: true
+- title: Lay with Images
+  id: lay-img
+  lay-img:
+  - src: https://placekitten.com/450/450
+    frag: fade-right
+  - src: https://placekitten.com/600/300
+    frag: fade-left
+- doc: |
     ```yaml
-    video:
-      - width: 320
-        height: 240
-        src: https://www.w3schools.com/html/movie.mp4
-      - src: https://www.w3schools.com/html/movie.mp4
-        controls: false
+    img:
+      label: Kitten 🐱
+      src: https://placekitten.com/600/400
     ```
-    [📖 video](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.video)
+    Multiple images will be placed horizontally.
+    ```yaml
+    img:
+      - label: Kitten 1
+        src: https://placekitten.com/700/500
+        pop: true
+      - label: Kitten 2
+        src: https://placekitten.com/800/500
+        pop: true
+    ```
+    Laid images will be placed at the same center.
+    ```yaml
+    lay-img:
+      - src: https://placekitten.com/450/450
+        frag: fade-right
+      - src: https://placekitten.com/600/300
+        frag: fade-left
+    ```
+    [📖 img](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.img)
+    [📖 lay-img](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.lay_img)
+---
+title: Video
+id: video
+doc: |
+  The videos can be placed as same as the images.
+  ```yaml
   video:
     - width: 320
       height: 240
       src: https://www.w3schools.com/html/movie.mp4
     - src: https://www.w3schools.com/html/movie.mp4
       controls: false
-- title: Maths
-  id: math
+  ```
+  [📖 video](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.video)
+video:
+- width: 320
+  height: 240
+  src: https://www.w3schools.com/html/movie.mp4
+- src: https://www.w3schools.com/html/movie.mp4
+  controls: false
+---
+title: Maths
+id: math
+math: |
+  \small\begin{aligned}
+  \min_{x_1, x_2}&f(x)
+  \\
+  \text{s.t.}\,&b(x) \le 0
+  \\
+  &c(x) = 0
+  \end{aligned}
+doc: |
+  Inline math text $x^2$.
+  ```yaml
+  doc: Inline math text $x^2$.
   math: |
     \small\begin{aligned}
     \min_{x_1, x_2}&f(x)
@@ -186,81 +206,60 @@ style: |
     \\
     &c(x) = 0
     \end{aligned}
-  doc: |
-    Inline math text $x^2$.
-    ```yaml
-    doc: Inline math text $x^2$.
-    math: |
-      \small\begin{aligned}
-      \min_{x_1, x_2}&f(x)
-      \\
-      \text{s.t.}\,&b(x) \le 0
-      \\
-      &c(x) = 0
-      \end{aligned}
-    ```
-    [📖 math](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.math)
-- title: Background Color & Transition
-  id: background
-  doc: |
-    Override global setting, use a single color background.
-    ```yaml
-    trans: convex-in convex-out
-    background: rgb(70, 70, 255)
-    ```
-    🐳🐳🐳
+  ```
+  [📖 math](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.math)
+---
+title: Background Color & Transition
+id: background
+doc: |
+  Override global setting, use a single color background.
+  ```yaml
   trans: convex-in convex-out
   background: rgb(70, 70, 255)
-  sub:
-    - title: Local Background & Style Options
-      doc: |
-        Override global setting, use a local background.
-        ```yaml
-        class: left-align
-        bg-trans: fade-in fade-out
-        background:
-          src: https://placekitten.com/800/800
-          size: 25%
-          opacity: 0.5
-        ```
-        This page has a "left-align" class, and "text-align: left" has been set for ".left-align p".
-        So all the pargraphs are left aligned.
-
-        "Id"s are also work, but the page id will be replaced.
-        ```css
-        .left-align p {
-            text-align: left;
-        }
-        ```
-        [📖 style](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.style)
-        [📖 id](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.id)
-        [📖 class](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.class)
-        [📖 background (global)](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.background)
-        [📖 background](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.background)
-
-        [📖 trans](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.trans)
-        [📖 bg-trans](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.bg_trans)
-      class: left-align
-      bg-trans: fade-in fade-out
-      background:
-        src: https://placekitten.com/800/800
-        size: 25%
-        opacity: 0.5
-- title: Layout
-  id: stack
+  ```
+  🐳🐳🐳
+trans: convex-in convex-out
+background: rgb(70, 70, 255)
+sub:
+- title: Local Background & Style Options
   doc: |
+    Override global setting, use a local background.
     ```yaml
-    h-stack:
-      - doc: |
-          *Data types*
-          + sturct
-          + enum
-          + union
-      - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
-      - img: { src: https://placekitten.com/600/600 }
+    class: left-align
+    bg-trans: fade-in fade-out
+    background:
+      src: https://placekitten.com/800/800
+      size: 25%
+      opacity: 0.5
     ```
-    [📖 h-stack](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.h_stack)
-    [📖 v-stack](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.v_stack)
+    This page has a "left-align" class, and "text-align: left" has been set for ".left-align p".
+    So all the pargraphs are left aligned.
+
+    "Id"s are also work, but the page id will be replaced.
+    ```css
+    .left-align p {
+        text-align: left;
+    }
+    ```
+    [📖 style](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.style)
+    [📖 id](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.id)
+    [📖 class](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.class)
+    [📖 background (global)](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.background)
+    [📖 background](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.background)
+
+    [📖 trans](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.trans)
+    [📖 bg-trans](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.bg_trans)
+  class: left-align
+  bg-trans: fade-in fade-out
+  background:
+    src: https://placekitten.com/800/800
+    size: 25%
+    opacity: 0.5
+---
+title: Layout
+id: stack
+doc: |
+  ```yaml
   h-stack:
     - doc: |
         *Data types*
@@ -269,172 +268,187 @@ style: |
         + union
     - math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
     - img: { src: https://placekitten.com/600/600 }
-  sub:
-    - title: Nested Layout
-      id: stack-border
-      doc: |
-        ```yaml
-        h-stack:
-          - v-stack:
-            - h-stack:
-              - doc: Left Top Left
-              - doc: Left Top Right
-            - doc: Left Bottom
-          - v-stack-border:
-            - doc: Right Top
-            - h-stack-border:
-              - doc: Right Bottom Left
-              - doc: Right Bottom Right
-        ```
-        [📖 h-stack-border](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.h_stack_border)
-        [📖 v-stack-border](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.v_stack_border)
-      h-stack:
-        - v-stack:
-          - h-stack:
-            - doc: Left Top Left
-            - doc: Left Top Right
-          - doc: Left Bottom
-        - v-stack-border:
-          - doc: Right Top
-          - h-stack-border:
-            - doc: Right Bottom Left
-            - doc: Right Bottom Right
-- title: Auto Animate
-  id: auto-animate
+  ```
+  [📖 h-stack](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.h_stack)
+  [📖 v-stack](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.v_stack)
+h-stack:
+- doc: |
+    *Data types*
+    + sturct
+    + enum
+    + union
+- math: \small \frac{-b\pm \sqrt{b^2 - 4ac}}{2a}
+- img: { src: https://placekitten.com/600/600 }
+sub:
+- title: Nested Layout
+  id: stack-border
   doc: |
-    Auto animation is suggested for the most simple cases.
+    ```yaml
+    h-stack:
+      - v-stack:
+        - h-stack:
+          - doc: Left Top Left
+          - doc: Left Top Right
+        - doc: Left Bottom
+      - v-stack-border:
+        - doc: Right Top
+        - h-stack-border:
+          - doc: Right Bottom Left
+          - doc: Right Bottom Right
+    ```
+    [📖 h-stack-border](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.h_stack_border)
+    [📖 v-stack-border](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.v_stack_border)
+  h-stack:
+  - v-stack:
+    - h-stack:
+      - doc: Left Top Left
+      - doc: Left Top Right
+    - doc: Left Bottom
+  - v-stack-border:
+    - doc: Right Top
+    - h-stack-border:
+      - doc: Right Bottom Left
+      - doc: Right Bottom Right
+---
+title: Auto Animate
+id: auto-animate
+doc: |
+  Auto animation is suggested for the most simple cases.
 
-    Enable this option for two continuous slides, the animation will be generated automatically.
-    ```yaml[1]
+  Enable this option for two continuous slides, the animation will be generated automatically.
+  ```yaml[1]
+  title: Auto Animate
+  auto-animate: true
+  ```
+  [📖 auto-animate](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.auto_animate)
+
+  Move
+auto-animate: true
+sub:
+- title-only: Auto Animate
+  doc: |
+    ```yaml[2]
     title: Auto Animate
     auto-animate: true
     ```
     [📖 auto-animate](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.auto_animate)
 
     Move
+
+    Smoothly
   auto-animate: true
-  sub:
-    - title-only: Auto Animate
-      doc: |
-        ```yaml[2]
-        title: Auto Animate
-        auto-animate: true
-        ```
-        [📖 auto-animate](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.auto_animate)
-
-        Move
-
-        Smoothly
-      auto-animate: true
-    - title: Fragment
-      id: frag
-      h-stack:
-        - doc: AAA
-          math: f(x)
-          frag: [ { doc: ~, math: ~ } ]
-        - doc: BBB
-          math: g(y)
-          frag: [ { doc: ~ }, { math: ~ } ]
-        - doc: CCC
-          math: h(z)
-          frag: [ { math: ~ } ]
-      doc: |
-        The index of fragment is the order of the animation.
-
-        The blank represents normal `class="framgment"` effect.
-        ```yaml
-        h-stack:
-          - doc: AAA
-            math: f(x)
-            frag: [ { doc: ~, math: ~ } ]  # one action
-          - doc: BBB
-            math: g(y)
-            frag: [ { doc: ~ }, { math: ~ } ]  # two action
-          - doc: CCC
-            math: h(z)
-            frag: [ { math: ~ } ]  # one element
-        ```
-        [📖 frag](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.frag)
-    - title: Fragment with Multiple `doc`s
-      doc: |
-        ```yaml
-        v-stack:
-          - doc: Since there is only one `doc`,
-            frag: &frag [ { doc: ~ } ]
-          - doc: so it may splitted by `v-stack`.
-            frag: *frag
-          - doc: The anchors can be used on `frag` array.
-            frag: *frag
-        ```
-      v-stack:
-        - doc: Since there is only one `doc`,
-          frag: &frag [ { doc: ~ } ]
-        - doc: so it may splited by `v-stack`.
-          frag: *frag
-        - doc: The anchors can be used on `frag` array.
-          frag: *frag
-- title: Note
-  id: note
+- title: Fragment
+  id: frag
+  h-stack:
+  - doc: AAA
+    math: f(x)
+    frag: [ { doc: ~, math: ~ } ]
+  - doc: BBB
+    math: g(y)
+    frag: [ { doc: ~ }, { math: ~ } ]
+  - doc: CCC
+    math: h(z)
+    frag: [ { math: ~ } ]
   doc: |
-    Press "s" key to open speaker's view.
-    ```yaml
-    note: |
-      Note text here!
+    The index of fragment is the order of the animation.
 
-      There are also have **markdown** *syntax*!
+    The blank represents normal `class="framgment"` effect.
+    ```yaml
+    h-stack:
+      - doc: AAA
+        math: f(x)
+        frag: [ { doc: ~, math: ~ } ]  # one action
+      - doc: BBB
+        math: g(y)
+        frag: [ { doc: ~ }, { math: ~ } ]  # two action
+      - doc: CCC
+        math: h(z)
+        frag: [ { math: ~ } ]  # one element
     ```
-    [📖 note](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.note)
+    [📖 frag](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Content.html#structfield.frag)
+- title: Fragment with Multiple `doc`s
+  doc: |
+    ```yaml
+    v-stack:
+      - doc: Since there is only one `doc`,
+        frag: &frag [ { doc: ~ } ]
+      - doc: so it may splitted by `v-stack`.
+        frag: *frag
+      - doc: The anchors can be used on `frag` array.
+        frag: *frag
+    ```
+  v-stack:
+  - doc: Since there is only one `doc`,
+    frag: &frag [ { doc: ~ } ]
+  - doc: so it may splited by `v-stack`.
+    frag: *frag
+  - doc: The anchors can be used on `frag` array.
+    frag: *frag
+---
+title: Note
+id: note
+doc: |
+  Press "s" key to open speaker's view.
+  ```yaml
   note: |
     Note text here!
 
     There are also have **markdown** *syntax*!
-- title: Anchors
-  doc: |
-    YAML anchor can be used in the content data.
+  ```
+  [📖 note](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Slide.html#structfield.note)
+note: |
+  Note text here!
 
-    Anchors will be only resolve twice,
+  There are also have **markdown** *syntax*!
+---
+title: Anchors
+doc: |
+  YAML anchor can be used in the content data.
 
-    which not allow to serializing self-loop in anchor chain.
+  Anchors will be only resolve twice,
 
-    ```yaml
-    h-stack-border:
-      - &stack
-        v-stack:
-        - &map
-          doc: &doc Same content here!
-        - doc: *doc
-        - *map
-      - *stack
-    ```
+  which not allow to serializing self-loop in anchor chain.
+
+  ```yaml
   h-stack-border:
     - &stack
       v-stack:
-        - &map
-          doc: &doc Same content here!
-        - doc: *doc
-        - *map
+      - &map
+        doc: &doc Same content here!
+      - doc: *doc
+      - *map
     - *stack
-- title: Third-party Plugins
-  id: plugin
-  doc: |
-    The third-party plugins can be loaded from metadata.
-    ```yaml
-    plugin:
-      RevealNotes:
-        - plugin/notes/notes.js
-    ```
-    [📖 plugin](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.plugin)
+  ```
+h-stack-border:
+- &stack
+  v-stack:
+  - &map
+    doc: &doc Same content here!
+  - doc: *doc
+  - *map
+- *stack
+---
+title: Third-party Plugins
+id: plugin
+doc: |
+  The third-party plugins can be loaded from metadata.
+  ```yaml
+  plugin:
+    RevealNotes:
+      - plugin/notes/notes.js
+  ```
+  [📖 plugin](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/struct.Metadata.html#structfield.plugin)
 
-    Will be converted to:
-    ```html
-    <script src="/plugin/notes/notes.js"></script>
-    ```
-    ```js
-    Reveal.initialize({
-      plugins: [..., RevealNotes],
-      ...
-    });
-    ```
-    ## Example
-    + [reveal.yaml-menu](https://kmolyuan.github.io/reveal.yaml-menu/):
-      wrapping [reveal.js-menu](https://github.com/denehyg/reveal.js-menu).
+  Will be converted to:
+  ```html
+  <script src="/plugin/notes/notes.js"></script>
+  ```
+  ```js
+  Reveal.initialize({
+    plugins: [..., RevealNotes],
+    ...
+  });
+  ```
+  ## Example
+  + [reveal.yaml-menu](https://kmolyuan.github.io/reveal.yaml-menu/):
+    wrapping [reveal.js-menu](https://github.com/denehyg/reveal.js-menu).

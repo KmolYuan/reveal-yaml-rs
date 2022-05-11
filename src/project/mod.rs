@@ -20,11 +20,11 @@
 //! **Slides in YAML**: The horizontal slides are as listed in the second block, which is an array. A slide can work with at least one attribute structure.
 //!
 //! ```yaml
-//! # metadata block
+//! ## metadata block
 //! description: ...
 //! author: ...
 //! ---
-//! # slides block
+//! ## slides block
 //! - title: ...  # Works!
 //! - doc: ...  # Works!
 //! - img: ...  # Works!
@@ -41,6 +41,30 @@
 //! ```
 //!
 //! This work supports YAML 1.2, and the anchor function supports for specific fields, such as content blocks.
+//!
+//! ### Multi-document Mode
+//!
+//! A regular Reveal.yaml project can be:
+//!
+//! ```yaml
+//! ## metadata block (map)
+//! ---
+//! ## Slider block (sequence)
+//! - title: Title 1
+//! - title: Title 2
+//! ```
+//!
+//! Or multi-document with a leading metadata doc to reduce the indents.
+//!
+//! ```yaml
+//! ## metadata block (map)
+//! ---
+//! ## Slider block 1 (map)
+//! title: Title 1
+//! ---
+//! ## Slider block 2 (map)
+//! title: Title 2
+//! ```
 //!
 //! ### Layout
 //!
@@ -123,19 +147,38 @@ mod slides;
 mod to_html;
 mod wrap_string;
 
+fn metadata<'d, D>(metadata: D) -> Result<Metadata, D::Error>
+where
+    D: serde::Deserializer<'d>,
+{
+    Metadata::deserialize(metadata)
+}
+
 pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, IoError> {
-    let mut yaml =
+    let yaml =
         parse::<RcRepr>(doc).map_err(|e| IoError::new(ErrorKind::InvalidData, e.to_string()))?;
-    let metadata = yaml.remove(0);
-    let slides = yaml.remove(0);
-    std::mem::drop(yaml);
-    let display_error = |SerdeError { msg, pos }| {
+    let disp = |SerdeError { msg, pos }| {
         eprintln!("{}\n{}", msg, indicated_msg(doc.as_bytes(), pos));
         IoError::new(ErrorKind::InvalidData, msg)
     };
-    let metadata = Metadata::deserialize(metadata).map_err(display_error)?;
-    let slides = Slides {
-        slides: Deserialize::deserialize(slides).map_err(display_error)?,
+    let (metadata, slides) = match yaml.as_slice() {
+        [] => return Err(IoError::new(ErrorKind::InvalidData, "Empty project")),
+        [n1] => {
+            let slides = Vec::deserialize(n1.clone()).map_err(disp)?;
+            (Metadata::default(), Slides { slides })
+        }
+        [n1, n2] => {
+            let slides = Vec::deserialize(n2.clone()).map_err(disp)?;
+            (metadata(n1.clone()).map_err(disp)?, Slides { slides })
+        }
+        [n1, ns @ ..] => {
+            let slides = ns
+                .iter()
+                .map(|n| ChapterSlide::deserialize(n.clone()))
+                .collect::<Result<_, _>>()
+                .map_err(disp)?;
+            (metadata(n1.clone()).map_err(disp)?, Slides { slides })
+        }
     };
     Ok(metadata.build(slides, mount, auto_reload))
 }
