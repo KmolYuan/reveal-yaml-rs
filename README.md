@@ -58,26 +58,21 @@ The executable can be checked with `rym` command.
 
 The command `rym` stands for "Reveal-Yaml Manager".
 
-```bash
-# Download the latest Reveal.js archive
-rym update
-# Create/Initialize a project to current directory
-# Only "reveal.yaml" will be create, the rest is up to you!
-rym new PROJECT_PATH
-rym init
-# Serve the slides
-rym serve
-# Reformat the project file
-rym fmt
-# Pack the project to HTML archive
-rym pack
-```
+| Command | Description                                     |
+|:--------|:------------------------------------------------|
+| help    | Show the CLI help message                       |
+| update  | Download the Reveal.js resources                |
+| new     | Create a new project and its directory          |
+| init    | Create a new project from an existing directory |
+| serve   | Serve the current project                       |
+| fmt     | Format the current project                      |
+| pack    | Pack the current project                        |
 
 Please see `rym --help`/`rym subcommand --help` for more information.
 
 ### Edit Mode (Hot Reload / Auto-reload)
 
-There are `-e` / `--edit` flags on the `serve` command. This option let the server keep watching the project file `reveal.yaml`, then reload the page from the web browser. (via JS & WebSocket)
+There are `-e`/`--edit` flags on the `serve` command. This option let the server keep watching the project file `reveal.yaml`, then reload the page from the web browser. (via JS & WebSocket)
 
 If this option is not enabled, the server will only resolve once at startup, and always use the cache.
 

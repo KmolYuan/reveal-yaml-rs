@@ -44,27 +44,31 @@
 //!
 //! ### Multi-document Mode
 //!
-//! A regular Reveal.yaml project can be:
+//! A regular Reveal.yaml project has two parts, metadata and a list of slides.
+//! [`Metadata`] and [`Slides`].
 //!
 //! ```yaml
-//! ## metadata block (map)
+//! ## metadata block (map) - Metadata
 //! ---
-//! ## Slider block (sequence)
+//! ## Slider block (sequence) - Sliders
 //! - title: Title 1
 //! - title: Title 2
 //! ```
 //!
 //! Or multi-document with a leading metadata doc to reduce the indents.
+//! [`Metadata`] and [`ChapterSlide`].
 //!
 //! ```yaml
-//! ## metadata block (map)
+//! ## metadata block (map) - Metadata
 //! ---
-//! ## Slider block 1 (map)
+//! ## Slider block 1 (map) - ChapterSlide
 //! title: Title 1
 //! ---
-//! ## Slider block 2 (map)
+//! ## Slider block 2 (map) - ChapterSlide
 //! title: Title 2
 //! ```
+//!
+//! Please be aware that anchors cannot be referenced between different documents.
 //!
 //! ### Layout
 //!
@@ -85,8 +89,8 @@
 //!
 //! ```yaml
 //! h-stack-border:
-//!   - doc: Splitted left
-//!   - doc: Splitted right
+//!   - doc: Left
+//!   - doc: Right
 //! ```
 //!
 //! ### Sized Attribute

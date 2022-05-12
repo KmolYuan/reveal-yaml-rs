@@ -1,11 +1,12 @@
 use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag};
 
-const MARKED: Options = Options::from_bits_truncate(
-    Options::ENABLE_TABLES.bits()
+const MARKED: Options = {
+    let bits = Options::ENABLE_TABLES.bits()
         | Options::ENABLE_SMART_PUNCTUATION.bits()
         | Options::ENABLE_TASKLISTS.bits()
-        | Options::ENABLE_STRIKETHROUGH.bits(),
-);
+        | Options::ENABLE_STRIKETHROUGH.bits();
+    Options::from_bits_truncate(bits)
+};
 
 fn marked(e: Event) -> Event {
     match e {
@@ -34,11 +35,7 @@ fn marked(e: Event) -> Event {
 
 /// Translate Markdown to HTML.
 pub fn md2html(text: &str) -> String {
-    if text.is_empty() {
-        "".to_string()
-    } else {
-        let mut out = String::new();
-        push_html(&mut out, Parser::new_ext(text, MARKED).map(marked));
-        out
-    }
+    let mut doc = String::new();
+    push_html(&mut doc, Parser::new_ext(text, MARKED).map(marked));
+    doc
 }
