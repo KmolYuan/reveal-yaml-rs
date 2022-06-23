@@ -137,7 +137,7 @@ pub use self::{
     background::*, content::*, footer::*, js_option::*, js_plugin::*, metadata::*, slides::*,
     to_html::*, wrap_string::*,
 };
-use serde::Deserialize;
+use serde::Deserialize as _;
 use std::io::{Error as IoError, ErrorKind};
 use yaml_peg::{indicated_msg, parse, repr::RcRepr, serde::SerdeError};
 
@@ -172,7 +172,11 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
             (Metadata::default(), Slides { slides })
         }
         [n1, n2] => {
-            let slides = Vec::deserialize(n2.clone()).map_err(disp)?;
+            let slides = if let Ok(slides) = Vec::deserialize(n2.clone()) {
+                slides
+            } else {
+                vec![ChapterSlide::deserialize(n2.clone()).map_err(disp)?]
+            };
             (metadata(n1.clone()).map_err(disp)?, Slides { slides })
         }
         [n1, ns @ ..] => {
