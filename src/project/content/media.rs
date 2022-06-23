@@ -69,12 +69,7 @@ impl ToHtml for Img {
 
 impl ToHtml for Video {
     fn to_html(self, _ctx: &Ctx) -> String {
-        let Self {
-            controls,
-            autoplay,
-            r#type,
-            size,
-        } = self;
+        let Self { controls, autoplay, r#type, size } = self;
         let (src, size) = size.size();
         let controls = if controls { " controls" } else { "" };
         let autoplay = if autoplay { " autoplay" } else { "" };

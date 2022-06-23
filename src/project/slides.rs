@@ -40,10 +40,7 @@ impl Slides {
         let slides = vec![ChapterSlide {
             slide: Slide {
                 title: title.to_string(),
-                content: Content {
-                    doc: doc.to_string(),
-                    ..Default::default()
-                },
+                content: Content { doc: doc.to_string(), ..Default::default() },
                 ..Default::default()
             },
             ..Default::default()
@@ -95,10 +92,7 @@ impl ToHtml for Slides {
             slides.first_mut().unwrap().sub.push(Slide {
                 title: ctx.outline.clone(),
                 id: "outline".to_string(),
-                content: Content {
-                    doc,
-                    ..Default::default()
-                },
+                content: Content { doc, ..Default::default() },
                 ..Default::default()
             });
         }

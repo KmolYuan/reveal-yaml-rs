@@ -77,13 +77,9 @@ fn main() -> Result<(), Error> {
         Subcommand::Update => update(),
         Subcommand::New { dir } => blank(dir, true),
         Subcommand::Init { dir } => blank(dir, false),
-        Subcommand::Serve {
-            dir,
-            port,
-            name,
-            edit,
-            no_open,
-        } => serve(port, dir, name, edit, !no_open),
+        Subcommand::Serve { dir, port, name, edit, no_open } => {
+            serve(port, dir, name, edit, !no_open)
+        }
         Subcommand::Fmt { dir, name, dry_run } => fmt(dir, dry_run, &name),
         Subcommand::Pack { dir, name, out } => pack(dir, out, &name),
     }

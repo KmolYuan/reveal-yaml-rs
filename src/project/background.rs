@@ -45,13 +45,7 @@ pub struct ImgBackground {
 
 impl ToHtml for ImgBackground {
     fn to_html(self, _ctx: &Ctx) -> String {
-        let Self {
-            src,
-            size,
-            position,
-            repeat,
-            opacity,
-        } = self;
+        let Self { src, size, position, repeat, opacity } = self;
         if src.is_empty() {
             String::new()
         } else {
