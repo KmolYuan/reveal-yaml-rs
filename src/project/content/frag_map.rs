@@ -1,4 +1,4 @@
-use std::{cell::Cell, collections::HashMap, rc::Rc};
+use std::{cell::Cell, collections::HashMap, fmt::Write, rc::Rc};
 
 /// [Fragment](https://revealjs.com/fragments/) option.
 ///
@@ -31,10 +31,12 @@ impl FragMap {
             if let Some(frag) = map.get(tag) {
                 let frag = frag.as_ref().map(String::as_str).unwrap_or_default();
                 let i = self.counter.get();
-                head += &format!(
+                write!(
+                    head,
                     "<span class=\"fragment {}\" data-fragment-index=\"{}\">",
                     frag, i
-                );
+                )
+                .unwrap();
                 end += "</span>";
                 self.counter.set(i + 1);
             }

@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::Write};
 
 /// Third-party Reveal plugins.
 ///
@@ -22,9 +22,9 @@ impl JsPlugin {
         let mut names = String::new();
         let mut files = String::new();
         for (name, file) in self.inner {
-            names += &format!("{}, ", name);
+            write!(names, "{}, ", name).unwrap();
             for f in file {
-                files += &format!("<script src=\"{}\"></script>\n", f);
+                writeln!(files, "<script src=\"{}\"></script>", f).unwrap();
             }
         }
         (names, files)

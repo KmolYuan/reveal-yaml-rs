@@ -1,4 +1,5 @@
 use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag};
+use std::fmt::Write;
 
 const MARKED: Options = {
     let bits = Options::ENABLE_TABLES.bits()
@@ -21,9 +22,9 @@ fn marked(e: Event) -> Event {
                 let line = info
                     .replace(lang, "")
                     .replace(|s| (s == '[') | (s == ']'), "");
-                head += &format!("<pre><code class=\"language-{}\"", lang);
+                write!(head, "<pre><code class=\"language-{}\"", lang).unwrap();
                 if !line.is_empty() {
-                    head += &format!(" data-line-numbers=\"{}\"", line);
+                    write!(head, " data-line-numbers=\"{}\"", line).unwrap();
                 }
                 head += ">";
             }
