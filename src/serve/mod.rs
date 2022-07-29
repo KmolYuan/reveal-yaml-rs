@@ -1,7 +1,7 @@
 use self::edit_mode::Monitor;
 use crate::{
     pack::{extract, listdir},
-    project::{error_page, load, Slides},
+    project::{error_page, load, single_page},
     update::archive,
 };
 use actix_files::Files;

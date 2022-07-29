@@ -139,7 +139,7 @@ pub use self::{
 };
 use serde::Deserialize as _;
 use std::io::{Error as IoError, ErrorKind};
-use yaml_peg::{indicated_msg, parse, repr::RcRepr, serde::SerdeError, NodeRc};
+use yaml_peg::{indicated_msg, parse, serde::SerdeError, NodeRc};
 
 mod background;
 mod content;
@@ -152,8 +152,7 @@ mod to_html;
 mod wrap_string;
 
 pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, IoError> {
-    let yaml =
-        parse::<RcRepr>(doc).map_err(|e| IoError::new(ErrorKind::InvalidData, e.to_string()))?;
+    let yaml = parse(doc).map_err(|e| IoError::new(ErrorKind::InvalidData, e.to_string()))?;
     let disp = |SerdeError { msg, pos }| {
         eprintln!("{}\n{}", msg, indicated_msg(doc.as_bytes(), pos));
         IoError::new(ErrorKind::InvalidData, msg)
@@ -168,7 +167,7 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
             .collect::<Result<_, _>>()
     };
     let (metadata, slides) = match yaml.as_slice() {
-        [] => return Err(IoError::new(ErrorKind::InvalidData, "Empty project")),
+        [] => (Metadata::default(), Slides::single("Hello", "World!")),
         [n1] => {
             let slides = to_slides(n1.clone()).map_err(disp)?;
             (Metadata::default(), Slides { slides })
@@ -187,5 +186,11 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
 }
 
 pub(crate) fn error_page(error: IoError) -> String {
-    Slides::single("Error", format!("```\n{}\n```", error))
+    let slides = Slides::single("Error", format!("```\n{}\n```", error));
+    Metadata::default().build(slides, "/static/", true)
+}
+
+pub(crate) fn single_page(title: &str, doc: &str) -> String {
+    let slides = Slides::single(title, doc);
+    Metadata::default().build(slides, "/static/", true)
 }

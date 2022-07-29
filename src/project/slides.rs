@@ -32,7 +32,7 @@ pub struct Slides {
 
 impl Slides {
     /// Create single page slide.
-    pub fn single<T, D>(title: T, doc: D) -> String
+    pub fn single<T, D>(title: T, doc: D) -> Self
     where
         T: ToString,
         D: ToString,
@@ -45,7 +45,7 @@ impl Slides {
             },
             ..Default::default()
         }];
-        Metadata::default().build(Self { slides }, "/static/", true)
+        Self { slides }
     }
 }
 
