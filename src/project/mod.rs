@@ -139,7 +139,7 @@ pub use self::{
 };
 use serde::Deserialize as _;
 use std::io::{Error as IoError, ErrorKind};
-use yaml_peg::{indicated_msg, parse, repr::RcRepr, serde::SerdeError};
+use yaml_peg::{indicated_msg, parse, repr::RcRepr, serde::SerdeError, NodeRc};
 
 mod background;
 mod content;
@@ -160,32 +160,27 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
     };
     let metadata = Metadata::deserialize;
     let to_slides = Vec::deserialize;
+    let to_slides_flatten = |ns: &[NodeRc]| {
+        ns.iter()
+            .filter(|n| !n.is_null())
+            .cloned()
+            .map(ChapterSlide::deserialize)
+            .collect::<Result<_, _>>()
+    };
     let (metadata, slides) = match yaml.as_slice() {
         [] => return Err(IoError::new(ErrorKind::InvalidData, "Empty project")),
         [n1] => {
             let slides = to_slides(n1.clone()).map_err(disp)?;
             (Metadata::default(), Slides { slides })
         }
-        ns @ [n1, n2] => {
+        ns @ [n1, ns_sub @ ..] => {
             if let Ok(metadata) = metadata(n1.clone()) {
-                let slides = to_slides(n2.clone()).map_err(disp)?;
+                let slides = to_slides_flatten(ns_sub).map_err(disp)?;
                 (metadata, Slides { slides })
             } else {
-                let slides = ns
-                    .iter()
-                    .map(|n| ChapterSlide::deserialize(n.clone()))
-                    .collect::<Result<_, _>>()
-                    .map_err(disp)?;
+                let slides = to_slides_flatten(ns).map_err(disp)?;
                 (Metadata::default(), Slides { slides })
             }
-        }
-        [n1, ns @ ..] => {
-            let slides = ns
-                .iter()
-                .map(|n| ChapterSlide::deserialize(n.clone()))
-                .collect::<Result<_, _>>()
-                .map_err(disp)?;
-            (metadata(n1.clone()).map_err(disp)?, Slides { slides })
         }
     };
     Ok(metadata.build(slides, mount, auto_reload))
