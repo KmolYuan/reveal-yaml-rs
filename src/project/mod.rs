@@ -151,13 +151,6 @@ mod slides;
 mod to_html;
 mod wrap_string;
 
-fn metadata<'d, D>(metadata: D) -> Result<Metadata, D::Error>
-where
-    D: serde::Deserializer<'d>,
-{
-    Metadata::deserialize(metadata)
-}
-
 pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, IoError> {
     let yaml =
         parse::<RcRepr>(doc).map_err(|e| IoError::new(ErrorKind::InvalidData, e.to_string()))?;
@@ -165,19 +158,26 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
         eprintln!("{}\n{}", msg, indicated_msg(doc.as_bytes(), pos));
         IoError::new(ErrorKind::InvalidData, msg)
     };
+    let metadata = Metadata::deserialize;
+    let to_slides = Vec::deserialize;
     let (metadata, slides) = match yaml.as_slice() {
         [] => return Err(IoError::new(ErrorKind::InvalidData, "Empty project")),
         [n1] => {
-            let slides = Vec::deserialize(n1.clone()).map_err(disp)?;
+            let slides = to_slides(n1.clone()).map_err(disp)?;
             (Metadata::default(), Slides { slides })
         }
-        [n1, n2] => {
-            let slides = if let Ok(slides) = Vec::deserialize(n2.clone()) {
-                slides
+        ns @ [n1, n2] => {
+            if let Ok(metadata) = metadata(n1.clone()) {
+                let slides = to_slides(n2.clone()).map_err(disp)?;
+                (metadata, Slides { slides })
             } else {
-                vec![ChapterSlide::deserialize(n2.clone()).map_err(disp)?]
-            };
-            (metadata(n1.clone()).map_err(disp)?, Slides { slides })
+                let slides = ns
+                    .iter()
+                    .map(|n| ChapterSlide::deserialize(n.clone()))
+                    .collect::<Result<_, _>>()
+                    .map_err(disp)?;
+                (Metadata::default(), Slides { slides })
+            }
         }
         [n1, ns @ ..] => {
             let slides = ns
