@@ -16,7 +16,7 @@ use temp_dir::TempDir;
 mod edit_mode;
 mod site;
 
-const HELP_DOC: &str = include_str!("../assets/reveal.yaml");
+const HELP_DOC: &str = include_str!("assets/reveal.yaml");
 
 #[derive(Clone)]
 struct Cache {
