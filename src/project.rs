@@ -157,8 +157,6 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
         eprintln!("{}\n{}", msg, indicated_msg(doc.as_bytes(), pos));
         IoError::new(ErrorKind::InvalidData, msg)
     };
-    let metadata = Metadata::deserialize;
-    let to_slides = Vec::deserialize;
     let to_slides_flatten = |ns: &[NodeRc]| {
         ns.iter()
             .filter(|n| !n.is_null())
@@ -173,11 +171,11 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
     let (metadata, slides) = match yaml.as_slice() {
         [] => (Metadata::default(), Slides::single("Hello", "World!")),
         [n1] => {
-            let slides = to_slides(n1.clone()).map_err(disp)?;
+            let slides = Vec::deserialize(n1.clone()).map_err(disp)?;
             (Metadata::default(), Slides { slides })
         }
         ns @ [n1, ns_sub @ ..] => {
-            if let Ok(metadata) = metadata(n1.clone()) {
+            if let Ok(metadata) = Metadata::deserialize(n1.clone()) {
                 let slides = to_slides_flatten(ns_sub).map_err(disp)?;
                 (metadata, Slides { slides })
             } else {
