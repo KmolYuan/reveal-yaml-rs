@@ -163,8 +163,12 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
         ns.iter()
             .filter(|n| !n.is_null())
             .cloned()
-            .map(ChapterSlide::deserialize)
-            .collect::<Result<_, _>>()
+            .map(Option::<ChapterSlide>::deserialize)
+            .filter_map(|r| match r {
+                Ok(s) => s.map(Ok),
+                Err(e) => Some(Err(e)),
+            })
+            .collect::<Result<Vec<_>, _>>()
     };
     let (metadata, slides) = match yaml.as_slice() {
         [] => (Metadata::default(), Slides::single("Hello", "World!")),
