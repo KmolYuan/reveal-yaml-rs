@@ -151,7 +151,8 @@ pub struct Slide {
     pub note: String,
     /// Background setting, as same as global.
     ///
-    /// + Local background option can be boolean `false` to disable global background.
+    /// + Local background option can be boolean `false` to disable global
+    /// background.
     pub background: Optional<Background>,
     /// HTML "class" attribute for this section.
     ///

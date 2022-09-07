@@ -6,9 +6,11 @@ const RELOAD: &str = "\
 let ws = new WebSocket(\"ws://\" + window.location.host + \"/ws/\");
             ws.onmessage = _ => location.reload();";
 
-/// Metadata contains HTML settings and global slide settings, they are totally YAML Maps.
+/// Metadata contains HTML settings and global slide settings, they are totally
+/// YAML Maps.
 ///
-/// The definition contains in the first YAML doc, split by horizontal line `---`.
+/// The definition contains in the first YAML doc, split by horizontal line
+/// `---`.
 #[derive(serde::Deserialize)]
 #[serde(default)]
 pub struct Metadata {

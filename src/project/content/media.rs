@@ -41,7 +41,8 @@ impl Default for Video {
 
 /// Embed `<iframe>` structures, such as YouTube videos.
 ///
-/// Please be aware that `<iframe>` maybe slow down your web browser and cause security issues!
+/// Please be aware that `<iframe>` maybe slow down your web browser and cause
+/// security issues!
 #[derive(Default, serde::Deserialize)]
 #[serde(default)]
 pub struct IFrame {

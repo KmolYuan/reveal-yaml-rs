@@ -23,7 +23,8 @@ pub struct Content {
     pub doc: String,
     /// Include a Markdown file from path, append after `doc`.
     pub include: String,
-    /// If you want to include an HTML file without conversion, enable this option.
+    /// If you want to include an HTML file without conversion, enable this
+    /// option.
     #[serde(rename = "include-html")]
     pub include_html: bool,
     /// Latex math without `$$` / `\[\]` brackets.

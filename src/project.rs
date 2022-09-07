@@ -4,7 +4,8 @@
 //!
 //! ## Tutorial
 //!
-//! **Slides in HTML**: In Reveal.js, the HTML structure shown as following. The typesetting is done by original HTML and CSS.
+//! **Slides in HTML**: In Reveal.js, the HTML structure shown as following. The
+//! typesetting is done by original HTML and CSS.
 //!
 //! ```html
 //! <section> <!-- Horizontal slide 1 -->
@@ -17,7 +18,8 @@
 //! </section>
 //! ```
 //!
-//! **Slides in YAML**: The horizontal slides are as listed in the second block, which is an array. A slide can work with at least one attribute structure.
+//! **Slides in YAML**: The horizontal slides are as listed in the second block,
+//! which is an array. A slide can work with at least one attribute structure.
 //!
 //! ```yaml
 //! ## metadata block
@@ -30,7 +32,8 @@
 //! - img: ...  # Works!
 //! ```
 //!
-//! The vertical slides work under the `sub` node of first slide, the attributes are same as horizontal slides.
+//! The vertical slides work under the `sub` node of first slide, the attributes
+//! are same as horizontal slides.
 //!
 //! ```yaml
 //! - title: Horizontal slide 1
@@ -40,7 +43,8 @@
 //! - title: Horizontal slide 2
 //! ```
 //!
-//! This work supports YAML 1.2, and the anchor function supports for specific fields, such as content blocks.
+//! This work supports YAML 1.2, and the anchor function supports for specific
+//! fields, such as content blocks.
 //!
 //! ### Multi-document Mode
 //!
@@ -68,13 +72,17 @@
 //! title: Title 2
 //! ```
 //!
-//! Please be aware that anchors cannot be referenced between different documents.
+//! Please be aware that anchors cannot be referenced between different
+//! documents.
 //!
 //! ### Layout
 //!
-//! There are two layout types, called "horizontal stack" ([`Content::h_stack`]) and "vertical stack" ([`Content::v_stack`]). The vertical layout is default, as same as HTML.
+//! There are two layout types, called "horizontal stack" ([`Content::h_stack`])
+//! and "vertical stack" ([`Content::v_stack`]). The vertical layout is default,
+//! as same as HTML.
 //!
-//! The stack blocks list in the `h-stack` / `v-stack` tag, and the stack tags can be nested.
+//! The stack blocks list in the `h-stack` / `v-stack` tag, and the stack tags
+//! can be nested.
 //!
 //! ```yaml
 //! h-stack:
@@ -84,8 +92,8 @@
 //!     - doc: Right Bottom
 //! ```
 //!
-//! The stack tag can add a suffix `*-border` to add a borderline between the elements.
-//! ([`Content::h_stack_border`] and [`Content::v_stack_border`])
+//! The stack tag can add a suffix `*-border` to add a borderline between the
+//! elements. ([`Content::h_stack_border`] and [`Content::v_stack_border`])
 //!
 //! ```yaml
 //! h-stack-border:
@@ -95,9 +103,12 @@
 //!
 //! ### Sized Attribute
 //!
-//! The images and resizeable items are support [`Sized`] attribute, which contains three options: `src`, `width` and `height`. The `src` option is required, otherwise the feature will be disabled or invalid.
+//! The images and resizeable items are support [`Sized`] attribute, which
+//! contains three options: `src`, `width` and `height`. The `src` option is
+//! required, otherwise the feature will be disabled or invalid.
 //!
-//! The `width` and `height` options are the same as the attributes on the `<img>` tag, they are optional.
+//! The `width` and `height` options are the same as the attributes on the
+//! `<img>` tag, they are optional.
 //!
 //! ```yaml
 //! footer:  # Footer is a metadata option
@@ -124,12 +135,13 @@
 //!
 //! ## Writing Guide
 //!
-//! Generally, `reveal.yaml` divides into two parts, the first part will be deserialized to [`Metadata`],
-//! and the second part will be deserialized to [`Slides`], other parts will be ignored.
-//! YAML parser will not check extra key values.
+//! Generally, `reveal.yaml` divides into two parts, the first part will be
+//! deserialized to [`Metadata`], and the second part will be deserialized to
+//! [`Slides`], other parts will be ignored. YAML parser will not check extra
+//! key values.
 //!
-//! During the deserialization, "flatten" field means the child field will be inherited by the parent,
-//! such as [`Sized`].
+//! During the deserialization, "flatten" field means the child field will be
+//! inherited by the parent, such as [`Sized`].
 //!
 //! Most of functions are planed to be demonstrated in the help page.
 //! Open the help page by adding `/help/` after URL, like `http://localhost:8080/help/`.
