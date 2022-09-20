@@ -14,12 +14,12 @@ categories = ["command-line-utilities"]
 yaml-peg = { version = "1", features = ["serde"] }
 serde = { version = "1", features = ["derive"] }
 clap = { version = "3", features = ["derive"] }
+zip = { git = "https://github.com/zip-rs/zip" } # ^0.6.2
 actix = "0.13"
 actix-web = "4"
 actix-files = "0.6"
 actix-web-actors = "4"
 pulldown-cmark = "0.9"
-webbrowser = "0.7"
+webbrowser = "0.8"
 reqwest = "0.11"
 temp-dir = "0.1"
-zip = "0.6"
