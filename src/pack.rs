@@ -7,7 +7,7 @@ use std::{
     io::Result,
     path::{Path, PathBuf},
 };
-use zip::ZipArchive;
+use binstall_zip::ZipArchive;
 
 fn copy_dir<P, D>(path: P, dist: D) -> Result<()>
 where
