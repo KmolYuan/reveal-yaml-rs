@@ -166,7 +166,8 @@ mod wrap_string;
 pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, IoError> {
     let yaml = parse(doc).map_err(|e| IoError::new(ErrorKind::InvalidData, e.to_string()))?;
     let disp = |SerdeError { msg, pos }| {
-        eprintln!("{}\n{}", msg, indicated_msg(doc.as_bytes(), pos));
+        let ind_msg = indicated_msg(doc.as_bytes(), pos);
+        eprintln!("{msg}\n{ind_msg}");
         IoError::new(ErrorKind::InvalidData, msg)
     };
     let to_slides_flatten = |ns: &[NodeRc]| {

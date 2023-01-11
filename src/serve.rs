@@ -37,10 +37,11 @@ where
     extract(temp.path())?;
     // Start server
     let archive = temp.path().join(archive!());
-    println!("Serve at: http://localhost:{}/", port);
-    println!("Global archive at: {:?}", archive);
-    println!("Local assets at: {:?}", canonicalize(".")?);
-    println!("Edit mode: {}", edit);
+    println!("Serve at: http://localhost:{port}/");
+    println!("Global archive at: {archive:?}");
+    let full_path = canonicalize(".")?;
+    println!("Local assets at: {full_path:?}");
+    println!("Edit mode: {edit}");
     println!("Press Ctrl+C to close the server...");
     let assets = listdir(".")?;
     let cache = web::Data::new(Cache {

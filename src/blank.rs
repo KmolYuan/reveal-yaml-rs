@@ -23,7 +23,7 @@ where
         .replace("{%author}", &ask("Author")?)
         .replace("{%description}", &ask("Description")?);
     File::create(path.join(ROOT))?.write_all(doc.as_bytes())?;
-    println!("Create project {:?}", path);
+    println!("Create project {path:?}");
     Ok(())
 }
 

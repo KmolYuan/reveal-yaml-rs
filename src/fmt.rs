@@ -15,7 +15,7 @@ where
         .map_err(|e| Error::new(ErrorKind::InvalidData, e.to_string()))?;
     let s = dump(&yaml, &anchor);
     if dry {
-        println!("{}", s);
+        println!("{s}");
         Ok(())
     } else {
         write(path, s)

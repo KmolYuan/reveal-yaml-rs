@@ -23,7 +23,7 @@ where
         }
         let file_name = path.file_name().unwrap();
         let dist = dist.join(file_name);
-        println!("{:?} > {:?}", &path, &dist);
+        println!("{path:?} > {dist:?}");
         if path.is_dir() {
             copy_dir(&path, dist)?;
         } else if path.is_file() {
@@ -52,14 +52,7 @@ pub(crate) fn listdir<P>(path: P) -> Result<Vec<PathBuf>>
 where
     P: AsRef<Path>,
 {
-    let mut list = Vec::new();
-    for entry in fs::read_dir(path)? {
-        let path = entry?.path();
-        if !path.file_name().unwrap().to_str().unwrap().starts_with('.') {
-            list.push(path);
-        }
-    }
-    Ok(list)
+    fs::read_dir(path)?.map(|e| e.map(|f| f.path())).collect()
 }
 
 /// Pack project to an archive.
@@ -71,7 +64,7 @@ where
     std::env::set_current_dir(path.as_ref())?;
     let dist = dist.as_ref();
     if dist.is_dir() {
-        println!("Remove {:?}", dist);
+        println!("Remove {dist:?}");
         fs::remove_dir_all(dist)?;
     }
     extract(".")?;
@@ -98,7 +91,7 @@ fn pack_inner(project: &str) -> Result<()> {
             if !dist.is_dir() {
                 fs::create_dir(&dist)?;
             }
-            println!("{:?} > {:?}", &assets, &dist);
+            println!("{assets:?} > {dist:?}");
             copy_dir(assets, dist)?;
         }
     }
