@@ -75,7 +75,7 @@
 //! Please be aware that anchors cannot be referenced between different
 //! documents.
 //!
-//! ### Layout
+//! ### Layout System
 //!
 //! There are two layout types, called "horizontal stack" ([`Content::h_stack`])
 //! and "vertical stack" ([`Content::v_stack`]). The vertical layout is default,

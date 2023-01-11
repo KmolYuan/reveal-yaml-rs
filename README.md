@@ -1,7 +1,7 @@
 # Reveal.yaml
 
 [![dependency status](https://deps.rs/repo/github/KmolYuan/reveal-yaml-rs/status.svg)](https://deps.rs/crate/reveal-yaml/)
-[![Documentation](https://docs.rs/reveal-yaml/badge.svg)](https://docs.rs/reveal-yaml)
+[![Documentation](https://docs.rs/reveal-yaml/badge.svg)](https://docs.rs/reveal-yaml/latest/reveal_yaml/project/index.html)
 
 Rust implementation of [Reveal.js](https://github.com/hakimel/reveal.js) YAML server, a command line interface (CLI) tool.
 
