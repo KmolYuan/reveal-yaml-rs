@@ -27,6 +27,6 @@ impl Sized {
 impl std::fmt::Display for Sized {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let (src, size) = self.size();
-        write!(f, "{}{}", src, size)
+        write!(f, "{src}{size}")
     }
 }

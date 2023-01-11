@@ -22,9 +22,9 @@ impl JsPlugin {
         let mut names = String::new();
         let mut files = String::new();
         for (name, file) in self.inner {
-            write!(names, "{}, ", name).unwrap();
+            write!(names, "{name}, ").unwrap();
             for f in file {
-                writeln!(files, "<script src=\"{}\"></script>", f).unwrap();
+                writeln!(files, "<script src=\"{f}\"></script>").unwrap();
             }
         }
         (names, files)

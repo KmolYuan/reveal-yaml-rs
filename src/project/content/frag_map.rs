@@ -33,8 +33,7 @@ impl FragMap {
                 let i = self.counter.get();
                 write!(
                     head,
-                    "<span class=\"fragment {}\" data-fragment-index=\"{}\">",
-                    frag, i
+                    "<span class=\"fragment {frag}\" data-fragment-index=\"{i}\">"
                 )
                 .unwrap();
                 end += "</span>";

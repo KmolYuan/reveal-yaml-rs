@@ -11,7 +11,7 @@ impl StringWrap for str {
         if self.is_empty() {
             self.to_string()
         } else {
-            format!("{}{}{}", prefix, self, suffix)
+            format!("{prefix}{self}{suffix}")
         }
     }
 

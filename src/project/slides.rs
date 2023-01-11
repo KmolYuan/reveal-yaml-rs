@@ -67,7 +67,7 @@ impl ToHtml for Slides {
                         } else {
                             chapter.slide.id.clone()
                         };
-                        format!("+ [{}](#/{})\n", title, id)
+                        format!("+ [{title}](#/{id})\n")
                             + &chapter
                                 .sub
                                 .iter()
@@ -76,11 +76,11 @@ impl ToHtml for Slides {
                                     let title = slide_title(slide);
                                     if !title.is_empty() {
                                         let id = if slide.id.is_empty() {
-                                            format!("{}/{}", i, j + 1)
+                                            format!("{i}/{}", j + 1)
                                         } else {
                                             slide.id.clone()
                                         };
-                                        format!("  + [{}](#/{})\n", title, id)
+                                        format!("  + [{title}](#/{id})\n")
                                     } else {
                                         String::new()
                                     }
@@ -124,7 +124,7 @@ impl ToHtml for ChapterSlide {
         if let Some(header) = &ctx.chapter_header {
             header.replace(title);
         }
-        format!("<section>\n{}</section>", slide + &sub.to_html(ctx))
+        format!("<section>\n{slide}{}</section>", sub.to_html(ctx))
     }
 }
 
@@ -219,6 +219,6 @@ impl ToHtml for Slide {
             .map(|s| s.borrow().wrap("<div class=\"chapter-header\">", "</div>"))
             .unwrap_or_default();
         ctx.frag.set(0);
-        format!("<section{}>\n{}{}</section>", data, content, header)
+        format!("<section{data}>\n{content}{header}</section>")
     }
 }

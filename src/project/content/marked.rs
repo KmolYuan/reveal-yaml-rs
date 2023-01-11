@@ -22,9 +22,9 @@ fn marked(e: Event) -> Event {
                 let line = info
                     .replace(lang, "")
                     .replace(|s| (s == '[') | (s == ']'), "");
-                write!(head, "<pre><code class=\"language-{}\"", lang).unwrap();
+                write!(head, "<pre><code class=\"language-{lang}\"").unwrap();
                 if !line.is_empty() {
-                    write!(head, " data-line-numbers=\"{}\"", line).unwrap();
+                    write!(head, " data-line-numbers=\"{line}\"").unwrap();
                 }
                 head += ">";
             }

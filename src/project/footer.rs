@@ -22,7 +22,7 @@ impl ToHtml for Footer {
         }
         let link = link.wrap("<a href=\"", "\">\n");
         let link_end = if link.is_empty() { "" } else { "</a>\n" };
-        let img = src.wrap("<img", &format!("{}/>", size));
+        let img = src.wrap("<img", &format!("{size}/>"));
         "<div class=\"footer\">\n".to_string()
             + &link
             + &img

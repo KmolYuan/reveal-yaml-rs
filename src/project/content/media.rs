@@ -59,11 +59,11 @@ impl ToHtml for Img {
         } else {
             ""
         };
-        let s = format!("<img alt=\"{}\"{}{}/>", label, pop, size);
+        let s = format!("<img alt=\"{label}\"{pop}{size}/>");
         if label.is_empty() {
             s
         } else {
-            format!("<figure>{}<figcaption>{}</figcaption></figure>", s, label)
+            format!("<figure>{s}<figcaption>{label}</figcaption></figure>")
         }
     }
 }
@@ -74,16 +74,13 @@ impl ToHtml for Video {
         let (src, size) = size.size();
         let controls = if controls { " controls" } else { "" };
         let autoplay = if autoplay { " autoplay" } else { "" };
-        format!(
-            "<video{}{}{}><source{} type=\"{}\"></video>",
-            size, controls, autoplay, src, r#type
-        )
+        format!("<video{size}{controls}{autoplay}><source{src} type=\"{type}\"></video>")
     }
 }
 
 impl ToHtml for IFrame {
     fn to_html(self, _ctx: &Ctx) -> String {
         let Self { size } = self;
-        format!("<iframe{}></iframe>", size)
+        format!("<iframe{size}></iframe>")
     }
 }

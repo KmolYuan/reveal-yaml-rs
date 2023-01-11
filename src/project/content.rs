@@ -99,7 +99,7 @@ impl ToHtml for Content {
             .wrap("<div class=\"r-stack\">", "</div>\n");
         if !h_stack.is_empty() {
             let width = 100. / h_stack.len() as f32;
-            let pre = format!("<div style=\"width:{:.04}%\">", width);
+            let pre = format!("<div style=\"width:{width:.04}%\">");
             s += &h_stack
                 .into_iter()
                 .map(|c| c.to_html(ctx).wrap(&pre, "</div>\n"))
@@ -113,17 +113,14 @@ impl ToHtml for Content {
             .wrap("<div class=\"v-stack\">", "</div>\n");
         if !h_stack_border.is_empty() {
             let width = 100. / h_stack_border.len() as f32;
-            let pre = format!(
-                "<div class=\"h-stack-border\" style=\"width:{:.04}%\">",
-                width
-            );
+            let pre = format!("<div class=\"h-stack-border\" style=\"width:{width:.04}%\">");
             s += &h_stack_border
                 .into_iter()
                 .enumerate()
                 .map(|(i, c)| {
                     let text = c.to_html(ctx);
                     if i == 0 {
-                        text.wrap(&format!("<div style=\"width:{:.04}%\">", width), "</div>")
+                        text.wrap(&format!("<div style=\"width:{width:.04}%\">"), "</div>")
                     } else {
                         text.wrap(&pre, "</div>")
                     }

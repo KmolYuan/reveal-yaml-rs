@@ -15,6 +15,6 @@ impl ToHtml for LayImg {
     fn to_html(self, _ctx: &Ctx) -> String {
         let Self { frag, size } = self;
         let frag = frag.unwrap_or_default();
-        format!("<img class=\"fragment {}\"{}/>", frag, size)
+        format!("<img class=\"fragment {frag}\"{size}/>")
     }
 }

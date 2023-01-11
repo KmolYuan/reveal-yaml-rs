@@ -49,7 +49,7 @@ impl ToHtml for ImgBackground {
         if src.is_empty() {
             String::new()
         } else {
-            format!(" data-background=\"{}\"", src)
+            format!(" data-background=\"{src}\"")
                 + &size.to_string().wrap(" data-background-size=\"", "\"")
                 + &position.wrap(" data-background-position=\"", "\"")
                 + &repeat.wrap(" data-background-repeat=\"", "\"")

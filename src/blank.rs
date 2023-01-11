@@ -28,7 +28,7 @@ where
 }
 
 fn ask(q: &'static str) -> Result<String> {
-    print!("{}: ", q);
+    print!("{q}: ");
     let mut buf = String::new();
     stdout().flush()?;
     stdin().read_line(&mut buf)?;

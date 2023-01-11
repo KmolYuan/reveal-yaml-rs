@@ -79,7 +79,7 @@ where
     .bind(("localhost", port))?
     .run();
     if open {
-        webbrowser::open(&format!("http://localhost:{}/", port))?;
+        webbrowser::open(&format!("http://localhost:{port}/"))?;
     }
     actix_web::rt::System::new().block_on(server)
 }

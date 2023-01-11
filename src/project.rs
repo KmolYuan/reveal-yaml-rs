@@ -200,8 +200,8 @@ pub(crate) fn load(doc: &str, mount: &str, auto_reload: bool) -> Result<String, 
     Ok(metadata.build(slides, mount, auto_reload))
 }
 
-pub(crate) fn error_page(error: IoError) -> String {
-    let slides = Slides::single("Error", format!("```\n{}\n```", error));
+pub(crate) fn error_page(e: IoError) -> String {
+    let slides = Slides::single("Error", format!("```\n{e}\n```"));
     Metadata::default().build(slides, "/static/", true)
 }
 
