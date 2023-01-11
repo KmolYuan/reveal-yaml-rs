@@ -1,7 +1,7 @@
 [package]
 name = "reveal-yaml"
 description = "A YAML project manager serving Reveal.js slides."
-version = "1.1.3"
+version = "1.1.4"
 authors = ["KmolYuan <pyslvs@gmail.com>"]
 edition = "2021"
 license = "MIT"
@@ -13,13 +13,13 @@ categories = ["command-line-utilities"]
 [dependencies]
 yaml-peg = { version = "1", features = ["serde"] }
 serde = { version = "1", features = ["derive"] }
-clap = { version = "3", features = ["derive"] }
-zip = { git = "https://github.com/zip-rs/zip" } # ^0.6.2
+clap = { version = "4", features = ["derive"] }
 actix = "0.13"
 actix-web = "4"
 actix-files = "0.6"
 actix-web-actors = "4"
 pulldown-cmark = "0.9"
+binstall-zip = "0.6"
 webbrowser = "0.8"
 reqwest = "0.11"
 temp-dir = "0.1"

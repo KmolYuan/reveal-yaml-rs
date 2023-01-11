@@ -1,5 +1,5 @@
 use std::io::{Cursor, Result};
-use zip::{ZipArchive, ZipWriter};
+use binstall_zip::{ZipArchive, ZipWriter};
 
 macro_rules! archive {
     () => {
