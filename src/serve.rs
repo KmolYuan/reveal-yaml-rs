@@ -61,11 +61,19 @@ where
             .service(site::help_page)
             .default_service(web::route().to(site::not_found))
             .service(edit_mode::ws_index)
-            .service(Files::new("/static", &archive));
-        assets.iter().fold(app, |app, asset| {
-            let name = asset.strip_prefix(".").unwrap_or(asset).to_str().unwrap();
-            app.service(Files::new(name, asset))
-        })
+            .service(Files::new("/static", &archive))
+            .service(Files::new("/", "."));
+        assets
+            .iter()
+            .filter(|p| p.is_dir())
+            .fold(app, |app, asset| {
+                let name = asset.file_name().unwrap().to_str().unwrap();
+                if name.starts_with('.') {
+                    app
+                } else {
+                    app.service(Files::new(name, asset))
+                }
+            })
     })
     .bind(("localhost", port))?
     .run();
