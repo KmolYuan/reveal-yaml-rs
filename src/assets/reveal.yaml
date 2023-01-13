@@ -195,9 +195,9 @@ math: |
   &c(x) = 0
   \end{aligned}
 doc: |
-  Inline math text $x^2$.
+  Inline math text $x_a^\*$ and $x_b^\*$.
   ```yaml
-  doc: Inline math text $x^2$.
+  doc: Inline math text $x_a^\*$ and $x_b^\*$.
   math: |
     \small\begin{aligned}
     \min_{x_1, x_2}&f(x)

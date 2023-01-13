@@ -20,6 +20,11 @@ pub struct Content {
     /// + Special symbol `---` represents horizontal line `<hr/>`.
     pub fit: Vec<String>,
     /// Multiline Markdown text, accept HTML.
+    ///
+    /// The star * symbol of inline math needs to escaped.
+    /// ```markdown
+    /// $x_a^\*$ and $x_b^\*$
+    /// ```
     pub doc: String,
     /// Include a Markdown file from path, append after `doc`.
     pub include: String,
@@ -27,11 +32,29 @@ pub struct Content {
     /// option.
     #[serde(rename = "include-html")]
     pub include_html: bool,
-    /// Latex math without `$$` / `\[\]` brackets.
+    /// Multiline LaTex math without `$$` / `\[\]` brackets.
+    /// ```yaml
+    /// math: |
+    ///   \begin{cases}
+    ///   x_1 &= 10
+    ///   \\
+    ///   x_2 &= 20
+    ///   \end{cases}
+    /// ```
     pub math: String,
     /// Embed images.
+    ///
+    /// ```yaml
+    /// # Single
+    /// img:
+    ///   src: img/image.png
+    /// # Multiple
+    /// img:
+    /// - src: img/image1.png
+    /// - src: img/image2.png
+    /// ```
     pub img: InlineList<Img>,
-    /// Embed videos.
+    /// Embed videos. Same as `img`.
     pub video: InlineList<Video>,
     /// Embed `<iframe>` structures, such as YouTube videos.
     pub iframe: InlineList<IFrame>,
