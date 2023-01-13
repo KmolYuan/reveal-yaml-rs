@@ -405,8 +405,8 @@ for i in range(10):
 <section>
 <section data-background="https://raw.githubusercontent.com/rust-lang/rust-artwork/master/logo/rust-logo-gear-only.svg" data-background-size="50%" data-background-opacity="0.2" id="math">
 <h1>Maths</h1>
-<p>Inline math text $x^2$.</p>
-<pre><code class="language-yaml">doc: Inline math text $x^2$.
+<p>Inline math text $x_a^*$ and $x_b^*$.</p>
+<pre><code class="language-yaml">doc: Inline math text $x_a^\*$ and $x_b^\*$.
 math: |
   \small\begin{aligned}
   \min_{x_1, x_2}&amp;f(x)
@@ -684,8 +684,8 @@ wrapping <a href="https://github.com/denehyg/reveal.js-menu">reveal.js-menu</a>.
 
     Reveal.initialize({
         slideNumber: "c/t",
-        pdfMaxPagesPerSlide: 1,
         hash: true,
+        pdfMaxPagesPerSlide: 1,
         plugins: [RevealNotes, RevealSearch, RevealHighlight, RevealMath.MathJax2, RevealZoom, ],
         mathjax2: {
             mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js',
