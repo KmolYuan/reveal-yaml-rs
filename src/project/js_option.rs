@@ -2,7 +2,7 @@ use super::*;
 use std::collections::HashMap;
 
 fn lower_camelcase(doc: &str) -> String {
-    let mut s = String::new();
+    let mut s = String::with_capacity(doc.chars().count());
     let mut is_word = false;
     for c in doc.chars() {
         if " -_".contains(c) {
@@ -16,6 +16,7 @@ fn lower_camelcase(doc: &str) -> String {
             c
         });
     }
+    s.shrink_to_fit();
     s
 }
 
