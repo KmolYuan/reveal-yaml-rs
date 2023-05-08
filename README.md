@@ -39,7 +39,9 @@ Wherever the binary placed, it should be visible for the environment variable `P
 
 If you are a Rust user, install it with cargo is possible. Unfortunately, the binary is build with the cargo toolchain, and you will get a large size than the CI/CD result.
 
-```
+```bash
+# Ensure openssl headers are installed in Ubuntu
+sudo apt install libssl-dev
 cargo install reveal-yaml
 ```
 
